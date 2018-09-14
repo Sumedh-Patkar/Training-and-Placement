@@ -1,6 +1,6 @@
 package application;
 
-public class Student s{
+public class Student {
 
 	public Student() {
 		// TODO Auto-generated constructor stub
