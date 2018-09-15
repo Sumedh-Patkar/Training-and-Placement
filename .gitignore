@@ -1,0 +1,13 @@
+# Compiled class file
+*.class
+
+*.classpath
+
+# Package Files #
+*.jar
+
+bin/**
+.settings/
+
+## Eclipse Core
+.project
