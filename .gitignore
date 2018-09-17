@@ -11,3 +11,6 @@ bin/**
 
 ## Eclipse Core
 .project
+/bin/
+
+.DS_Store
