@@ -14,3 +14,4 @@ bin/**
 /bin/
 
 .DS_Store
+/.metadata/

@@ -36,22 +36,23 @@ public class Main extends Application
     public void signUpPageDisplay(Stage stage)
     {
         Hyperlink loginHyperlink = new Hyperlink();
-        
+
         loginHyperlink.setText("Login");
-        
+
         loginHyperlink.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event)
             {
                 loginPageDisplay(stage);
             }
-        }); 
+        });
             Label userSignUpLabel = new Label("User ID");       
-            
+  
             Label userAgeLabel = new Label("Age");
             
             Label passwordLabel = new Label("Password"); 
             
+
             Label confirmPasswordLabel = new Label("Confirm Password");
 
             Label nameLabel = new Label("Name");
@@ -62,12 +63,14 @@ public class Main extends Application
             
             TextField ageField = new TextField();
 
+            TextField ageField = new TextField();
+
             TextField CGPAField = new TextField();
-    
+
             TextField userSignUpTextField = new TextField();       
-              
-            PasswordField userPasswordPasswordField = new PasswordField();  
-             
+
+            PasswordField userPasswordPasswordField = new PasswordField(); 
+
             PasswordField confirmPasswordField = new PasswordField();
 
             Button SignUpButton = new Button("Sign Up"); 
@@ -84,10 +87,12 @@ public class Main extends Application
             gridPaneSignUp.setAlignment(Pos.CENTER); 
              
             SignUpButton.setOnAction(new EventHandler<ActionEvent>() 
+
             {
 
                 public void handle(ActionEvent event)
                 {
+
                 	studentObject = new Student(userSignUpTextField.getText().toString(),
                 								nameField.getText().toString(),
                 								Double.parseDouble(ageField.getText().toString()),
@@ -103,9 +108,11 @@ public class Main extends Application
                     	signUpPageDisplay(stage);
                     }
                 	
+
                 }
 
             });
+
 
             gridPaneSignUp.add(userSignUpLabel, 0, 0); 
             gridPaneSignUp.add(userSignUpTextField, 1, 0); 
@@ -113,11 +120,14 @@ public class Main extends Application
             gridPaneSignUp.add(userPasswordPasswordField, 1, 4);
             gridPaneSignUp.add(confirmPasswordField, 1, 5);
             gridPaneSignUp.add(confirmPasswordLabel, 0, 5); 
+
             gridPaneSignUp.add(nameLabel, 0, 1);
             gridPaneSignUp.add(nameField, 1, 1);
             gridPaneSignUp.add(CGPALabel, 0, 3);
             gridPaneSignUp.add(CGPAField, 1, 3);
+
             gridPaneSignUp.add(SignUpButton, 0,6); 
+
             gridPaneSignUp.add(loginHyperlink, 1, 6);
             gridPaneSignUp.add(ageField, 1, 2);
             gridPaneSignUp.add(userAgeLabel, 0, 2);
@@ -128,6 +138,7 @@ public class Main extends Application
                
             stage.setScene(scene); 
                
+
             stage.show();
 
     }
@@ -156,14 +167,18 @@ public class Main extends Application
 
     public void loginPageDisplay(Stage stage)
     {
+
         ObservableList<String> options = 
+
     FXCollections.observableArrayList(
         "Student",
         "Company",
         "Admin"
     );
 
+
         
+
     final ComboBox loginType = new ComboBox<>(options);
 
      Hyperlink signUpHyperlink = new Hyperlink();
@@ -180,13 +195,18 @@ public class Main extends Application
      
         Label typeLabel = new Label("Type of login");
 
+        loginType.getSelectionModel().selectFirst();
+
+        Label typeLabel = new Label("Type of login");
+
         Label signupLabel = new Label("New user");
 
       Label userLoginLabel = new Label("User ID");       
-      
-      Label passwordLabel = new Label("Password"); 
-	  
+
+      Label passwordLabel = new Label("Password");
+
       TextField userLoginTextField = new TextField();       
+
              
       PasswordField userPasswordPasswordField = new PasswordField();  
        
@@ -208,10 +228,12 @@ public class Main extends Application
       gridPane.add(passwordLabel, 0, 2);       
       gridPane.add(userPasswordPasswordField, 1, 2); 
       gridPane.add(loginButton, 0, 4); 
+
       gridPane.add(signUpHyperlink, 1, 5);
       gridPane.add(signupLabel, 0, 5);
       gridPane.add(loginType, 1, 0);
       gridPane.add(typeLabel, 0, 0);
+
  
       Scene scene = new Scene(gridPane);  
       
@@ -219,13 +241,15 @@ public class Main extends Application
           
       stage.setScene(scene);    
      
+
       stage.show();
 
-      loginButton.setOnAction(new EventHandler<ActionEvent>() 
+      loginButton.setOnAction(new EventHandler<ActionEvent>()
       {
         //Code to check all login credentials are filled
         public void handle(ActionEvent event)
         {
+
         	//System.out.println(userLoginTextField.getText().toString() + userPasswordPasswordField.getText().toString() + (String)loginType.getValue());
         	boolean result=loginSignUpObject.login(userLoginTextField.getText().toString() , userPasswordPasswordField.getText().toString() , (String)loginType.getValue());
             if(result)
@@ -235,9 +259,10 @@ public class Main extends Application
             else
             {
             	loginPageDisplay(stage);
+
             }
         }
-        
+
       });
 
     }
@@ -245,8 +270,10 @@ public class Main extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
+
     	loginSignUpObject = new LoginSignup();
     	companyObject = new Company();
+
         loginPageDisplay(primaryStage);
     }
 
