@@ -2,6 +2,8 @@ package application;
 
 import javafx.*;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -15,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -24,52 +27,31 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.geometry.*;
 
- class text1
-{
-    String name;
-    public void setText1(String x)
-    {
-        this.name = x;
-    }
-
-    public String getText1()
-    {
-        return this.name;
-    }
-}
-
-
 public class Main extends Application
 {
-    Label check ;
-    Label check1;
-    TextField c1;
-    TextField c2;
-    Scene s1;
-    Scene s2;
-    AnchorPane x;
-    AnchorPane y;
-    Button qw;
-    Button wq;
-    text1 t;
+    Student studentObject;
+    LoginSignup loginSignUpObject;
+    Company companyObject;
 
-    public void signUp(Stage stage)
+    public void signUpPageDisplay(Stage stage)
     {
         Hyperlink loginHyperlink = new Hyperlink();
-        
+
         loginHyperlink.setText("Login");
-        
+
         loginHyperlink.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event)
             {
                 loginPageDisplay(stage);
             }
-        }); 
+        });
             Label userSignUpLabel = new Label("User ID");       
-            
-            Label passwordLabel = new Label("Password"); 
-            
+
+            Label userAgeLabel = new Label("Age");
+
+            Label passwordLabel = new Label("Password");
+
             Label confirmPasswordLabel = new Label("Confirm Password");
 
             Label nameLabel = new Label("Name");
@@ -78,60 +60,77 @@ public class Main extends Application
 
             TextField nameField = new TextField();
 
+            TextField ageField = new TextField();
+
             TextField CGPAField = new TextField();
-    
+
             TextField userSignUpTextField = new TextField();       
-              
-            PasswordField userPasswordPasswordField = new PasswordField();  
-             
+
+            PasswordField userPasswordPasswordField = new PasswordField(); 
+
             PasswordField confirmPasswordField = new PasswordField();
 
-            Button SignUpButton = new Button("Sign Up"); 
-            
-            GridPane gridPaneSignUp = new GridPane();    
-            
-            gridPaneSignUp.setMinSize(400, 200); 
-               
-            gridPaneSignUp.setPadding(new Insets(10, 10, 10, 10)); 
-              
-            gridPaneSignUp.setVgap(5); 
-            gridPaneSignUp.setHgap(5);       
-            
-            gridPaneSignUp.setAlignment(Pos.CENTER); 
-             
-            SignUpButton.setOnAction(new EventHandler<ActionEvent>() 
+            Button SignUpButton = new Button("Sign Up");
+
+            GridPane gridPaneSignUp = new GridPane();   
+
+            gridPaneSignUp.setMinSize(400, 200);
+
+            gridPaneSignUp.setPadding(new Insets(10, 10, 10, 10));
+
+            gridPaneSignUp.setVgap(20);
+            gridPaneSignUp.setHgap(20);       
+
+            gridPaneSignUp.setAlignment(Pos.CENTER);
+
+            SignUpButton.setOnAction(new EventHandler<ActionEvent>()
             {
 
                 public void handle(ActionEvent event)
                 {
-                    dummyPageDisplay(stage);
+                        studentObject = new Student(userSignUpTextField.getText().toString(),
+                                                                                nameField.getText().toString(),
+                                                                                Double.parseDouble(ageField.getText().toString()),
+                                                                                Double.parseDouble(CGPAField.getText().toString()));
+                        studentObject.setstudentdata();
+                        boolean result=loginSignUpObject.signUp(userSignUpTextField.getText().toString() , userPasswordPasswordField.getText().toString());
+                    if(result)
+                    {
+                        dummyPageDisplay(stage);
+                    }
+                    else
+                    {
+                        signUpPageDisplay(stage);
+                    }
+
                 }
 
             });
 
-            gridPaneSignUp.add(userSignUpLabel, 0, 0); 
-            gridPaneSignUp.add(userSignUpTextField, 1, 0); 
-            gridPaneSignUp.add(passwordLabel, 0, 1);       
-            gridPaneSignUp.add(userPasswordPasswordField, 1, 1);
-            gridPaneSignUp.add(confirmPasswordField, 1, 2);
-            gridPaneSignUp.add(confirmPasswordLabel, 0, 2); 
-            gridPaneSignUp.add(nameLabel, 0, 3);
-            gridPaneSignUp.add(nameField, 1, 3);
-            gridPaneSignUp.add(CGPALabel, 0, 4);
-            gridPaneSignUp.add(CGPAField, 1, 4);
-            gridPaneSignUp.add(SignUpButton, 0,5); 
-            gridPaneSignUp.add(loginHyperlink, 1, 5);
+            gridPaneSignUp.add(userSignUpLabel, 0, 0);
+            gridPaneSignUp.add(userSignUpTextField, 1, 0);
+            gridPaneSignUp.add(passwordLabel, 0, 4);       
+            gridPaneSignUp.add(userPasswordPasswordField, 1, 4);
+            gridPaneSignUp.add(confirmPasswordField, 1, 5);
+            gridPaneSignUp.add(confirmPasswordLabel, 0, 5);
+            gridPaneSignUp.add(nameLabel, 0, 1);
+            gridPaneSignUp.add(nameField, 1, 1);
+            gridPaneSignUp.add(CGPALabel, 0, 3);
+            gridPaneSignUp.add(CGPAField, 1, 3);
+            gridPaneSignUp.add(SignUpButton, 0,6);
+            gridPaneSignUp.add(loginHyperlink, 1, 6);
+            gridPaneSignUp.add(ageField, 1, 2);
+            gridPaneSignUp.add(userAgeLabel, 0, 2);
 
-            Scene scene = new Scene(gridPaneSignUp);  
-      
-            stage.setTitle("Grid Pane Example"); 
-               
-            stage.setScene(scene); 
-               
+            Scene scene = new Scene(gridPaneSignUp); 
+
+            stage.setTitle("Grid Pane Example");
+
+            stage.setScene(scene);
+
             stage.show();
 
     }
-
 
     public void dummyPageDisplay(Stage stage)
     {
@@ -157,76 +156,97 @@ public class Main extends Application
 
     public void loginPageDisplay(Stage stage)
     {
-     Hyperlink h = new Hyperlink();
-        h.setText("SignUp");
-        h.setOnAction(new EventHandler<ActionEvent>() {
+        ObservableList<String> options =
+    FXCollections.observableArrayList(
+        "Student",
+        "Company",
+        "Admin"
+    );
+
+
+    final ComboBox loginType = new ComboBox<>(options);
+
+     Hyperlink signUpHyperlink = new Hyperlink();
+     signUpHyperlink.setText("SignUp");
+     signUpHyperlink.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event)
             {
-                signUp(stage);
+                signUpPageDisplay(stage);
             }
         });   
+
+        loginType.getSelectionModel().selectFirst();
+
+        Label typeLabel = new Label("Type of login");
 
         Label signupLabel = new Label("New user");
 
       Label userLoginLabel = new Label("User ID");       
-      
-      Label passwordLabel = new Label("Password"); 
-	  
+
+      Label passwordLabel = new Label("Password");
+
       TextField userLoginTextField = new TextField();       
-             
-      PasswordField userPasswordPasswordField = new PasswordField();  
-       
-      Button loginButton = new Button("Login"); 
-      
-      GridPane gridPane = new GridPane();    
-      
-      gridPane.setMinSize(400, 200); 
-        
-      gridPane.setPadding(new Insets(10, 10, 10, 10)); 
-      
-      gridPane.setVgap(5); 
-      gridPane.setHgap(5);       
-       
-      gridPane.setAlignment(Pos.CENTER); 
-       
-      gridPane.add(userLoginLabel, 0, 0); 
-      gridPane.add(userLoginTextField, 1, 0); 
-      gridPane.add(passwordLabel, 0, 1);       
-      gridPane.add(userPasswordPasswordField, 1, 1); 
-      gridPane.add(loginButton, 0, 2); 
-      gridPane.add(h, 1, 3);
-      gridPane.add(signupLabel, 0, 3);
- 
-      Scene scene = new Scene(gridPane);  
-      
-      stage.setTitle("Grid Pane Example"); 
-          
-      stage.setScene(scene);    
-     
+
+      PasswordField userPasswordPasswordField = new PasswordField(); 
+
+      Button loginButton = new Button("Login");
+
+      GridPane gridPane = new GridPane();   
+
+      gridPane.setMinSize(400, 200);
+
+      gridPane.setPadding(new Insets(10, 10, 10, 10));
+
+      gridPane.setVgap(20);
+      gridPane.setHgap(20);       
+
+      gridPane.setAlignment(Pos.CENTER);
+
+      gridPane.add(userLoginLabel, 0, 1);
+      gridPane.add(userLoginTextField, 1, 1);
+      gridPane.add(passwordLabel, 0, 2);       
+      gridPane.add(userPasswordPasswordField, 1, 2);
+      gridPane.add(loginButton, 0, 4);
+      gridPane.add(signUpHyperlink, 1, 5);
+      gridPane.add(signupLabel, 0, 5);
+      gridPane.add(loginType, 1, 0);
+      gridPane.add(typeLabel, 0, 0);
+
+      Scene scene = new Scene(gridPane); 
+
+      stage.setTitle("Grid Pane Example");
+
+      stage.setScene(scene);   
+
       stage.show();
 
-      loginButton.setOnAction(new EventHandler<ActionEvent>() 
+      loginButton.setOnAction(new EventHandler<ActionEvent>()
       {
         //Code to check all login credentials are filled
         public void handle(ActionEvent event)
         {
-            dummyPageDisplay(stage);
+                //System.out.println(userLoginTextField.getText().toString() + userPasswordPasswordField.getText().toString() + (String)loginType.getValue());
+                boolean result=loginSignUpObject.login(userLoginTextField.getText().toString() , userPasswordPasswordField.getText().toString() , (String)loginType.getValue());
+            if(result)
+            {
+                dummyPageDisplay(stage);
+            }
+            else
+            {
+                loginPageDisplay(stage);
+            }
         }
-        
+
       });
 
     }
 
-
-    
-
-
-    
-
     @Override
     public void start(Stage primaryStage) throws Exception
     {
+        loginSignUpObject = new LoginSignup();
+        companyObject = new Company();
         loginPageDisplay(primaryStage);
     }
 
