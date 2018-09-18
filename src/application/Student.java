@@ -16,6 +16,7 @@ import com.mongodb.client.MongoDatabase;
 
 public class Student {
 
+
     String sid,name;
     double age,CGPA;         // double taken on purpose
     
