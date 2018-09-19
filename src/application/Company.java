@@ -127,6 +127,30 @@ public class Company {
 		collection.replaceOne(searchQuery, newDocument);
 	}
 	
+	void getCompanyList()
+	{
+		MongoClient mongo = new MongoClient("localhost",27017);
+		
+		//access the database
+		MongoDatabase database = mongo.getDatabase("tnpdb");
+		
+		//access the collection Company
+		MongoCollection<Document> collection = database.getCollection("Company");
+		
+		//Find the Company's Document from the Collection
+		BasicDBObject query = new BasicDBObject();
+		BasicDBObject fields = new BasicDBObject("name",1);
+		FindIterable <Document> iterDoc = collection.find().projection(new Document("name",1));
+		MongoCursor <Document> it = iterDoc.iterator();
+		
+		//Store in a Document object
+//		Document result = it.next();
+		while(it.hasNext())
+		{
+			System.out.println(it.next());
+		}
+	}
+	
 	/*
 	 * only used for testing purpose
 	 */
@@ -138,7 +162,7 @@ public class Company {
 		
 		while(true)
 		{
-			System.out.println("\nEnter Choice:\n1: Get Company Profile\n2: Set/Update Company Profile");
+			System.out.println("\nEnter Choice:\n1: Get Company Profile\n2: Set/Update Company Profile\n3: Display Company List");
 			choice = sc.nextInt();
 			switch(choice)
 			{
@@ -147,6 +171,9 @@ public class Company {
 				break;
 			case 2:
 				c.updateProfile();
+				break;
+			case 3:
+				c.getCompanyList();
 				break;
 			}
 		}
