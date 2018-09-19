@@ -63,8 +63,6 @@ public class Main extends Application
             
             TextField ageField = new TextField();
 
-            TextField ageField = new TextField();
-
             TextField CGPAField = new TextField();
 
             TextField userSignUpTextField = new TextField();       
@@ -97,11 +95,12 @@ public class Main extends Application
                 								nameField.getText().toString(),
                 								Double.parseDouble(ageField.getText().toString()),
                 								Double.parseDouble(CGPAField.getText().toString()));
-                	studentObject.setstudentdata();
+                	
                 	boolean result=loginSignUpObject.signUp(userSignUpTextField.getText().toString() , userPasswordPasswordField.getText().toString());
                     if(result)
                     {
                     	dummyPageDisplay(stage);
+                    	studentObject.setstudentdata();
                     }
                     else
                     {
@@ -169,21 +168,17 @@ public class Main extends Application
     {
 
         ObservableList<String> options = 
-
-    FXCollections.observableArrayList(
-        "Student",
-        "Company",
-        "Admin"
-    );
-
-
+        	FXCollections.observableArrayList(
+    		"Student",
+        	"Company",
+        	"Admin"
+    	);
         
+        final ComboBox loginType = new ComboBox<>(options);
 
-    final ComboBox loginType = new ComboBox<>(options);
-
-     Hyperlink signUpHyperlink = new Hyperlink();
-     signUpHyperlink.setText("SignUp");
-     signUpHyperlink.setOnAction(new EventHandler<ActionEvent>() {
+        Hyperlink signUpHyperlink = new Hyperlink("SignUp");
+//        signUpHyperlink.setText("SignUp");
+        signUpHyperlink.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event)
             {
@@ -195,76 +190,62 @@ public class Main extends Application
      
         Label typeLabel = new Label("Type of login");
 
-        loginType.getSelectionModel().selectFirst();
+        Label signupLabel = new Label("New user?");
 
-        Label typeLabel = new Label("Type of login");
+        Label userLoginLabel = new Label("User ID");       
 
-        Label signupLabel = new Label("New user");
+        Label passwordLabel = new Label("Password");
 
-      Label userLoginLabel = new Label("User ID");       
-
-      Label passwordLabel = new Label("Password");
-
-      TextField userLoginTextField = new TextField();       
-
-             
-      PasswordField userPasswordPasswordField = new PasswordField();  
+        TextField userLoginTextField = new TextField();       
+     
+        PasswordField userPasswordPasswordField = new PasswordField();  
        
-      Button loginButton = new Button("Login"); 
+        Button loginButton = new Button("Login"); 
       
-      GridPane gridPane = new GridPane();    
+        GridPane gridPane = new GridPane();    
       
-      gridPane.setMinSize(400, 200); 
-        
-      gridPane.setPadding(new Insets(10, 10, 10, 10)); 
-      
-      gridPane.setVgap(20); 
-      gridPane.setHgap(20);       
+        gridPane.setMinSize(400, 200); 
+        gridPane.setPadding(new Insets(10, 10, 10, 10)); 
+        gridPane.setVgap(20); 
+        gridPane.setHgap(20);       
+        gridPane.setAlignment(Pos.CENTER); 
        
-      gridPane.setAlignment(Pos.CENTER); 
-       
-      gridPane.add(userLoginLabel, 0, 1); 
-      gridPane.add(userLoginTextField, 1, 1); 
-      gridPane.add(passwordLabel, 0, 2);       
-      gridPane.add(userPasswordPasswordField, 1, 2); 
-      gridPane.add(loginButton, 0, 4); 
-
-      gridPane.add(signUpHyperlink, 1, 5);
-      gridPane.add(signupLabel, 0, 5);
-      gridPane.add(loginType, 1, 0);
-      gridPane.add(typeLabel, 0, 0);
+        gridPane.add(userLoginLabel, 0, 1); 
+        gridPane.add(userLoginTextField, 1, 1); 
+        gridPane.add(passwordLabel, 0, 2);       
+        gridPane.add(userPasswordPasswordField, 1, 2); 
+        gridPane.add(loginButton, 0, 4); 
+        gridPane.add(signUpHyperlink, 1, 5);
+        gridPane.add(signupLabel, 0, 5);
+        gridPane.add(loginType, 1, 0);
+        gridPane.add(typeLabel, 0, 0);
 
  
-      Scene scene = new Scene(gridPane);  
+        Scene scene = new Scene(gridPane);  
       
-      stage.setTitle("Grid Pane Example"); 
+        stage.setTitle("Training-and-Placement"); 
           
-      stage.setScene(scene);    
+        stage.setScene(scene);
      
+        stage.show();
 
-      stage.show();
-
-      loginButton.setOnAction(new EventHandler<ActionEvent>()
-      {
-        //Code to check all login credentials are filled
-        public void handle(ActionEvent event)
+        loginButton.setOnAction(new EventHandler<ActionEvent>()
         {
-
-        	//System.out.println(userLoginTextField.getText().toString() + userPasswordPasswordField.getText().toString() + (String)loginType.getValue());
-        	boolean result=loginSignUpObject.login(userLoginTextField.getText().toString() , userPasswordPasswordField.getText().toString() , (String)loginType.getValue());
-            if(result)
-            {
-            	dummyPageDisplay(stage);
-            }
-            else
-            {
-            	loginPageDisplay(stage);
-
-            }
-        }
-
-      });
-
+        //Code to check all login credentials are filled
+        	public void handle(ActionEvent event)
+        	{
+        		boolean result=loginSignUpObject.login(userLoginTextField.getText().toString() , userPasswordPasswordField.getText().toString() , (String)loginType.getValue());
+        		if(result)
+        		{
+        			dummyPageDisplay(stage);
+        		}
+        		else
+        		{
+        			//set an error Label here and clear text fields
+        			loginPageDisplay(stage);
+        		}
+        	}
+        });
     }
 
     @Override

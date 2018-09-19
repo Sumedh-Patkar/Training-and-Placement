@@ -21,7 +21,7 @@ public class LoginSignup {
 
         boolean login(String loginName,String password,String loginType)
         {       
-                // Creating a Mongo client
+            // Creating a Mongo client
             MongoClient mongo = new MongoClient( "localhost" , 27017 );
 
             // Accessing the database
@@ -29,20 +29,19 @@ public class LoginSignup {
 
 
             //check type
-            System.out.println("Enter Type");
             type = loginType;
 
             MongoCollection<Document> collection;
             if(type.equals("Student"))
             //access the Collection
                 collection = database.getCollection("StudentLogin");
-            else
+            else if(type.equals("Company"))
                 collection = database.getCollection("CompanyLogin");
+            else
+            	collection = database.getCollection("AdminLogin");
 
             //take username password
-            System.out.println("Enter Username");
             username = loginName;
-            System.out.println("Enter Password");
             password = password;
 
             //check if username already exists
@@ -82,22 +81,13 @@ public class LoginSignup {
             // Accessing the database
             MongoDatabase database = mongo.getDatabase("tnpdb");
 
-            //check type
-            System.out.println("Enter Type");
-            type = "Student";
-
             MongoCollection<Document> collection;
             //access the collection
-            if(type.equals("Student"))
-                collection = database.getCollection("StudentLogin");
-            else
-                collection = database.getCollection("CompanyLogin");
+            collection = database.getCollection("StudentLogin");
 
             //take username password
-            System.out.println("Enter Username");
             username = signUpname;
 
-            System.out.println("Enter Password");
             password = pass;
 
             //check if username already exists

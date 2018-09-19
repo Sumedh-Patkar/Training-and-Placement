@@ -46,7 +46,7 @@ public class Student {
     MongoClient mongo = new MongoClient( "localhost" , 27017 );
     MongoDatabase db = mongo.getDatabase("tnpdb");
     
-    MongoCollection<Document> collection = db.getCollection("student");
+    MongoCollection<Document> collection = db.getCollection("Student");
           Document document = new Document("sid", sid) 
                   .append("name", name)
                   .append("age", age) 
