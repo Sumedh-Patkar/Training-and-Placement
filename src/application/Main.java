@@ -10,13 +10,18 @@ import javafx.event.EventHandler;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -99,7 +104,7 @@ public class Main extends Application
                 	boolean result=loginSignUpObject.signUp(userSignUpTextField.getText().toString() , userPasswordPasswordField.getText().toString());
                     if(result)
                     {
-                    	dummyPageDisplay(stage);
+                    	homePageDisplay(stage);
                     	studentObject.setstudentdata();
                     }
                     else
@@ -115,21 +120,19 @@ public class Main extends Application
 
             gridPaneSignUp.add(userSignUpLabel, 0, 0); 
             gridPaneSignUp.add(userSignUpTextField, 1, 0); 
+            gridPaneSignUp.add(nameLabel, 0, 1);
+            gridPaneSignUp.add(nameField, 1, 1);
+            gridPaneSignUp.add(ageField, 1, 2);
+            gridPaneSignUp.add(userAgeLabel, 0, 2);
+            gridPaneSignUp.add(CGPALabel, 0, 3);
+            gridPaneSignUp.add(CGPAField, 1, 3);
             gridPaneSignUp.add(passwordLabel, 0, 4);       
             gridPaneSignUp.add(userPasswordPasswordField, 1, 4);
             gridPaneSignUp.add(confirmPasswordField, 1, 5);
             gridPaneSignUp.add(confirmPasswordLabel, 0, 5); 
-
-            gridPaneSignUp.add(nameLabel, 0, 1);
-            gridPaneSignUp.add(nameField, 1, 1);
-            gridPaneSignUp.add(CGPALabel, 0, 3);
-            gridPaneSignUp.add(CGPAField, 1, 3);
-
             gridPaneSignUp.add(SignUpButton, 0,6); 
-
             gridPaneSignUp.add(loginHyperlink, 1, 6);
-            gridPaneSignUp.add(ageField, 1, 2);
-            gridPaneSignUp.add(userAgeLabel, 0, 2);
+            
 
             Scene scene = new Scene(gridPaneSignUp);  
       
@@ -142,28 +145,111 @@ public class Main extends Application
 
     }
 
-    public void dummyPageDisplay(Stage stage)
+    public void searchByDomainPageDisplay(Stage stage)
     {
-        BorderPane borderPane = new BorderPane();
+    	//Created a dummy label to display bigger font size with colour
+    	
+//    	Label company = new Label("hello");
+//    	company.setPrefSize(200, 200);
+//    	company.setFont(Font.font("Verdana", 40));
+//    	company.setTextFill(Color.RED);
+//    	GridPane a = new GridPane();
+//    	a.add(company, 0, 0);
+//    	Scene scene = new Scene(a,600,600);
+//    	stage.setScene(scene);
+//    	stage.show();
+    	
+    	CheckBox domains[] = new CheckBox[3];
+    	domains[0] = new CheckBox("Artificial Intelligence");
+    	domains[1] = new CheckBox("Deep Learning");
+    	domains[2] = new CheckBox("Computer Vision");
+    	
+    	
+    }
+    
+    public void searchByCompanyPageDisplay(Stage stage)
+    {
+    	ObservableList<String> options = 
+            	FXCollections.observableArrayList(
+        		"Apple",
+            	"Company",
+            	"Admin"
+        	);
+            
+            final ComboBox<String> loginType = new ComboBox<>(options);
 
-        MenuBar menu = new MenuBar();
-
-        Menu profile = new Menu("Profile");
+    }
+    
+    public void homePageDisplay(Stage stage)
+    {
+    	MenuBar leftBar = new MenuBar();
+    	Menu profile = new Menu("Profile");
         Menu home = new Menu("Home");
-
+        Menu search = new Menu("Search");
+        MenuItem searchByCompany = new MenuItem("Search by company name");
+        MenuItem searchByDomain = new MenuItem("Search by domains");
         MenuItem signout = new MenuItem("Signout");
+        MenuItem myProfile = new MenuItem("My Profile");
+        profile.getItems().addAll(myProfile,signout);
+        search.getItems().addAll(searchByDomain,searchByCompany);
+        leftBar.getMenus().addAll(home,search);
+        MenuBar rightBar = new MenuBar();
+        rightBar.getMenus().addAll(profile);
+        Region spacer = new Region();
+        spacer.getStyleClass().add("menu-bar");
+        HBox.setHgrow(spacer, Priority.SOMETIMES);
+        HBox menubars = new HBox(leftBar, spacer, rightBar);
 
-        profile.getItems().addAll(signout);
+        BorderPane borderPane = new BorderPane();
+        borderPane.setTop(menubars);
 
-        menu.getMenus().addAll(profile,home);
-
-        borderPane.setTop(menu);
+        searchByDomain.setOnAction(new EventHandler<ActionEvent>() 
+        {
+        	@Override
+        	public void handle(ActionEvent event)
+        	{
+        		searchByDomainPageDisplay(stage);
+        	}
+        	
+		});
+        
+        searchByCompany.setOnAction(new EventHandler<ActionEvent>() 
+        {
+        	@Override
+        	public void handle(ActionEvent event)
+        	{
+        		searchByCompanyPageDisplay(stage);
+        	}
+        	
+		});
+        
+        signout.setOnAction(new EventHandler<ActionEvent>() 
+        {
+        	@Override
+        	public void handle(ActionEvent event)
+        	{
+        		loginPageDisplay(stage);
+        	}
+        	
+		});
 
         Scene scene = new Scene(borderPane, 400, 400);
         stage.setScene(scene);
         stage.show();
     }
 
+    public void companyProfilePageDisplay(Stage stage)
+    {
+    	Label companyVision = new Label("Vision");
+    	
+    	Label companyDomains = new Label("Domains");
+    	
+    	Label companySubdomains = new Label("Sub-Domains");
+    	
+    	Label address = new Label("Address");
+    }
+    
+    
     public void loginPageDisplay(Stage stage)
     {
 
@@ -174,7 +260,7 @@ public class Main extends Application
         	"Admin"
     	);
         
-        final ComboBox loginType = new ComboBox<>(options);
+        final ComboBox<String> loginType = new ComboBox<>(options);
 
         Hyperlink signUpHyperlink = new Hyperlink("SignUp");
 //        signUpHyperlink.setText("SignUp");
@@ -237,7 +323,7 @@ public class Main extends Application
         		boolean result=loginSignUpObject.login(userLoginTextField.getText().toString() , userPasswordPasswordField.getText().toString() , (String)loginType.getValue());
         		if(result)
         		{
-        			dummyPageDisplay(stage);
+        			homePageDisplay(stage);
         		}
         		else
         		{
