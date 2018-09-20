@@ -1,5 +1,6 @@
 package application;
 
+
 import java.util.ArrayList;
 import javafx.*;
 import javafx.application.Application;
@@ -10,6 +11,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -30,6 +32,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.geometry.*;
 
@@ -39,14 +42,13 @@ public class Main extends Application
     LoginSignup loginSignUpObject;
     Company companyObject;
 
-    public void signUpPageDisplay(Stage stage)
+    public void signUpPageDisplay( final Stage stage)
     {
         Hyperlink loginHyperlink = new Hyperlink();
 
         loginHyperlink.setText("Login");
 
         loginHyperlink.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
             public void handle(ActionEvent event)
             {
                 loginPageDisplay(stage);
@@ -65,15 +67,15 @@ public class Main extends Application
 
             Label CGPALabel = new Label("CGPA");
 
-            TextField nameField = new TextField();
+            final TextField nameField = new TextField();
             
-            TextField ageField = new TextField();
+            final TextField ageField = new TextField();
 
-            TextField CGPAField = new TextField();
+            final TextField CGPAField = new TextField();
 
-            TextField userSignUpTextField = new TextField();       
+            final TextField userSignUpTextField = new TextField();       
 
-            PasswordField userPasswordPasswordField = new PasswordField(); 
+            final PasswordField userPasswordPasswordField = new PasswordField(); 
 
             PasswordField confirmPasswordField = new PasswordField();
 
@@ -102,7 +104,8 @@ public class Main extends Application
                 								Double.parseDouble(ageField.getText().toString()),
                 								Double.parseDouble(CGPAField.getText().toString()));
                 	
-                	boolean result=loginSignUpObject.signUp(userSignUpTextField.getText().toString() , userPasswordPasswordField.getText().toString());
+                	boolean result=loginSignUpObject.signUp(userSignUpTextField.getText().toString(),
+                											userPasswordPasswordField.getText().toString());
                     if(result)
                     {
                     	homePageDisplay(stage);
@@ -148,12 +151,107 @@ public class Main extends Application
 
     public void searchByDomainPageDisplay(Stage stage)
     {
+
+
+        	
+        	//code for menu bar
+        	MenuBar leftBar = new MenuBar();
+        	Menu profile = new Menu("Profile");
+            Menu home = new Menu("Home");
+            Menu search = new Menu("Search");
+            MenuItem searchByCompany = new MenuItem("Search by company name");
+            MenuItem searchByDomain = new MenuItem("Search by domains");
+            MenuItem signout = new MenuItem("Signout");
+            MenuItem myProfile = new MenuItem("My Profile");
+            profile.getItems().addAll(myProfile,signout);
+            search.getItems().addAll(searchByDomain,searchByCompany);
+            leftBar.getMenus().addAll(home,search);
+            MenuBar rightBar = new MenuBar();
+            rightBar.getMenus().addAll(profile);
+            Region spacer = new Region();
+            spacer.getStyleClass().add("menu-bar");
+            HBox.setHgrow(spacer, Priority.SOMETIMES);
+            HBox menubars = new HBox(leftBar, spacer, rightBar);
+
+            BorderPane borderPane = new BorderPane();
+            borderPane.setTop(menubars);
+
+        	
+        	
+        	//main code for this function
+        	CheckBox subdomains[] = new CheckBox[3];
+        	subdomains[0] = new CheckBox("Artificial Intelligence");
+        	subdomains[1] = new CheckBox("Deep Learning");
+        	subdomains[2] = new CheckBox("Computer Vision");
+        	
+
+        	Label Domain1 = new Label("Domain1");
+         
+           
+            Button searchCompanies = new Button("Search"); 
+          
+            GridPane gridPane = new GridPane();    
+          
+            gridPane.setMinSize(400, 200); 
+            gridPane.setPadding(new Insets(10, 10, 10, 10)); 
+            gridPane.setVgap(20); 
+            gridPane.setHgap(20);       
+            gridPane.setAlignment(Pos.CENTER); 
+           
+            gridPane.add(Domain1,0 ,1 );
+            gridPane.add(subdomains[0],1 ,2 );
+            gridPane.add(subdomains[1], 1, 3);
+            //gridPane.add(subdomains[2], 1, 4);
+            
+            //gridPane.add(Domain1,0 ,6 );
+            //gridPane.add(subdomains[0],1 ,7 );   //needs diff array elements
+            //gridPane.add(subdomains[1], 1, 8);
+            gridPane.add(subdomains[2], 1, 9);
+            
+            
+            gridPane.add(searchCompanies,2,50);
+            
+           /* VBox a = new VBox(borderPane,gridPane);
+            ScrollPane scrollPane = new ScrollPane(a);
+            scrollPane.add(a);
+           */ 
+            
+           /* Pane mainPane = new Pane();
+            mainPane.getChildren().addAll(borderPane,mainPane);*/
+     
+            ScrollPane scrollPane = new ScrollPane();
+            scrollPane.setContent(gridPane);
+            
+            // Pannable.
+            scrollPane.setPannable(true);
+          
+            
+            
+            Scene scene = new Scene(new VBox(borderPane,scrollPane));  
+          
+            stage.setTitle("Training-and-Placement"); 
+              
+            stage.setScene(scene);
+         
+            stage.show();
+
+            searchCompanies.setOnAction(new EventHandler<ActionEvent>()
+            {
+            
+            	public void handle(ActionEvent event)
+            	{
+            		//companylistPageDisplay(stage);
+            	}
+            });
+        	
+       
     	
     }
     
-    public void searchByCompanyPageDisplay(Stage stage)
+    public void searchByCompanyPageDisplay(final Stage stage)
     {
     	
+
     	MenuBar leftBar = new MenuBar();
     	Menu profile = new Menu("Profile");
         Menu home = new Menu("\b");
@@ -276,9 +374,10 @@ public class Main extends Application
      	
 		});
      
+
     }
     
-    public void homePageDisplay(Stage stage)
+    public void homePageDisplay(final Stage stage)
     {
     	MenuBar leftBar = new MenuBar();
     	Menu profile = new Menu("Profile");
@@ -312,6 +411,7 @@ public class Main extends Application
         HBox.setHgrow(spacer, Priority.SOMETIMES);
         HBox menubars = new HBox(leftBar, spacer, rightBar);
         
+
         System.out.println("Home");
         
         BorderPane borderPane = new BorderPane();
@@ -327,10 +427,10 @@ public class Main extends Application
         	}
         	
 		});
+
         
         searchByDomain.setOnAction(new EventHandler<ActionEvent>() 
         {
-        	@Override
         	public void handle(ActionEvent event)
         	{
         		searchByDomainPageDisplay(stage);
@@ -340,7 +440,6 @@ public class Main extends Application
         
         searchByCompany.setOnAction(new EventHandler<ActionEvent>() 
         {
-        	@Override
         	public void handle(ActionEvent event)
         	{
         		searchByCompanyPageDisplay(stage);
@@ -350,7 +449,7 @@ public class Main extends Application
         
         signout.setOnAction(new EventHandler<ActionEvent>() 
         {
-        	@Override
+        	
         	public void handle(ActionEvent event)
         	{
         		loginPageDisplay(stage);
@@ -417,7 +516,7 @@ public class Main extends Application
     	stage.show();
     }
     
-    public void loginPageDisplay(Stage stage)
+    public void loginPageDisplay(final Stage stage)
     {
     	
         ObservableList<String> options = 
@@ -427,12 +526,12 @@ public class Main extends Application
         	"Admin"
     	);
         
-        final ComboBox<String> loginType = new ComboBox<>(options);
+        final ComboBox<String> loginType = new ComboBox<String>(options);
 
         Hyperlink signUpHyperlink = new Hyperlink("SignUp");
 //        signUpHyperlink.setText("SignUp");
         signUpHyperlink.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
+           
             public void handle(ActionEvent event)
             {
                 signUpPageDisplay(stage);
@@ -449,9 +548,9 @@ public class Main extends Application
 
         Label passwordLabel = new Label("Password");
 
-        TextField userLoginTextField = new TextField();       
+        final TextField userLoginTextField = new TextField();       
      
-        PasswordField userPasswordPasswordField = new PasswordField();  
+        final PasswordField userPasswordPasswordField = new PasswordField();  
        
         Button loginButton = new Button("Login"); 
       
@@ -487,7 +586,9 @@ public class Main extends Application
         //Code to check all login credentials are filled
         	public void handle(ActionEvent event)
         	{
-        		boolean result=loginSignUpObject.login(userLoginTextField.getText().toString() , userPasswordPasswordField.getText().toString() , (String)loginType.getValue());
+        		boolean result=loginSignUpObject.login(userLoginTextField.getText().toString() ,
+        											userPasswordPasswordField.getText().toString() ,
+        											(String)loginType.getValue());
         		if(result)
         		{
         			studentObject.sid = userLoginTextField.getText().toString();
