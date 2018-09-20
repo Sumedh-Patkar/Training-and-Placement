@@ -64,7 +64,7 @@ public class Student {
         MongoClient mongo = new MongoClient( "localhost" , 27017 );
         MongoDatabase db = mongo.getDatabase("tnpdb");
         
-        MongoCollection<Document> collection = db.getCollection("student");
+        MongoCollection<Document> collection = db.getCollection("Student");
         
         BasicDBObject whereQuery = new BasicDBObject();
         whereQuery.put("sid" , sid);
@@ -124,7 +124,7 @@ public class Student {
         MongoClient mongo = new MongoClient( "localhost" , 27017 );
         MongoDatabase db = mongo.getDatabase("tnpdb");
         
-        MongoCollection<Document> collection = db.getCollection("student");
+        MongoCollection<Document> collection = db.getCollection("Student");
         
         FindIterable<Document> iterDoc = collection.find(); 
         
