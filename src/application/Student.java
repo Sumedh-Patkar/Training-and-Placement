@@ -40,7 +40,7 @@ public class Student {
     
     //for actually storing the student data in the database
     //this function will be called by student object in the UI class
-    public void setstudentdata()
+    public void setStudentData()
     {
         
     MongoClient mongo = new MongoClient( "localhost" , 27017 );
@@ -59,7 +59,7 @@ public class Student {
     
     
     //will be used for displaying the student's profile
-    public  void getstudentdata(String sid)
+    public  void getStudentData(String sid)
     {
         MongoClient mongo = new MongoClient( "localhost" , 27017 );
         MongoDatabase db = mongo.getDatabase("tnpdb");
@@ -94,10 +94,10 @@ public class Student {
 
                             
                             Document result = it.next();
-                            this.sid = result.get("sid").toString();
+                            this.sid  = result.get("sid").toString();
                             this.name = result.get("name").toString();
-                            this.age = (double)result.get("age");
-                            this.CGPA = (double)result.get("CGPA");
+                            this.age  =  (Integer)result.get("age");
+                            this.CGPA = (Integer)result.get("CGPA");
                             
                             
                             //the println statements further are only for testing purpose
@@ -119,7 +119,7 @@ public class Student {
     
     //getallstudentdata() is a temporary function.
     //to be removed afterwards
-    public  void getallstudentdata()
+    public  void getAllStudentData()
     {
         MongoClient mongo = new MongoClient( "localhost" , 27017 );
         MongoDatabase db = mongo.getDatabase("tnpdb");
@@ -153,8 +153,8 @@ public class Student {
                             //this.sid = result.get("sid").toString();  //alternate way
                             this.sid = result.getString("sid");
                             this.name = result.get("name").toString();
-                            this.age =  (double) result.get("age");
-                            this.CGPA = (double) result.get("CGPA");
+                            this.age =  (Integer) result.get("age");
+                            this.CGPA = (Integer) result.get("CGPA");
 
                             System.out.println("Profile of Student:");
                             System.out.println();
@@ -200,16 +200,16 @@ public class Student {
             age = sc.nextInt();
             CGPA = sc.nextInt();
             Student s1=new Student(sid,name,age,CGPA);
-            s1.setstudentdata();
+            s1.setStudentData();
             break;
         case 2:
             System.out.println("Student Data :");
-            s.getallstudentdata();
+            s.getAllStudentData();
             break;
         case 3: 
             System.out.println("Enter sid of student to be searched");
             sid=sc.next();
-            s.getstudentdata(sid);
+            s.getStudentData(sid);
             break;
         }
         }while(choice!=10);
