@@ -1,5 +1,6 @@
 package application;
 
+import java.util.ArrayList;
 import javafx.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -147,44 +148,15 @@ public class Main extends Application
 
     public void searchByDomainPageDisplay(Stage stage)
     {
-    	//Created a dummy label to display bigger font size with colour
-    	
-//    	Label company = new Label("hello");
-//    	company.setPrefSize(200, 200);
-//    	company.setFont(Font.font("Verdana", 40));
-//    	company.setTextFill(Color.RED);
-//    	GridPane a = new GridPane();
-//    	a.add(company, 0, 0);
-//    	Scene scene = new Scene(a,600,600);
-//    	stage.setScene(scene);
-//    	stage.show();
-    	
-    	CheckBox domains[] = new CheckBox[3];
-    	domains[0] = new CheckBox("Artificial Intelligence");
-    	domains[1] = new CheckBox("Deep Learning");
-    	domains[2] = new CheckBox("Computer Vision");
-    	
     	
     }
     
     public void searchByCompanyPageDisplay(Stage stage)
     {
-    	ObservableList<String> options = 
-            	FXCollections.observableArrayList(
-        		"Apple",
-            	"Company",
-            	"Admin"
-        	);
-            
-            final ComboBox<String> loginType = new ComboBox<>(options);
-
-    }
-    
-    public void homePageDisplay(Stage stage)
-    {
+    	
     	MenuBar leftBar = new MenuBar();
     	Menu profile = new Menu("Profile");
-        Menu home = new Menu("Home");
+        Menu home = new Menu("\b");
         Menu search = new Menu("Search");
         MenuItem searchByCompany = new MenuItem("Search by company name");
         MenuItem searchByDomain = new MenuItem("Search by domains");
@@ -192,6 +164,19 @@ public class Main extends Application
         MenuItem myProfile = new MenuItem("My Profile");
         profile.getItems().addAll(myProfile,signout);
         search.getItems().addAll(searchByDomain,searchByCompany);
+        
+        Label menuLabel = new Label("Home");
+        menuLabel.setOnMouseClicked(new EventHandler<Event>()
+        {
+			@Override
+			public void handle(Event event) 
+			{
+				homePageDisplay(stage);
+			}
+		});
+        
+        home.setGraphic(menuLabel);
+        
         leftBar.getMenus().addAll(home,search);
         MenuBar rightBar = new MenuBar();
         rightBar.getMenus().addAll(profile);
@@ -199,10 +184,150 @@ public class Main extends Application
         spacer.getStyleClass().add("menu-bar");
         HBox.setHgrow(spacer, Priority.SOMETIMES);
         HBox menubars = new HBox(leftBar, spacer, rightBar);
-
+    	
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(menubars);
-
+        
+    	ObservableList<String> options =
+            	FXCollections.observableArrayList();
+        
+    	ArrayList<String> companyList = new ArrayList<String>();
+    	
+    	companyList = companyObject.getCompanyList();
+    	for(int i=0;i<companyList.size();i++)
+    	{
+    		options.add(companyList.get(i));
+    	}
+    	
+    	
+        final ComboBox<String> companyListSearchBar = new ComboBox<>(options);
+            
+        companyListSearchBar.getSelectionModel().select("--Select--");
+     
+        
+        
+     GridPane gridPane = new GridPane();    
+     
+     gridPane.setMinSize(400, 200); 
+     gridPane.setPadding(new Insets(10, 10, 10, 10)); 
+     gridPane.setVgap(20); 
+     gridPane.setHgap(20);       
+     gridPane.setAlignment(Pos.CENTER);
+     
+     gridPane.add(companyListSearchBar, 2, 4);
+     
+     
+     
+     Scene scene = new Scene(new VBox(borderPane,gridPane),400,400);
+     
+     stage.setScene(scene);
+     
+     stage.show();
+    
+     myProfile.setOnAction(new EventHandler<ActionEvent>() 
+     {
+     	@Override
+     	public void handle(ActionEvent event)
+     	{
+     		myProfilePageDisplay(stage);
+     	}
+     	
+		});
+     
+     companyListSearchBar.setOnAction(new EventHandler<ActionEvent>() 
+     {
+    	 @Override
+    	 public void handle(ActionEvent event)
+    	 {
+    		 String companyNameSelected=(String)companyListSearchBar.getValue();
+    		 companyObject.name=companyNameSelected;
+    		 companyObject.getProfile();
+    		 companyProfilePageDisplay(stage);
+    	 }
+	});
+     
+     searchByDomain.setOnAction(new EventHandler<ActionEvent>() 
+     {
+     	@Override
+     	public void handle(ActionEvent event)
+     	{
+     		searchByDomainPageDisplay(stage);
+     	}
+     	
+		});
+     
+     searchByCompany.setOnAction(new EventHandler<ActionEvent>() 
+     {
+     	@Override
+     	public void handle(ActionEvent event)
+     	{
+     		searchByCompanyPageDisplay(stage);
+     	}
+     	
+		});
+     
+     signout.setOnAction(new EventHandler<ActionEvent>() 
+     {
+     	@Override
+     	public void handle(ActionEvent event)
+     	{
+     		loginPageDisplay(stage);
+     	}
+     	
+		});
+     
+    }
+    
+    public void homePageDisplay(Stage stage)
+    {
+    	MenuBar leftBar = new MenuBar();
+    	Menu profile = new Menu("Profile");
+        Menu home = new Menu("\b");
+        Menu search = new Menu("Search");
+        MenuItem searchByCompany = new MenuItem("Search by company name");
+        MenuItem searchByDomain = new MenuItem("Search by domains");
+        MenuItem signout = new MenuItem("Signout");
+        MenuItem myProfile = new MenuItem("My Profile");
+        profile.getItems().addAll(myProfile,signout);
+        search.getItems().addAll(searchByDomain,searchByCompany);
+        
+        Label menuLabel = new Label("Home");
+        menuLabel.setOnMouseClicked(new EventHandler<Event>()
+        {
+			@Override
+			public void handle(Event event) 
+			{
+				homePageDisplay(stage);
+			}
+		});
+        
+        home.setGraphic(menuLabel);
+        
+        
+        leftBar.getMenus().addAll(home,search);
+        MenuBar rightBar = new MenuBar();
+        rightBar.getMenus().addAll(profile);
+        Region spacer = new Region();
+        spacer.getStyleClass().add("menu-bar");
+        HBox.setHgrow(spacer, Priority.SOMETIMES);
+        HBox menubars = new HBox(leftBar, spacer, rightBar);
+        
+        System.out.println("Home");
+        
+        BorderPane borderPane = new BorderPane();
+        borderPane.setTop(menubars);
+        System.out.println("here");
+        myProfile.setOnAction(new EventHandler<ActionEvent>() 
+        {
+        	@Override
+        	public void handle(ActionEvent event)
+        	{
+        		System.out.println("here1");
+        		myProfilePageDisplay(stage);
+        	}
+        	
+		});
+        
         searchByDomain.setOnAction(new EventHandler<ActionEvent>() 
         {
         	@Override
@@ -249,10 +374,52 @@ public class Main extends Application
     	Label address = new Label("Address");
     }
     
+    public void myProfilePageDisplay(Stage stage)
+    {
+    	studentObject.getStudentData(studentObject.sid);
+    	Label studentId = new Label(studentObject.sid);
+    	
+    	Label studentName = new Label(studentObject.name);
+    	
+    	Label studentAge = new Label(""+studentObject.age);
+    	
+    	Label studentCGPA = new Label(""+studentObject.CGPA);
+    	
+    	Label displayId = new Label("ID");
+    	
+    	Label displayName = new Label("Name");
+    	
+    	Label displayAge = new Label("Age");
+    	
+    	Label displayCGPA = new Label("CGPA");
+    	
+    	GridPane gridPane = new GridPane();
+    	
+    	gridPane.setMinSize(400, 200); 
+        gridPane.setPadding(new Insets(10, 10, 10, 10)); 
+        gridPane.setVgap(20); 
+        gridPane.setHgap(20);       
+        gridPane.setAlignment(Pos.CENTER);
+    	
+    	gridPane.add(displayId, 0, 0);
+    	gridPane.add(studentId, 1, 0);
+    	gridPane.add(displayName, 0, 1);
+    	gridPane.add(studentName, 1, 1);
+    	gridPane.add(displayAge, 0, 2);
+    	gridPane.add(studentAge, 1, 2);
+    	gridPane.add(displayCGPA, 0, 3);
+    	gridPane.add(studentCGPA, 1, 3);
+    	
+    	Scene scene = new Scene(gridPane,400,400);
+    	
+    	stage.setScene(scene);
+
+    	stage.show();
+    }
     
     public void loginPageDisplay(Stage stage)
     {
-
+    	
         ObservableList<String> options = 
         	FXCollections.observableArrayList(
     		"Student",
@@ -323,6 +490,7 @@ public class Main extends Application
         		boolean result=loginSignUpObject.login(userLoginTextField.getText().toString() , userPasswordPasswordField.getText().toString() , (String)loginType.getValue());
         		if(result)
         		{
+        			studentObject.sid = userLoginTextField.getText().toString();
         			homePageDisplay(stage);
         		}
         		else
@@ -340,7 +508,7 @@ public class Main extends Application
 
     	loginSignUpObject = new LoginSignup();
     	companyObject = new Company();
-
+    	studentObject = new Student();
         loginPageDisplay(primaryStage);
     }
 

@@ -52,7 +52,7 @@ public class Company {
 	 */
 	void getProfile()
 	{
-		companyId = "apple";
+		
 		//Create a mongo client
 		MongoClient mongo = new MongoClient("localhost",27017);
 		
@@ -64,7 +64,7 @@ public class Company {
 		
 		//Find the Company's Document from the Collection
 		BasicDBObject query = new BasicDBObject();
-		query.put("companyId", this.companyId);
+		query.put("name", this.name);
 		FindIterable <Document> iterDoc = collection.find(query);
 		MongoCursor <Document> it = iterDoc.iterator();
 		
@@ -127,8 +127,10 @@ public class Company {
 		collection.replaceOne(searchQuery, newDocument);
 	}
 	
-	void getCompanyList()
+	ArrayList<String> getCompanyList()
 	{
+		ArrayList<String> returningCompanyList = new ArrayList<String>();
+		
 		MongoClient mongo = new MongoClient("localhost",27017);
 		
 		//access the database
@@ -147,8 +149,10 @@ public class Company {
 //		Document result = it.next();
 		while(it.hasNext())
 		{
-			System.out.println(it.next());
+			Document result = it.next();
+			returningCompanyList.add(result.get("name").toString());
 		}
+		return returningCompanyList;
 	}
 	
 	/*

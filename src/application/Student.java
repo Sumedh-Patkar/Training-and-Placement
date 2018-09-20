@@ -59,12 +59,12 @@ public class Student {
     
     
     //will be used for displaying the student's profile
-    public  void getstudentdata(String sid)
+    public  void getStudentData(String sid)
     {
         MongoClient mongo = new MongoClient( "localhost" , 27017 );
         MongoDatabase db = mongo.getDatabase("tnpdb");
         
-        MongoCollection<Document> collection = db.getCollection("student");
+        MongoCollection<Document> collection = db.getCollection("Student");
         
         BasicDBObject whereQuery = new BasicDBObject();
         whereQuery.put("sid" , sid);
@@ -124,7 +124,7 @@ public class Student {
         MongoClient mongo = new MongoClient( "localhost" , 27017 );
         MongoDatabase db = mongo.getDatabase("tnpdb");
         
-        MongoCollection<Document> collection = db.getCollection("student");
+        MongoCollection<Document> collection = db.getCollection("Student");
         
         FindIterable<Document> iterDoc = collection.find(); 
         
@@ -209,7 +209,7 @@ public class Student {
         case 3: 
             System.out.println("Enter sid of student to be searched");
             sid=sc.next();
-            s.getstudentdata(sid);
+            s.getStudentData(sid);
             break;
         }
         }while(choice!=10);
