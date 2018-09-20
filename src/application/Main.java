@@ -110,7 +110,7 @@ public class Main extends Application
                     if(result)
                     {
                     	homePageDisplay(stage);
-                    	studentObject.setstudentdata();
+                    	studentObject.setStudentData();
                     }
                     else
                     {
