@@ -13,49 +13,76 @@ import com.mongodb.client.MongoDatabase;
 
 public class Student
 {
-    String sid,name;
-    double age,CGPA;         // double taken on purpose
+    String sid;
+    String name;
+    double age;
+    double CGPA;         // double taken on purpose
     
-    //constructor
+    MongoClient mongo;
+	MongoDatabase database;
+	MongoCollection<Document> collection;
+	
     public Student()
     {
+    	/*
+    	 * Constructor. Initializes variables to default values.
+    	 * Establishes connection with the database.
+    	 * Accesses "Student" collection from the Database. 
+    	 */
         sid = "";
         name = "";
         age=0;
         CGPA=0;
+        
+		mongo = new MongoClient("localhost",27017);
+		database = mongo.getDatabase("tnpdb");
+		collection = database.getCollection("Student");
     }
+
     public Student(String sid,String name,double age,double cgpa)
     {
         this.sid = sid;
         this.name = name;
         this.age=age;
         this.CGPA=cgpa;
+        
+        mongo = new MongoClient("localhost",27017);
+		database = mongo.getDatabase("tnpdb");
+		collection = database.getCollection("Student");
     }
     
+    public void updateProfile()
+    {
+    	/*
+		 * used to update Profile document in Student collection
+		 */
+    	
+        Document searchQuery = new Document("sid", this.sid);
+
+        Document newDocument = new Document("sid", this.sid) 
+                .append("name", this.name)
+                .append("age", this.age) 
+                .append("CGPA", this.CGPA);  
+        
+        //replace that document in the Student Collection
+        collection.replaceOne(searchQuery,newDocument);    
+    }
+
     //for actually storing the student data in the database
     //this function will be called by student object in the UI class
     public void setStudentData()
-    {
-    	MongoClient mongo = new MongoClient( "localhost" , 27017 );
-    	MongoDatabase db = mongo.getDatabase("tnpdb");
-    
-    	MongoCollection<Document> collection = db.getCollection("Student");
-    	Document document = new Document("sid", sid) 
+    {	
+        Document document = new Document("sid", sid) 
     			.append("name", name)
     			.append("age", age) 
     			.append("CGPA", CGPA);  
-    	collection.insertOne(document); 
-    	System.out.println("Document inserted successfully");
+    	
+        collection.insertOne(document); 
     }
     
     //will be used for displaying the student's profile
     public  void getStudentData(String sid)
-    {
-        MongoClient mongo = new MongoClient( "localhost" , 27017 );
-        MongoDatabase db = mongo.getDatabase("tnpdb");
-        
-        MongoCollection<Document> collection = db.getCollection("Student");
-        
+    {   
         BasicDBObject whereQuery = new BasicDBObject();
         whereQuery.put("sid" , sid);
         FindIterable<Document> iterDoc = collection.find(whereQuery); 
