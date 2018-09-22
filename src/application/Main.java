@@ -1,28 +1,31 @@
 package application;
 
-
 import java.util.ArrayList;
-import javafx.*;
+
+import org.bson.Document;
+
+import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.stage.*;
-import javafx.scene.*;
+
+import javafx.stage.Stage;
+
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -34,7 +37,9 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.geometry.*;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 
 public class Main extends Application
 {
@@ -42,176 +47,193 @@ public class Main extends Application
     LoginSignup loginSignUpObject;
     Company companyObject;
 
-    public void signUpPageDisplay( final Stage stage)
-    {
-        Hyperlink loginHyperlink = new Hyperlink();
+    MongoClient mongo;
+    MongoDatabase database;
+    MongoCollection<Document> collection;
 
-        loginHyperlink.setText("Login");
+    public void signUpPageDisplay(final Stage stage)
+    {
+        Hyperlink loginHyperlink = new Hyperlink("Login");
 
         loginHyperlink.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event)
+        	public void handle(ActionEvent event)
             {
                 loginPageDisplay(stage);
             }
         });
-            Label userSignUpLabel = new Label("User ID");       
-  
-            Label userAgeLabel = new Label("Age");
+
+        Label userSignUpLabel = new Label("User ID");       
+        Label userAgeLabel = new Label("Age");
+        Label passwordLabel = new Label("Password"); 
+        Label confirmPasswordLabel = new Label("Confirm Password");
+        Label nameLabel = new Label("Name");
+        Label CGPALabel = new Label("CGPA");
+
+        final TextField nameField = new TextField();
+        final TextField ageField = new TextField();
+        final TextField CGPAField = new TextField();
+        final TextField userSignUpTextField = new TextField();       
+        final PasswordField userPasswordPasswordField = new PasswordField(); 
+        PasswordField confirmPasswordField = new PasswordField();
+
+        Button SignUpButton = new Button("Sign Up"); 
             
-            Label passwordLabel = new Label("Password"); 
+        GridPane gridPaneSignUp = new GridPane();    
             
-
-            Label confirmPasswordLabel = new Label("Confirm Password");
-
-            Label nameLabel = new Label("Name");
-
-            Label CGPALabel = new Label("CGPA");
-
-            final TextField nameField = new TextField();
-            
-            final TextField ageField = new TextField();
-
-            final TextField CGPAField = new TextField();
-
-            final TextField userSignUpTextField = new TextField();       
-
-            final PasswordField userPasswordPasswordField = new PasswordField(); 
-
-            PasswordField confirmPasswordField = new PasswordField();
-
-            Button SignUpButton = new Button("Sign Up"); 
-            
-            GridPane gridPaneSignUp = new GridPane();    
-            
-            gridPaneSignUp.setMinSize(400, 200); 
-               
-            gridPaneSignUp.setPadding(new Insets(10, 10, 10, 10)); 
-              
-            gridPaneSignUp.setVgap(20); 
-            gridPaneSignUp.setHgap(20);       
-            
-            gridPaneSignUp.setAlignment(Pos.CENTER); 
+        gridPaneSignUp.setMinSize(400, 200); 
+        gridPaneSignUp.setPadding(new Insets(10, 10, 10, 10)); 
+        gridPaneSignUp.setVgap(20); 
+        gridPaneSignUp.setHgap(20);       
+        gridPaneSignUp.setAlignment(Pos.CENTER); 
              
-            SignUpButton.setOnAction(new EventHandler<ActionEvent>() 
+        SignUpButton.setOnAction(new EventHandler<ActionEvent>() 
+        {
+        	public void handle(ActionEvent event)
+        	{
+        		studentObject = new Student(userSignUpTextField.getText().toString(),
+        				nameField.getText().toString(),
+        				Double.parseDouble(ageField.getText().toString()),
+        				Double.parseDouble(CGPAField.getText().toString()));
 
-            {
+        		boolean result=loginSignUpObject.signUp(userSignUpTextField.getText().toString(),
+        				userPasswordPasswordField.getText().toString());
+        		if(result)
+        		{
+                    studentObject.setStudentData();
+        			homePageDisplay(stage);
+        		}
+        		else
+        		{
+        			signUpPageDisplay(stage);
+        		}	
+        	}
+        });
 
-                public void handle(ActionEvent event)
-                {
-
-                	studentObject = new Student(userSignUpTextField.getText().toString(),
-                								nameField.getText().toString(),
-                								Double.parseDouble(ageField.getText().toString()),
-                								Double.parseDouble(CGPAField.getText().toString()));
-                	
-                	boolean result=loginSignUpObject.signUp(userSignUpTextField.getText().toString(),
-                											userPasswordPasswordField.getText().toString());
-                    if(result)
-                    {
-                    	homePageDisplay(stage);
-                    	studentObject.setstudentdata();
-                    }
-                    else
-                    {
-                    	signUpPageDisplay(stage);
-                    }
-                	
-
-                }
-
-            });
-
-
-            gridPaneSignUp.add(userSignUpLabel, 0, 0); 
-            gridPaneSignUp.add(userSignUpTextField, 1, 0); 
-            gridPaneSignUp.add(nameLabel, 0, 1);
-            gridPaneSignUp.add(nameField, 1, 1);
-            gridPaneSignUp.add(ageField, 1, 2);
-            gridPaneSignUp.add(userAgeLabel, 0, 2);
-            gridPaneSignUp.add(CGPALabel, 0, 3);
-            gridPaneSignUp.add(CGPAField, 1, 3);
-            gridPaneSignUp.add(passwordLabel, 0, 4);       
-            gridPaneSignUp.add(userPasswordPasswordField, 1, 4);
-            gridPaneSignUp.add(confirmPasswordField, 1, 5);
-            gridPaneSignUp.add(confirmPasswordLabel, 0, 5); 
-            gridPaneSignUp.add(SignUpButton, 0,6); 
-            gridPaneSignUp.add(loginHyperlink, 1, 6);
-            
-
-            Scene scene = new Scene(gridPaneSignUp);  
-      
-            stage.setTitle("Grid Pane Example"); 
-               
-            stage.setScene(scene); 
-               
-
-            stage.show();
-
+        gridPaneSignUp.add(userSignUpLabel, 0, 0); 
+        gridPaneSignUp.add(userSignUpTextField, 1, 0); 
+        gridPaneSignUp.add(nameLabel, 0, 1);
+        gridPaneSignUp.add(nameField, 1, 1);
+        gridPaneSignUp.add(ageField, 1, 2);
+        gridPaneSignUp.add(userAgeLabel, 0, 2);
+        gridPaneSignUp.add(CGPALabel, 0, 3);
+        gridPaneSignUp.add(CGPAField, 1, 3);
+        gridPaneSignUp.add(passwordLabel, 0, 4);       
+        gridPaneSignUp.add(userPasswordPasswordField, 1, 4);
+        gridPaneSignUp.add(confirmPasswordField, 1, 5);
+        gridPaneSignUp.add(confirmPasswordLabel, 0, 5); 
+        gridPaneSignUp.add(SignUpButton, 0,6); 
+        gridPaneSignUp.add(loginHyperlink, 1, 6);
+        
+        Scene scene = new Scene(gridPaneSignUp);  
+        
+        stage.setScene(scene);        
+        stage.show();
     }
 
+    public void companyListPageDisplay(Stage stage,ArrayList<String> domainList)
+    {
+    	//access the collection Company
+    	collection = database.getCollection("Company");
+
+    	//Get matching documents
+    	Document query = new Document("subdomain",new Document("$in",domainList));
+    	FindIterable<Document> iterDoc = collection.find(query);
+    	MongoCursor<Document> it = iterDoc.iterator();
+    	Document result;
+    	
+    	//display them
+    	ArrayList<Hyperlink> companyNames = new ArrayList<>();
+    	ArrayList<Label> description = new ArrayList<>();
+    	ArrayList<Label> domains = new ArrayList<>();
+    	ArrayList<Label> subdomains = new ArrayList<>();
+    	while(it.hasNext())
+    	{
+    		result = it.next();
+    		companyNames.add(new Hyperlink(result.get("name").toString()));
+    		description.add(new Label(result.get("generalDescription").toString()));
+    		domains.add(new Label(result.get("domain").toString()));
+    		subdomains.add(new Label(result.get("subdomain").toString()));
+    	}
+    	
+    	BorderPane borderPane = createMenuBar(stage);
+
+        VBox vBox = new VBox();
+        for(int i = 0; i < companyNames.size(); i++)
+        {   
+            /*
+            to get the company Name selected in order to 
+            show appropriate profile page
+            */
+        	String companyNameSelected = companyNames.get(i).getText();
+        	
+        	companyNames.get(i).setOnMouseClicked(new EventHandler<Event>()
+            {
+                @Override
+                public void handle(Event event) 
+                {
+                	System.out.println(companyNameSelected + " is selected");
+                    companyProfilePageDisplay(stage,companyNameSelected);
+                }
+            });
+
+        	VBox.setMargin(companyNames.get(i), new Insets(5, 10, 5, 10));
+            VBox.setMargin(description.get(i), new Insets(5, 10, 5, 10));
+            VBox.setMargin(domains.get(i), new Insets(5, 10, 5, 10));
+            VBox.setMargin(subdomains.get(i), new Insets(5, 10, 20, 10));
+        	
+        	vBox.getChildren().add(companyNames.get(i));  
+        	vBox.getChildren().add(description.get(i));
+        	vBox.getChildren().add(domains.get(i));
+        	vBox.getChildren().add(subdomains.get(i));
+
+        }
+        
+        ScrollPane scrollPane = new ScrollPane();
+    	scrollPane.setContent(vBox);
+            
+    	// Pannable.
+    	scrollPane.setPannable(true);
+    	        
+    	Scene scene = new Scene(new VBox(borderPane,scrollPane),400,400);  
+        stage.setScene(scene);
+    	stage.show();	
+    }
+    
     public void searchByDomainPageDisplay(Stage stage)
     {
-
-
-        	
-        	//code for menu bar
-        	MenuBar leftBar = new MenuBar();
-        	Menu profile = new Menu("Profile");
-            Menu home = new Menu("Home");
-            Menu search = new Menu("Search");
-            MenuItem searchByCompany = new MenuItem("Search by company name");
-            MenuItem searchByDomain = new MenuItem("Search by domains");
-            MenuItem signout = new MenuItem("Signout");
-            MenuItem myProfile = new MenuItem("My Profile");
-            profile.getItems().addAll(myProfile,signout);
-            search.getItems().addAll(searchByDomain,searchByCompany);
-            leftBar.getMenus().addAll(home,search);
-            MenuBar rightBar = new MenuBar();
-            rightBar.getMenus().addAll(profile);
-            Region spacer = new Region();
-            spacer.getStyleClass().add("menu-bar");
-            HBox.setHgrow(spacer, Priority.SOMETIMES);
-            HBox menubars = new HBox(leftBar, spacer, rightBar);
-
-            BorderPane borderPane = new BorderPane();
-            borderPane.setTop(menubars);
-
-        	
-        	
-        	//main code for this function
-        	CheckBox subdomains[] = new CheckBox[3];
-        	subdomains[0] = new CheckBox("Artificial Intelligence");
-        	subdomains[1] = new CheckBox("Deep Learning");
-        	subdomains[2] = new CheckBox("Computer Vision");
-        	
-
-        	Label Domain1 = new Label("Domain1");
-         
+    	BorderPane borderPane = createMenuBar(stage);
+    		
+    	//main code for this function
+    	CheckBox subdomains[] = new CheckBox[3];
+    	subdomains[0] = new CheckBox("Artificial Intelligence");
+    	subdomains[1] = new CheckBox("Machine Learning");
+    	subdomains[2] = new CheckBox("Natural Language Processing");
+    	
+    	Label Domain1 = new Label("Domain1");
            
-            Button searchCompanies = new Button("Search"); 
+    	Button searchCompanies = new Button("Search"); 
           
-            GridPane gridPane = new GridPane();    
+    	GridPane gridPane = new GridPane();    
           
-            gridPane.setMinSize(400, 200); 
-            gridPane.setPadding(new Insets(10, 10, 10, 10)); 
-            gridPane.setVgap(20); 
-            gridPane.setHgap(20);       
-            gridPane.setAlignment(Pos.CENTER); 
-           
-            gridPane.add(Domain1,0 ,1 );
-            gridPane.add(subdomains[0],1 ,2 );
-            gridPane.add(subdomains[1], 1, 3);
-            //gridPane.add(subdomains[2], 1, 4);
+    	gridPane.setMinSize(400, 200); 
+    	gridPane.setPadding(new Insets(10, 10, 10, 10)); 
+    	gridPane.setVgap(20); 
+    	gridPane.setHgap(20);       
+    	gridPane.setAlignment(Pos.CENTER); 
+    	
+    	gridPane.add(Domain1,0 ,1 );
+    	gridPane.add(subdomains[0],1 ,2 );
+    	gridPane.add(subdomains[1], 1, 3);
+    	//gridPane.add(subdomains[2], 1, 4);
+    	
+    	//gridPane.add(Domain1,0 ,6 );
+    	//gridPane.add(subdomains[0],1 ,7 );   //needs diff array elements
+    	//gridPane.add(subdomains[1], 1, 8);
+    	gridPane.add(subdomains[2], 1, 4);
+    	
+    	gridPane.add(searchCompanies,2,20);
             
-            //gridPane.add(Domain1,0 ,6 );
-            //gridPane.add(subdomains[0],1 ,7 );   //needs diff array elements
-            //gridPane.add(subdomains[1], 1, 8);
-            gridPane.add(subdomains[2], 1, 9);
-            
-            
-            gridPane.add(searchCompanies,2,50);
-            
-           /* VBox a = new VBox(borderPane,gridPane);
+    	/* VBox a = new VBox(borderPane,gridPane);
             ScrollPane scrollPane = new ScrollPane(a);
             scrollPane.add(a);
            */ 
@@ -219,72 +241,40 @@ public class Main extends Application
            /* Pane mainPane = new Pane();
             mainPane.getChildren().addAll(borderPane,mainPane);*/
      
-            ScrollPane scrollPane = new ScrollPane();
-            scrollPane.setContent(gridPane);
+    	ScrollPane scrollPane = new ScrollPane();
+    	scrollPane.setContent(gridPane);
             
-            // Pannable.
-            scrollPane.setPannable(true);
-          
-            
-            
-            Scene scene = new Scene(new VBox(borderPane,scrollPane));  
-          
-            stage.setTitle("Training-and-Placement"); 
-              
-            stage.setScene(scene);
-         
-            stage.show();
-
-            searchCompanies.setOnAction(new EventHandler<ActionEvent>()
-            {
-            
-            	public void handle(ActionEvent event)
-            	{
-            		//companylistPageDisplay(stage);
-            	}
-            });
-        	
-       
+    	// Pannable.
+    	scrollPane.setPannable(true);
+                
+    	Scene scene = new Scene(new VBox(borderPane,scrollPane));  
+        stage.setScene(scene);
+    	stage.show();
+        
+    	ArrayList<String> domainList = new ArrayList<String>();
     	
+    	searchCompanies.setOnAction(new EventHandler<ActionEvent>()
+    	{	
+    		public void handle(ActionEvent event)
+    		{
+    			//get all selected domains from checkboxes
+    	    	for(int i = 0; i < subdomains.length; i++)
+    	    		if(subdomains[i].isSelected())
+    	    			domainList.add(subdomains[i].getText());
+    	    	
+    	    	/*
+                if domain list is empty
+                (i.e. No checkboxes are selected) show error
+                */
+    	    	
+    			companyListPageDisplay(stage,domainList);
+    		}
+    	});
     }
     
     public void searchByCompanyPageDisplay(final Stage stage)
-    {
-    	
-
-    	MenuBar leftBar = new MenuBar();
-    	Menu profile = new Menu("Profile");
-        Menu home = new Menu("\b");
-        Menu search = new Menu("Search");
-        MenuItem searchByCompany = new MenuItem("Search by company name");
-        MenuItem searchByDomain = new MenuItem("Search by domains");
-        MenuItem signout = new MenuItem("Signout");
-        MenuItem myProfile = new MenuItem("My Profile");
-        profile.getItems().addAll(myProfile,signout);
-        search.getItems().addAll(searchByDomain,searchByCompany);
-        
-        Label menuLabel = new Label("Home");
-        menuLabel.setOnMouseClicked(new EventHandler<Event>()
-        {
-			@Override
-			public void handle(Event event) 
-			{
-				homePageDisplay(stage);
-			}
-		});
-        
-        home.setGraphic(menuLabel);
-        
-        leftBar.getMenus().addAll(home,search);
-        MenuBar rightBar = new MenuBar();
-        rightBar.getMenus().addAll(profile);
-        Region spacer = new Region();
-        spacer.getStyleClass().add("menu-bar");
-        HBox.setHgrow(spacer, Priority.SOMETIMES);
-        HBox menubars = new HBox(leftBar, spacer, rightBar);
-    	
-        BorderPane borderPane = new BorderPane();
-        borderPane.setTop(menubars);
+    {    	
+        BorderPane borderPane = createMenuBar(stage);
         
     	ObservableList<String> options =
             	FXCollections.observableArrayList();
@@ -297,90 +287,43 @@ public class Main extends Application
     		options.add(companyList.get(i));
     	}
     	
-    	
         final ComboBox<String> companyListSearchBar = new ComboBox<>(options);
             
-        companyListSearchBar.getSelectionModel().select("--Select--");
-     
+        companyListSearchBar.getSelectionModel().select("--Select--"); 
         
-        
-     GridPane gridPane = new GridPane();    
+        GridPane gridPane = new GridPane();    
      
-     gridPane.setMinSize(400, 200); 
-     gridPane.setPadding(new Insets(10, 10, 10, 10)); 
-     gridPane.setVgap(20); 
-     gridPane.setHgap(20);       
-     gridPane.setAlignment(Pos.CENTER);
+        gridPane.setMinSize(400, 200); 
+        gridPane.setPadding(new Insets(10, 10, 10, 10)); 
+        gridPane.setVgap(20); 
+        gridPane.setHgap(20);       
+        gridPane.setAlignment(Pos.CENTER);
      
-     gridPane.add(companyListSearchBar, 2, 4);
+        gridPane.add(companyListSearchBar, 2, 4);
      
+        Scene scene = new Scene(new VBox(borderPane,gridPane),400,400);
+        stage.setScene(scene);
      
-     
-     Scene scene = new Scene(new VBox(borderPane,gridPane),400,400);
-     
-     stage.setScene(scene);
-     
-     stage.show();
-    
-     myProfile.setOnAction(new EventHandler<ActionEvent>() 
-     {
-     	@Override
-     	public void handle(ActionEvent event)
-     	{
-     		myProfilePageDisplay(stage);
-     	}
-     	
-		});
-     
-     companyListSearchBar.setOnAction(new EventHandler<ActionEvent>() 
-     {
-    	 @Override
-    	 public void handle(ActionEvent event)
-    	 {
-    		 String companyNameSelected=(String)companyListSearchBar.getValue();
-    		 companyObject.name=companyNameSelected;
-    		 companyObject.getProfile();
-    		 companyProfilePageDisplay(stage);
-    	 }
-	});
-     
-     searchByDomain.setOnAction(new EventHandler<ActionEvent>() 
-     {
-     	@Override
-     	public void handle(ActionEvent event)
-     	{
-     		searchByDomainPageDisplay(stage);
-     	}
-     	
-		});
-     
-     searchByCompany.setOnAction(new EventHandler<ActionEvent>() 
-     {
-     	@Override
-     	public void handle(ActionEvent event)
-     	{
-     		searchByCompanyPageDisplay(stage);
-     	}
-     	
-		});
-     
-     signout.setOnAction(new EventHandler<ActionEvent>() 
-     {
-     	@Override
-     	public void handle(ActionEvent event)
-     	{
-     		loginPageDisplay(stage);
-     	}
-     	
-		});
-     
+        stage.show();
 
+        companyListSearchBar.setOnAction(new EventHandler<ActionEvent>() 
+        {
+            @Override
+            public void handle(ActionEvent event)
+            {
+                String companyNameSelected=(String)companyListSearchBar.getValue();
+                companyObject.name=companyNameSelected;
+                companyObject.getProfile();
+                companyProfilePageDisplay(stage,companyNameSelected);
+            }
+        });
     }
     
-    public void homePageDisplay(final Stage stage)
+    //this function returns a borderpane corresponding to THE MENUBAR
+    private BorderPane createMenuBar(Stage stage)
     {
-    	MenuBar leftBar = new MenuBar();
-    	Menu profile = new Menu("Profile");
+        MenuBar leftBar = new MenuBar();
+        Menu profile = new Menu("Profile");
         Menu home = new Menu("\b");
         Menu search = new Menu("Search");
         MenuItem searchByCompany = new MenuItem("Search by company name");
@@ -393,15 +336,14 @@ public class Main extends Application
         Label menuLabel = new Label("Home");
         menuLabel.setOnMouseClicked(new EventHandler<Event>()
         {
-			@Override
-			public void handle(Event event) 
-			{
-				homePageDisplay(stage);
-			}
-		});
+            @Override
+            public void handle(Event event) 
+            {
+                homePageDisplay(stage);
+            }
+        });
         
-        home.setGraphic(menuLabel);
-        
+        home.setGraphic(menuLabel);     
         
         leftBar.getMenus().addAll(home,search);
         MenuBar rightBar = new MenuBar();
@@ -411,85 +353,133 @@ public class Main extends Application
         HBox.setHgrow(spacer, Priority.SOMETIMES);
         HBox menubars = new HBox(leftBar, spacer, rightBar);
         
-
-        System.out.println("Home");
-        
-        BorderPane borderPane = new BorderPane();
-        borderPane.setTop(menubars);
-        System.out.println("here");
         myProfile.setOnAction(new EventHandler<ActionEvent>() 
         {
-        	@Override
-        	public void handle(ActionEvent event)
-        	{
-        		System.out.println("here1");
-        		myProfilePageDisplay(stage);
-        	}
-        	
-		});
-
+            @Override
+            public void handle(ActionEvent event)
+            {
+                System.out.println("here1");
+                myProfilePageDisplay(stage);
+            }   
+        });
         
         searchByDomain.setOnAction(new EventHandler<ActionEvent>() 
         {
-        	public void handle(ActionEvent event)
-        	{
-        		searchByDomainPageDisplay(stage);
-        	}
-        	
-		});
+            public void handle(ActionEvent event)
+            {
+                searchByDomainPageDisplay(stage);
+            }     
+        });
         
         searchByCompany.setOnAction(new EventHandler<ActionEvent>() 
         {
-        	public void handle(ActionEvent event)
-        	{
-        		searchByCompanyPageDisplay(stage);
-        	}
-        	
-		});
+            public void handle(ActionEvent event)
+            {
+                searchByCompanyPageDisplay(stage);
+            }
+        });
         
         signout.setOnAction(new EventHandler<ActionEvent>() 
         {
-        	
-        	public void handle(ActionEvent event)
-        	{
-        		loginPageDisplay(stage);
-        	}
-        	
-		});
+            public void handle(ActionEvent event)
+            {
+                loginPageDisplay(stage);
+            }
+        });
+
+        BorderPane borderPane = new BorderPane();
+        borderPane.setTop(menubars);
+
+        return borderPane;
+    }
+
+    public void homePageDisplay(final Stage stage)
+    {
+        BorderPane borderPane = createMenuBar(stage);
 
         Scene scene = new Scene(borderPane, 400, 400);
         stage.setScene(scene);
         stage.show();
     }
 
-    public void companyProfilePageDisplay(Stage stage)
+    public void companyProfilePageDisplay(Stage stage,String companyName)
     {
-    	Label companyVision = new Label("Vision");
+    	//access the collection Company    	
+    	collection = database.getCollection("Company");
+
+    	//Get matching document
+    	FindIterable<Document> iterDoc = collection.find(new Document("name",companyName));
+    	MongoCursor<Document> it = iterDoc.iterator();
+    	Document company = it.next();
+    
+        //display the profile
+    	BorderPane borderPane = createMenuBar(stage);
+	
+        //only Id's
+    	Label companyNameId = new Label("Name: ");
+    	Label companyDomainId = new Label("Domain: ");
+    	Label companySubdomainId = new Label("Subdomain: ");
+    	Label generalDescriptionId = new Label("Description: ");
+    	Label monthOfVisitId = new Label("Month Of Visit: ");
+    	Label minCGPAId = new Label("Minimum CGPA: ");
+    	Label addressId = new Label("Address: ");
+    	Label contactId = new Label("Contact: ");
     	
-    	Label companyDomains = new Label("Domains");
+        //actual values
+    	Label companyNameLabel = new Label(company.get("name").toString());
+    	Label companyDomainLabel = new Label(company.get("domain").toString());
+    	Label companySubdomainLabel = new Label(company.get("subdomain").toString());
+    	Label generalDescriptionLabel = new Label(company.get("generalDescription").toString());
+    	Label monthOfVisitLabel = new Label(company.get("monthOfVisit").toString());
+    	Label minCGPALabel = new Label(company.get("minCGPA").toString());
+    	Label addressLabel = new Label(company.get("address").toString());
+    	Label contactLabel = new Label(company.get("contact").toString());    	
     	
-    	Label companySubdomains = new Label("Sub-Domains");
+    	GridPane gridPane = new GridPane();
     	
-    	Label address = new Label("Address");
+    	gridPane.setMinSize(400, 200); 
+        gridPane.setPadding(new Insets(10, 10, 10, 10)); 
+        gridPane.setVgap(20); 
+        gridPane.setHgap(20);       
+        gridPane.setAlignment(Pos.CENTER);
+        
+        gridPane.add(companyNameId, 0, 0);
+        gridPane.add(companyDomainId, 0, 1);
+        gridPane.add(companySubdomainId, 0, 2);
+        gridPane.add(generalDescriptionId, 0, 3);
+        gridPane.add(monthOfVisitId, 0, 4);
+        gridPane.add(minCGPAId, 0, 5);
+        gridPane.add(addressId, 0, 6);
+        gridPane.add(contactId, 0, 7);
+        
+        gridPane.add(companyNameLabel, 1, 0);
+        gridPane.add(companyDomainLabel, 1, 1);
+        gridPane.add(companySubdomainLabel, 1, 2);
+        gridPane.add(generalDescriptionLabel, 1, 3);
+        gridPane.add(monthOfVisitLabel, 1, 4);
+        gridPane.add(minCGPALabel, 1, 5);
+        gridPane.add(addressLabel, 1, 6);
+        gridPane.add(contactLabel, 1, 7);
+        
+        Scene scene = new Scene(new VBox(borderPane,gridPane),400,400);
+    	stage.setScene(scene);
+
+    	stage.show();
     }
     
     public void myProfilePageDisplay(Stage stage)
     {
-    	studentObject.getStudentData(studentObject.sid);
+        BorderPane borderPane = createMenuBar(stage);
+
+       	studentObject.getStudentData(studentObject.sid);
     	Label studentId = new Label(studentObject.sid);
-    	
     	Label studentName = new Label(studentObject.name);
-    	
     	Label studentAge = new Label(""+studentObject.age);
-    	
     	Label studentCGPA = new Label(""+studentObject.CGPA);
     	
     	Label displayId = new Label("ID");
-    	
     	Label displayName = new Label("Name");
-    	
     	Label displayAge = new Label("Age");
-    	
     	Label displayCGPA = new Label("CGPA");
     	
     	GridPane gridPane = new GridPane();
@@ -509,17 +499,15 @@ public class Main extends Application
     	gridPane.add(displayCGPA, 0, 3);
     	gridPane.add(studentCGPA, 1, 3);
     	
-    	Scene scene = new Scene(gridPane,400,400);
-    	
+    	Scene scene = new Scene(new VBox(borderPane,gridPane),400,400);
     	stage.setScene(scene);
 
     	stage.show();
     }
     
     public void loginPageDisplay(final Stage stage)
-    {
-    	
-        ObservableList<String> options = 
+    {	
+    	ObservableList<String> options = 
         	FXCollections.observableArrayList(
     		"Student",
         	"Company",
@@ -527,11 +515,10 @@ public class Main extends Application
     	);
         
         final ComboBox<String> loginType = new ComboBox<String>(options);
-
         Hyperlink signUpHyperlink = new Hyperlink("SignUp");
-//        signUpHyperlink.setText("SignUp");
+
         signUpHyperlink.setOnAction(new EventHandler<ActionEvent>() {
-           
+   
             public void handle(ActionEvent event)
             {
                 signUpPageDisplay(stage);
@@ -541,17 +528,12 @@ public class Main extends Application
      	loginType.getSelectionModel().selectFirst();
      
         Label typeLabel = new Label("Type of login");
-
         Label signupLabel = new Label("New user?");
-
         Label userLoginLabel = new Label("User ID");       
-
         Label passwordLabel = new Label("Password");
 
         final TextField userLoginTextField = new TextField();       
-     
         final PasswordField userPasswordPasswordField = new PasswordField();  
-       
         Button loginButton = new Button("Login"); 
       
         GridPane gridPane = new GridPane();    
@@ -572,13 +554,10 @@ public class Main extends Application
         gridPane.add(loginType, 1, 0);
         gridPane.add(typeLabel, 0, 0);
 
- 
         Scene scene = new Scene(gridPane);  
       
         stage.setTitle("Training-and-Placement"); 
-          
-        stage.setScene(scene);
-     
+        stage.setScene(scene);     
         stage.show();
 
         loginButton.setOnAction(new EventHandler<ActionEvent>()
@@ -610,6 +589,13 @@ public class Main extends Application
     	loginSignUpObject = new LoginSignup();
     	companyObject = new Company();
     	studentObject = new Student();
+
+        //Create a mongo client
+        mongo = new MongoClient("localhost",27017);
+
+        //access the database
+        database = mongo.getDatabase("tnpdb");
+
         loginPageDisplay(primaryStage);
     }
 
