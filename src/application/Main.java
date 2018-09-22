@@ -402,6 +402,9 @@ public class Main extends Application
         stage.show();
     }
 
+    /*
+     * Function for displaying company profile to STUDENT
+     */
     public void companyProfilePageDisplay(Stage stage,String companyName)
     {
     	//access the collection Company    	
@@ -467,6 +470,9 @@ public class Main extends Application
     	stage.show();
     }
     
+    /*
+     * Function for STUDENT's Profile Page Display
+     */
     public void myProfilePageDisplay(Stage stage)
     {
         BorderPane borderPane = createMenuBar(stage);
@@ -506,7 +512,10 @@ public class Main extends Application
     }
     
     public void loginPageDisplay(final Stage stage)
-    {	
+    {
+    	/*
+         * Function for displaying the Login Page
+         */
     	ObservableList<String> options = 
         	FXCollections.observableArrayList(
     		"Student",
@@ -565,13 +574,24 @@ public class Main extends Application
         //Code to check all login credentials are filled
         	public void handle(ActionEvent event)
         	{
-        		boolean result=loginSignUpObject.login(userLoginTextField.getText().toString() ,
-        											userPasswordPasswordField.getText().toString() ,
-        											(String)loginType.getValue());
+        		boolean result=loginSignUpObject.login(userLoginTextField.getText(),
+        											userPasswordPasswordField.getText() ,
+        											loginType.getValue());
         		if(result)
         		{
-        			studentObject.sid = userLoginTextField.getText().toString();
-        			homePageDisplay(stage);
+        			if(loginType.getValue() == "Student")
+        			{
+        				studentObject.sid = userLoginTextField.getText();
+        				homePageDisplay(stage);
+        			}
+        			else if(loginType.getValue() == "Company")
+        			{
+        				companyObject.companyId = userLoginTextField.getText();
+        				companyHomePageDisplay(stage);
+        			}
+        			else
+        				//display page for admin
+        				;
         		}
         		else
         		{
@@ -582,6 +602,171 @@ public class Main extends Application
         });
     }
 
+    public void companyEditProfilePageDisplay(Stage stage)
+    {
+    	/*
+         * Edit Profile function for Company Person
+         */
+        //only Id's
+    	Label companyNameId = new Label("Name: ");
+    	Label companyDomainId = new Label("Domain: ");
+    	Label companySubdomainId = new Label("Subdomain: ");
+    	Label generalDescriptionId = new Label("Description: ");
+    	Label monthOfVisitId = new Label("Month Of Visit: ");
+    	Label minCGPAId = new Label("Minimum CGPA: ");
+    	Label addressId = new Label("Address: ");
+    	Label contactId = new Label("Contact: ");
+    	
+        //values in textBoxes
+    	TextField companyNameTextField = new TextField(companyObject.name);
+    	TextField companyDomainTextField = new TextField(companyObject.domain);
+    	TextField companySubdomainTextField = new TextField(companyObject.subdomain);
+    	TextField generalDescriptionTextField = new TextField(companyObject.generalDescription);
+    	TextField monthOfVisitTextField = new TextField(companyObject.monthOfVisit);
+    	TextField minCGPATextField = new TextField("" + companyObject.minCGPA);
+    	TextField addressTextField = new TextField(companyObject.address);
+    	TextField contactTextField = new TextField("" + ((Double)companyObject.contact).intValue());    	
+    	
+    	Button saveProfileButton = new Button("Save Profile");
+    	
+    	GridPane gridPane = new GridPane();
+    	
+    	gridPane.setMinSize(400, 200); 
+        gridPane.setPadding(new Insets(10, 10, 10, 10)); 
+        gridPane.setVgap(20); 
+        gridPane.setHgap(20);       
+        gridPane.setAlignment(Pos.CENTER);
+        
+        gridPane.add(companyNameId, 0, 1);
+        gridPane.add(companyDomainId, 0, 2);
+        gridPane.add(companySubdomainId, 0, 3);
+        gridPane.add(generalDescriptionId, 0, 4);
+        gridPane.add(monthOfVisitId, 0, 5);
+        gridPane.add(minCGPAId, 0, 6);
+        gridPane.add(addressId, 0, 7);
+        gridPane.add(contactId, 0, 8);
+        
+        gridPane.add(companyNameTextField, 1, 1);
+        gridPane.add(companyDomainTextField, 1, 2);
+        gridPane.add(companySubdomainTextField, 1, 3);
+        gridPane.add(generalDescriptionTextField, 1, 4);
+        gridPane.add(monthOfVisitTextField, 1, 5);
+        gridPane.add(minCGPATextField, 1, 6);
+        gridPane.add(addressTextField, 1, 7);
+        gridPane.add(contactTextField, 1, 8);
+        
+        gridPane.add(saveProfileButton, 0, 10);
+        
+        Scene scene = new Scene(gridPane,400,500);
+    	stage.setScene(scene);
+
+    	stage.show();
+    	
+    	//on save profile button clicked, add values to database, and show profile page
+    	saveProfileButton.setOnAction(new EventHandler<ActionEvent>()
+    	{
+    		public void handle(ActionEvent event)
+    		{
+    			//get values from text boxes
+    			companyObject.name = companyNameTextField.getText();
+    			companyObject.domain = companyDomainTextField.getText();
+    			companyObject.subdomain = companySubdomainTextField.getText();
+    			companyObject.generalDescription = generalDescriptionTextField.getText();
+    			companyObject.monthOfVisit = monthOfVisitTextField.getText();
+    			companyObject.minCGPA = Double.parseDouble(minCGPATextField.getText());
+    			companyObject.address = addressTextField.getText();
+    			companyObject.contact = Double.parseDouble(contactTextField.getText());
+    			
+    			companyObject.updateProfile();
+    			companyHomePageDisplay(stage);
+    		}
+    	});
+    }
+    
+    public void companyHomePageDisplay(Stage stage)
+    {
+    	/*
+         * This function is for Company Person
+         */
+    	//get the profile from object
+    	companyObject.getProfile();
+    	
+        //display the profile
+    	
+        //only Id's
+    	Label companyNameId = new Label("Name: ");
+    	Label companyDomainId = new Label("Domain: ");
+    	Label companySubdomainId = new Label("Subdomain: ");
+    	Label generalDescriptionId = new Label("Description: ");
+    	Label monthOfVisitId = new Label("Month Of Visit: ");
+    	Label minCGPAId = new Label("Minimum CGPA: ");
+    	Label addressId = new Label("Address: ");
+    	Label contactId = new Label("Contact: ");
+    	
+        //actual values
+    	TextField companyNameTextField = new TextField(companyObject.name);
+    	TextField companyDomainTextField = new TextField(companyObject.domain);
+    	TextField companySubdomainTextField = new TextField(companyObject.subdomain);
+    	TextField generalDescriptionTextField = new TextField(companyObject.generalDescription);
+    	TextField monthOfVisitTextField = new TextField(companyObject.monthOfVisit);
+    	TextField minCGPATextField = new TextField("" + companyObject.minCGPA);
+    	TextField addressTextField = new TextField(companyObject.address);
+    	TextField contactTextField = new TextField("" + ((Double)companyObject.contact).intValue()); 	
+    	
+    	Button editProfileButton = new Button("Edit Profile");
+    	Button logoutButton = new Button("Logout");
+    	
+    	GridPane gridPane = new GridPane();
+    	
+    	gridPane.setMinSize(400, 200); 
+        gridPane.setPadding(new Insets(10, 10, 10, 10)); 
+        gridPane.setVgap(20); 
+        gridPane.setHgap(20);       
+        gridPane.setAlignment(Pos.CENTER);
+        
+        gridPane.add(companyNameId, 0, 0);
+        gridPane.add(companyDomainId, 0, 1);
+        gridPane.add(companySubdomainId, 0, 2);
+        gridPane.add(generalDescriptionId, 0, 3);
+        gridPane.add(monthOfVisitId, 0, 4);
+        gridPane.add(minCGPAId, 0, 5);
+        gridPane.add(addressId, 0, 6);
+        gridPane.add(contactId, 0, 7);
+        
+        gridPane.add(companyNameTextField, 1, 0);
+        gridPane.add(companyDomainTextField, 1, 1);
+        gridPane.add(companySubdomainTextField, 1, 2);
+        gridPane.add(generalDescriptionTextField, 1, 3);
+        gridPane.add(monthOfVisitTextField, 1, 4);
+        gridPane.add(minCGPATextField, 1, 5);
+        gridPane.add(addressTextField, 1, 6);
+        gridPane.add(contactTextField, 1, 7);
+        
+        gridPane.add(editProfileButton, 0, 10);
+        gridPane.add(logoutButton, 1, 10);
+        
+        Scene scene = new Scene(gridPane,400,500);
+    	stage.setScene(scene);
+
+    	stage.show();
+    	
+    	editProfileButton.setOnAction(new EventHandler<ActionEvent>()
+    	{
+    		public void handle(ActionEvent event)
+    		{
+    			companyEditProfilePageDisplay(stage);
+    		}
+    	});
+    	logoutButton.setOnAction(new EventHandler<ActionEvent>()
+    	{
+    		public void handle(ActionEvent event)
+    		{
+    			loginPageDisplay(stage);
+    		}
+    	});
+    	
+    }
+    
     @Override
     public void start(Stage primaryStage) throws Exception
     {
