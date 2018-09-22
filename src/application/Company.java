@@ -7,7 +7,6 @@ import com.mongodb.client.MongoCursor;
 
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.bson.Document;
 
@@ -52,7 +51,6 @@ public class Company {
 	 */
 	void getProfile()
 	{
-		
 		//Create a mongo client
 		MongoClient mongo = new MongoClient("localhost",27017);
 		
@@ -127,6 +125,9 @@ public class Company {
 		collection.replaceOne(searchQuery, newDocument);
 	}
 	
+	/*
+	Used to get the Company List in order to Display in "Search by Company" page
+	*/
 	ArrayList<String> getCompanyList()
 	{
 		ArrayList<String> returningCompanyList = new ArrayList<String>();
@@ -157,7 +158,7 @@ public class Company {
 	
 	/*
 	 * only used for testing purpose
-	 */
+	 *uncomment for testing
 	public static void main(String args[])
 	{
 		sc = new Scanner(System.in);
@@ -182,4 +183,5 @@ public class Company {
 			}
 		}
 	}
+	*/
 }
