@@ -22,7 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import javafx.scene.Scene;
@@ -40,6 +40,7 @@ import javafx.scene.control.TextField;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 
 public class Main extends Application
 {
@@ -124,9 +125,11 @@ public class Main extends Application
         gridPaneSignUp.add(SignUpButton, 0,6); 
         gridPaneSignUp.add(loginHyperlink, 1, 6);
         
-        Scene scene = new Scene(gridPaneSignUp);  
+        Scene scene = new Scene(gridPaneSignUp,800,600);  
         
-        stage.setScene(scene);        
+        stage.setScene(scene);  
+        //To set stage to full screen 
+        setFullScreen(stage);
         stage.show();
     }
 
@@ -194,61 +197,79 @@ public class Main extends Application
     	// Pannable.
     	scrollPane.setPannable(true);
     	        
-    	Scene scene = new Scene(new VBox(borderPane,scrollPane),400,400);  
+    	Scene scene = new Scene(new VBox(borderPane,scrollPane),800,600);  
         stage.setScene(scene);
+        //To set stage to full screen 
+        setFullScreen(stage);
     	stage.show();	
     }
     
     public void searchByDomainPageDisplay(Stage stage)
     {
     	BorderPane borderPane = createMenuBar(stage);
+    	borderPane.setStyle("-fx-foreground-color: black;");
     		
     	//main code for this function
-    	CheckBox subdomains[] = new CheckBox[3];
+    	CheckBox subdomains[] = new CheckBox[9];
     	subdomains[0] = new CheckBox("Artificial Intelligence");
     	subdomains[1] = new CheckBox("Machine Learning");
     	subdomains[2] = new CheckBox("Natural Language Processing");
+    	//update required names here afterwards
+    	subdomains[3] = new CheckBox("subdomain4");
+    	subdomains[4] = new CheckBox("subdomain5");
+    	subdomains[5] = new CheckBox("subdomain6");
+    	subdomains[6] = new CheckBox("subdomain7");
+    	subdomains[7] = new CheckBox("subdomain8");
+    	subdomains[8] = new CheckBox("subdomain9");
     	
     	Label Domain1 = new Label("Domain1");
+    	Label Domain2 = new Label("Domain2");
+    	Label Domain3 = new Label("Domain3");
            
     	Button searchCompanies = new Button("Search"); 
           
     	GridPane gridPane = new GridPane();    
           
-    	gridPane.setMinSize(400, 200); 
+    	gridPane.setMinSize(600, 400); 
     	gridPane.setPadding(new Insets(10, 10, 10, 10)); 
     	gridPane.setVgap(20); 
     	gridPane.setHgap(20);       
     	gridPane.setAlignment(Pos.CENTER); 
     	
+    	
     	gridPane.add(Domain1,0 ,1 );
     	gridPane.add(subdomains[0],1 ,2 );
     	gridPane.add(subdomains[1], 1, 3);
-    	//gridPane.add(subdomains[2], 1, 4);
-    	
-    	//gridPane.add(Domain1,0 ,6 );
-    	//gridPane.add(subdomains[0],1 ,7 );   //needs diff array elements
-    	//gridPane.add(subdomains[1], 1, 8);
     	gridPane.add(subdomains[2], 1, 4);
     	
-    	gridPane.add(searchCompanies,2,20);
-            
-    	/* VBox a = new VBox(borderPane,gridPane);
-            ScrollPane scrollPane = new ScrollPane(a);
-            scrollPane.add(a);
-           */ 
-            
-           /* Pane mainPane = new Pane();
-            mainPane.getChildren().addAll(borderPane,mainPane);*/
+    	gridPane.add(Domain2,0 ,6 );
+    	gridPane.add(subdomains[3],1 ,7 );
+    	gridPane.add(subdomains[4], 1, 8);
+    	gridPane.add(subdomains[5], 1, 9);
+    	
+    	gridPane.add(Domain3,0 ,11 );
+    	gridPane.add(subdomains[6],1 ,12 );
+    	gridPane.add(subdomains[7], 1, 13);
+    	gridPane.add(subdomains[8], 1, 14);
+    	
+    	gridPane.add(searchCompanies,3,30);//purposefully kept much below for testing scrollpane
+     
      
     	ScrollPane scrollPane = new ScrollPane();
+    	
+    	//Fitting the scrollPane to the screen size
+    	scrollPane.setFitToWidth(true);
+    	scrollPane.setPrefSize(600, 700);
+    	
     	scrollPane.setContent(gridPane);
             
-    	// Pannable.
+    	// Make scrollPane Pannable.
     	scrollPane.setPannable(true);
                 
-    	Scene scene = new Scene(new VBox(borderPane,scrollPane));  
+    	Scene scene = new Scene(new VBox(borderPane,scrollPane),800,600);  
         stage.setScene(scene);
+        //To set stage to full screen 
+        setFullScreen(stage);
     	stage.show();
         
     	ArrayList<String> domainList = new ArrayList<String>();
@@ -301,9 +322,10 @@ public class Main extends Application
      
         gridPane.add(companyListSearchBar, 2, 4);
      
-        Scene scene = new Scene(new VBox(borderPane,gridPane),400,400);
+        Scene scene = new Scene(new VBox(borderPane,gridPane),800,600);
         stage.setScene(scene);
-     
+        //To set stage to full screen 
+        setFullScreen(stage);
         stage.show();
 
         companyListSearchBar.setOnAction(new EventHandler<ActionEvent>() 
@@ -392,13 +414,26 @@ public class Main extends Application
 
         return borderPane;
     }
+    
+    private void setFullScreen(Stage stage)
+    {
+    	Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+
+        //set Stage boundaries to visible bounds of the main screen
+        stage.setX(primaryScreenBounds.getMinX());
+        stage.setY(primaryScreenBounds.getMinY());
+        stage.setWidth(primaryScreenBounds.getWidth());
+        stage.setHeight(primaryScreenBounds.getHeight());
+    }
 
     public void homePageDisplay(final Stage stage)
     {
         BorderPane borderPane = createMenuBar(stage);
 
-        Scene scene = new Scene(borderPane, 400, 400);
+        Scene scene = new Scene(borderPane, 800, 600);
         stage.setScene(scene);
+        //To set stage to full screen 
+        setFullScreen(stage);
         stage.show();
     }
 
@@ -464,9 +499,10 @@ public class Main extends Application
         gridPane.add(addressLabel, 1, 6);
         gridPane.add(contactLabel, 1, 7);
         
-        Scene scene = new Scene(new VBox(borderPane,gridPane),400,400);
+        Scene scene = new Scene(new VBox(borderPane,gridPane),800,600);
     	stage.setScene(scene);
-
+    	//To set stage to full screen 
+        setFullScreen(stage);
     	stage.show();
     }
     
@@ -505,9 +541,10 @@ public class Main extends Application
     	gridPane.add(displayCGPA, 0, 3);
     	gridPane.add(studentCGPA, 1, 3);
     	
-    	Scene scene = new Scene(new VBox(borderPane,gridPane),400,400);
+    	Scene scene = new Scene(new VBox(borderPane,gridPane),800,600);
     	stage.setScene(scene);
-
+    	//To set stage to full screen 
+        setFullScreen(stage);
     	stage.show();
     }
     
@@ -563,10 +600,14 @@ public class Main extends Application
         gridPane.add(loginType, 1, 0);
         gridPane.add(typeLabel, 0, 0);
 
-        Scene scene = new Scene(gridPane);  
+        Scene scene = new Scene(gridPane,800,600);  
       
         stage.setTitle("Training-and-Placement"); 
         stage.setScene(scene);     
+        
+      //To set stage to full screen 
+        setFullScreen(stage);
+        
         stage.show();
 
         loginButton.setOnAction(new EventHandler<ActionEvent>()
@@ -657,9 +698,10 @@ public class Main extends Application
         
         gridPane.add(saveProfileButton, 0, 10);
         
-        Scene scene = new Scene(gridPane,400,500);
+        Scene scene = new Scene(gridPane,800,600);
     	stage.setScene(scene);
-
+    	//To set stage to full screen 
+        setFullScreen(stage);
     	stage.show();
     	
     	//on save profile button clicked, add values to database, and show profile page
@@ -745,9 +787,11 @@ public class Main extends Application
         gridPane.add(editProfileButton, 0, 10);
         gridPane.add(logoutButton, 1, 10);
         
-        Scene scene = new Scene(gridPane,400,500);
+        Scene scene = new Scene(gridPane,800,600);
     	stage.setScene(scene);
 
+    	//To set stage to full screen 
+        setFullScreen(stage);
     	stage.show();
     	
     	editProfileButton.setOnAction(new EventHandler<ActionEvent>()
