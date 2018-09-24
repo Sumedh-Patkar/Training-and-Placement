@@ -92,21 +92,21 @@ public class Main extends Application
         	public void handle(ActionEvent event)
         	{
         		studentObject = new Student(userSignUpTextField.getText().toString(),
-                								nameField.getText().toString(),
-                								Double.parseDouble(ageField.getText().toString()),
-                								Double.parseDouble(CGPAField.getText().toString()));
-                	
-                	boolean result=loginSignUpObject.signUp(userSignUpTextField.getText().toString(),
-                											userPasswordPasswordField.getText().toString());
-                    if(result)
-                    {
-                    	homePageDisplay(stage);
-                    	studentObject.setStudentData();
-                    }
-                    else
-                    {
-                    	signUpPageDisplay(stage);
-                    }	
+        				nameField.getText().toString(),
+        				Double.parseDouble(ageField.getText().toString()),
+        				Double.parseDouble(CGPAField.getText().toString()));
+
+        		boolean result=loginSignUpObject.signUp(userSignUpTextField.getText().toString(),
+        				userPasswordPasswordField.getText().toString());
+        		if(result)
+        		{
+                    studentObject.setStudentData();
+        			homePageDisplay(stage);
+        		}
+        		else
+        		{
+        			signUpPageDisplay(stage);
+        		}	
         	}
         });
 
@@ -133,14 +133,13 @@ public class Main extends Application
         stage.show();
     }
 
-
-    public void companyListPageDisplay(Stage stage,ArrayList<String> domainList)
+    public void companyListPageDisplay(Stage stage,ArrayList<String> subDomainList)
     {
     	//access the collection Company
     	collection = database.getCollection("Company");
 
     	//Get matching documents
-    	Document query = new Document("subdomain",new Document("$in",domainList));
+    	Document query = new Document("subdomain",new Document("$in",subDomainList));
     	FindIterable<Document> iterDoc = collection.find(query);
     	MongoCursor<Document> it = iterDoc.iterator();
     	Document result;
@@ -438,6 +437,52 @@ public class Main extends Application
         stage.show();
     }
 
+    
+    //Function to display sample test for each company
+    public void companyTestPageDisplay(Stage stage,String companyName)
+    {
+    	//access the collection Company    	
+    	collection = database.getCollection("Company");
+
+    	//Get matching document
+    	FindIterable<Document> iterDoc = collection.find(new Document("name",companyName));
+    	MongoCursor<Document> it = iterDoc.iterator();
+    	Document company = it.next();
+    
+    	BorderPane borderPane = createMenuBar(stage);
+    	
+    	//Actual test will be stored in this label
+    	Label exam = new Label(company.get("test").toString());
+    	
+    	GridPane gridPane = new GridPane();
+    	
+    	gridPane.setMinSize(400, 200); 
+        gridPane.setPadding(new Insets(10, 10, 10, 10)); 
+        gridPane.setVgap(20); 
+        gridPane.setHgap(20);       
+        gridPane.setAlignment(Pos.CENTER);
+        
+        gridPane.add(exam,0,0);
+        
+        ScrollPane scrollPane = new ScrollPane();
+    	//Fitting the scrollPane to the screen size
+    	scrollPane.setFitToWidth(true);
+    	scrollPane.setPrefSize(600, 700);
+    	
+    	scrollPane.setContent(gridPane);
+            
+    	// Make scrollPane Pannable.
+    	scrollPane.setPannable(true);
+        
+        Scene scene = new Scene(new VBox(borderPane,scrollPane),800,600);
+    	stage.setScene(scene);
+    	//To set stage to full screen 
+        setFullScreen(stage);
+    	stage.show();
+    	
+    }
+  
+    
     /*
      * Function for displaying company profile to STUDENT
      */
@@ -472,7 +517,10 @@ public class Main extends Application
     	Label monthOfVisitLabel = new Label(company.get("monthOfVisit").toString());
     	Label minCGPALabel = new Label(company.get("minCGPA").toString());
     	Label addressLabel = new Label(company.get("address").toString());
-    	Label contactLabel = new Label(company.get("contact").toString());    	
+    	Label contactLabel = new Label(company.get("contact").toString());    
+    	
+    	Button exam = new Button("Sample Test");   //on clicking..test will be displayed on new page.
+    	
     	
     	GridPane gridPane = new GridPane();
     	
@@ -500,6 +548,18 @@ public class Main extends Application
         gridPane.add(addressLabel, 1, 6);
         gridPane.add(contactLabel, 1, 7);
         
+        gridPane.add(exam, 1, 9);
+       
+        
+        exam.setOnMouseClicked(new EventHandler<Event>()
+        {
+            @Override
+            public void handle(Event event) 
+            {
+            	companyTestPageDisplay(stage,companyName);
+            }
+        });
+
         Scene scene = new Scene(new VBox(borderPane,gridPane),800,600);
     	stage.setScene(scene);
     	//To set stage to full screen 
@@ -512,19 +572,18 @@ public class Main extends Application
      */
     public void myProfilePageDisplay(Stage stage)
     {
-    	studentObject.getStudentData();
-//    	Label studentId = new Label(studentObject.sid);
-    	
+        BorderPane borderPane = createMenuBar(stage);
+
+       	studentObject.getStudentData();
+    	//Label studentId = new Label(studentObject.sid);
     	Label studentName = new Label(studentObject.name);
-    	Label studentAge = new Label(""+((Double)studentObject.age).intValue());
+    	Label studentAge = new Label(""+studentObject.age);
     	Label studentCGPA = new Label(""+studentObject.CGPA);
     	
-//    	Label displayId = new Label("ID");
+    	//Label displayId = new Label("ID");
     	Label displayName = new Label("Name");
     	Label displayAge = new Label("Age");
     	Label displayCGPA = new Label("CGPA");
-    	
-    	Button editProfile = new Button("Edit");
     	
     	GridPane gridPane = new GridPane();
     	
@@ -534,96 +593,19 @@ public class Main extends Application
         gridPane.setHgap(20);       
         gridPane.setAlignment(Pos.CENTER);
     	
-//    	gridPane.add(displayId, 0, 0);
-//    	gridPane.add(studentId, 1, 0);
-    	gridPane.add(displayName, 0, 0);
-    	gridPane.add(studentName, 1, 0);
-    	gridPane.add(displayAge, 0, 1);
-    	gridPane.add(studentAge, 1, 1);
-    	gridPane.add(displayCGPA, 0, 2);
-    	gridPane.add(studentCGPA, 1, 2);
-    	gridPane.add(editProfile, 0, 4);
-    	
-    	BorderPane borderPane = createMenuBar(stage);
-    	
-    	editProfile.setOnAction(new EventHandler<ActionEvent>()
-    	{
-    		public void handle(ActionEvent event)
-    		{
-    			myProfileEditPageDisplay(stage);
-    		}
-    	});
+    	//gridPane.add(displayId, 0, 0);
+    	//gridPane.add(studentId, 1, 0);
+    	gridPane.add(displayName, 0, 1);
+    	gridPane.add(studentName, 1, 1);
+    	gridPane.add(displayAge, 0, 2);
+    	gridPane.add(studentAge, 1, 2);
+    	gridPane.add(displayCGPA, 0, 3);
+    	gridPane.add(studentCGPA, 1, 3);
     	
     	Scene scene = new Scene(new VBox(borderPane,gridPane),800,600);
     	stage.setScene(scene);
     	//To set stage to full screen 
         setFullScreen(stage);
-    	stage.show();
-    }
-    
-    public void myProfileEditPageDisplay(Stage stage)
-    {
-    	BorderPane borderPane = createMenuBar(stage);
-    	
-    	//edit will always be called after myProfileDisplay is called, so no need of getting student data again
-//    	studentObject.getStudentData();
-//    	TextField studentId = new TextField(studentObject.sid);
-    	TextField studentName = new TextField(studentObject.name);
-    	TextField studentAge = new TextField(""+((Double)studentObject.age).intValue());
-    	TextField studentCGPA = new TextField(""+studentObject.CGPA);
-
-//    	Label displayId = new Label("ID");
-    	Label displayName = new Label("Name");
-    	Label displayAge = new Label("Age");
-    	Label displayCGPA = new Label("CGPA");
-    	
-    	Button saveChanges = new Button("Save changes");
-    	Button cancel = new Button("Cancel");
-    	
-    	GridPane gridPane = new GridPane();
-    	
-    	gridPane.setMinSize(400, 200); 
-        gridPane.setPadding(new Insets(10, 10, 10, 10)); 
-        gridPane.setVgap(20); 
-        gridPane.setHgap(20);       
-        gridPane.setAlignment(Pos.CENTER);
-    	
-//    	gridPane.add(displayId, 0, 0);
-//    	gridPane.add(studentId, 1, 0);
-    	gridPane.add(displayName, 0, 0);
-    	gridPane.add(studentName, 1, 0);
-    	gridPane.add(displayAge, 0, 1);
-    	gridPane.add(studentAge, 1, 1);
-    	gridPane.add(displayCGPA, 0, 2);
-    	gridPane.add(studentCGPA, 1, 2);
-    	gridPane.add(saveChanges, 0, 4);
-    	gridPane.add(cancel, 1, 4);
-    	
-    	saveChanges.setOnAction(new EventHandler<ActionEvent>() 
-    	{
-    		public void handle(ActionEvent event)
-    		{
-//    			studentObject.sid = studentId.getText().toString();
-    			studentObject.name = studentName.getText().toString();
-    			studentObject.age = Double.parseDouble(studentAge.getText().toString());
-    			studentObject.CGPA = Double.parseDouble(studentCGPA.getText().toString());
-    			studentObject.updateProfile();
-    			myProfilePageDisplay(stage);
-    		}
-		});
-    	
-    	cancel.setOnAction(new EventHandler<ActionEvent>() 
-    	{
-    		public void handle(ActionEvent event)
-    		{   			
-    			myProfilePageDisplay(stage);
-    		}
-		});
-    	
-    	Scene scene = new Scene(new VBox(borderPane,gridPane),400,400);
-    	
-    	stage.setScene(scene);
-
     	stage.show();
     }
     
@@ -825,14 +807,14 @@ public class Main extends Application
     	Label contactId = new Label("Contact: ");
     	
         //actual values
-    	Label companyNameTextField = new Label(companyObject.name);
-    	Label companyDomainTextField = new Label(companyObject.domain);
-    	Label companySubdomainTextField = new Label(companyObject.subdomain);
-    	Label generalDescriptionTextField = new Label(companyObject.generalDescription);
-    	Label monthOfVisitTextField = new Label(companyObject.monthOfVisit);
-    	Label minCGPATextField = new Label("" + companyObject.minCGPA);
-    	Label addressTextField = new Label(companyObject.address);
-    	Label contactTextField = new Label("" + ((Double)companyObject.contact).intValue()); 	
+    	TextField companyNameTextField = new TextField(companyObject.name);
+    	TextField companyDomainTextField = new TextField(companyObject.domain);
+    	TextField companySubdomainTextField = new TextField(companyObject.subdomain);
+    	TextField generalDescriptionTextField = new TextField(companyObject.generalDescription);
+    	TextField monthOfVisitTextField = new TextField(companyObject.monthOfVisit);
+    	TextField minCGPATextField = new TextField("" + companyObject.minCGPA);
+    	TextField addressTextField = new TextField(companyObject.address);
+    	TextField contactTextField = new TextField("" + ((Double)companyObject.contact).intValue()); 	
     	
     	Button editProfileButton = new Button("Edit Profile");
     	Button logoutButton = new Button("Logout");
