@@ -3,7 +3,7 @@ package application;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 
-import java.util.Scanner;
+//import java.util.Scanner;
 import org.bson.Document;
 
 import com.mongodb.client.FindIterable;
@@ -81,7 +81,7 @@ public class Student
     }
     
     //will be used for displaying the student's profile
-    public  void getStudentData(String sid)
+    public  void getStudentData()
     {   
         BasicDBObject whereQuery = new BasicDBObject();
         whereQuery.put("sid" , sid);
@@ -100,7 +100,7 @@ public class Student
 //        while (it.hasNext()) 
 //        {
         Document result = it.next();
-        this.sid  = result.get("sid").toString();
+//        this.sid  = result.get("sid").toString();
         this.name = result.get("name").toString();
         this.age  =  (Double)result.get("age");
         this.CGPA = (Double)result.get("CGPA");
