@@ -7,11 +7,11 @@ import com.mongodb.client.MongoCursor;
 
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.bson.Document;
 
 import com.mongodb.MongoClient;
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 
 /*
@@ -38,40 +38,63 @@ public class Company {
 	String name;
 	String domain;
 	String subdomain;
+	String generalDescription;
+	String monthOfVisit;
+	double minCGPA;
 //	ArrayList<Branch> branchList;
 	String address;
 	double contact;
-	String monthOfVisit;
-	String generalDescription;
-	double minCGPA;
 	
-	static Scanner sc;
+//	static Scanner sc;
+	MongoClient mongo;
+	MongoDatabase database;
+	MongoCollection<Document> collection;
 	
-	/*
-	 * Used to get Company profile document from Company collection
-	 */
+	Company()
+	{
+		/*
+		 * Constructor. Initializes all variables to default value.
+		 * Establishes connection with Company Database.
+		 * Accesses the Collection "Company" from the Database
+		 */
+		companyId = "";
+		name = "";
+		domain = "";
+		subdomain = "";
+		generalDescription = "";
+		monthOfVisit = "";
+		minCGPA = 0;
+		address = "";
+		contact = 0;
+		
+		mongo = new MongoClient("localhost",27017);
+		database = mongo.getDatabase("tnpdb");
+		collection = database.getCollection("Company");
+	}
+	
 	void getProfile()
 	{
-		companyId = "apple";
-		//Create a mongo client
-		MongoClient mongo = new MongoClient("localhost",27017);
-		
-		//access the database
-		MongoDatabase database = mongo.getDatabase("tnpdb");
-		
-		//access the collection Company
-		MongoCollection<Document> collection = database.getCollection("Company");
+		/*
+		 * Used to get Company profile document from Company collection
+		 */
 		
 		//Find the Company's Document from the Collection
-		BasicDBObject query = new BasicDBObject();
-		query.put("companyId", this.companyId);
+		BasicDBObject clause1 = new BasicDBObject("companyId", this.companyId);
+		BasicDBObject clause2 = new BasicDBObject("name", this.name);
+	
+		BasicDBList or = new BasicDBList();
+		or.add(clause1);
+		or.add(clause2);
+		
+		BasicDBObject query = new BasicDBObject("$or",or);
+		
 		FindIterable <Document> iterDoc = collection.find(query);
 		MongoCursor <Document> it = iterDoc.iterator();
 		
 		//Store in a Document object
 		Document result = it.next();
 		
-		//get the company document entries into company attributes
+		//get the company document entries into company object's attributes
 		this.name = (String)result.get("name");
 		this.domain = (String)result.get("domain");
 		this.subdomain = (String)result.get("subdomain");
@@ -80,42 +103,21 @@ public class Company {
 		this.minCGPA = (Double)result.get("minCGPA");
 		this.address = (String)result.get("address");
 		this.contact = (Double)result.get("contact");
-		
-		//display the result on terminal for now
-		System.out.println("Name = " + this.name);
-		System.out.println("Domain = " + this.domain);
-		System.out.println("SubDomain = " + this.subdomain);
-		System.out.println("Month Of Visit = " + this.monthOfVisit);
-		System.out.println("General Description = " + this.generalDescription);
-		System.out.println("minCGPA = " + this.minCGPA);
-		System.out.println("Address = " + this.address);
-		System.out.println("Contact = " + this.contact);
-		
 	}
 	
-	/*
-	 * used to update Profile document in Company collection
-	 */
 	void updateProfile()
 	{
-		companyId = "apple";
-		//Create a mongo client
-		MongoClient mongo = new MongoClient("localhost",27017);
-		
-		//access the database
-		MongoDatabase database = mongo.getDatabase("tnpdb");
-		
-		//access the collection Company
-		MongoCollection<Document> collection = database.getCollection("Company");
-		
+		/*
+		 * used to update Profile document in Company collection
+		 */
+
 		//Find the Company's Document from the Collection
 		Document searchQuery = new Document("companyId",this.companyId);
 		
-		//get NEW VALUES from the textboxes
-		
+		//insert the NEW VALUES 
 		Document newDocument = new Document("companyId",this.companyId)
 				.append("name", this.name)
-				.append("domain", "Computers")
+				.append("domain", this.domain)
 				.append("subdomain", this.subdomain)
 				.append("monthOfVisit", this.monthOfVisit)
 				.append("generalDescription", this.generalDescription)
@@ -127,15 +129,12 @@ public class Company {
 		collection.replaceOne(searchQuery, newDocument);
 	}
 	
-	void getCompanyList()
+	ArrayList<String> getCompanyList()
 	{
-		MongoClient mongo = new MongoClient("localhost",27017);
-		
-		//access the database
-		MongoDatabase database = mongo.getDatabase("tnpdb");
-		
-		//access the collection Company
-		MongoCollection<Document> collection = database.getCollection("Company");
+		/*
+		 * Used to get the Company List in order to Display in "Search by Company" page
+		*/	
+		ArrayList<String> returningCompanyList = new ArrayList<String>();
 		
 		//Find the Company's Document from the Collection
 		BasicDBObject query = new BasicDBObject();
@@ -144,16 +143,17 @@ public class Company {
 		MongoCursor <Document> it = iterDoc.iterator();
 		
 		//Store in a Document object
-//		Document result = it.next();
 		while(it.hasNext())
 		{
-			System.out.println(it.next());
+			Document result = it.next();
+			returningCompanyList.add(result.get("name").toString());
 		}
+		return returningCompanyList;
 	}
 	
 	/*
 	 * only used for testing purpose
-	 */
+	 *uncomment for testing
 	public static void main(String args[])
 	{
 		sc = new Scanner(System.in);
@@ -178,4 +178,5 @@ public class Company {
 			}
 		}
 	}
+	*/
 }

@@ -27,7 +27,6 @@ public class LoginSignup {
             // Accessing the database
             MongoDatabase database = mongo.getDatabase("tnpdb");
 
-
             //check type
             type = loginType;
 
@@ -75,7 +74,7 @@ public class LoginSignup {
 
         boolean signUp(String signUpname,String pass)
         {       
-                // Creating a Mongo client
+            // Creating a Mongo client
             MongoClient mongo = new MongoClient( "localhost" , 27017 ); 
 
             // Accessing the database
@@ -87,7 +86,6 @@ public class LoginSignup {
 
             //take username password
             username = signUpname;
-
             password = pass;
 
             //check if username already exists
@@ -114,34 +112,31 @@ public class LoginSignup {
 
         }
 
-        void logout()
-        {
-                //show login page again
-
-        }
-
-        //only for testing
-//      public static void main(String []args)
-//      {
-//              LoginSignup l = new LoginSignup();
-//              sc = new Scanner(System.in);
-//             
-//              int choice;
-//      while(true)
-//      {
-//              System.out.println("\n\nEnter Choice:\n1: Login\n2: SignUp\n");
-//              choice = sc.nextInt();
-//             
-//                      switch(choice)
-//                      {
-//                      case 1:
-//                              l.login();
-//                              break;
-//                      case 2:
-//                              l.signUp();
-//                              break;
-//              }
-//      }
-//      sc.close();
-//      }
+    /*
+     * only used for testing purpose
+     *uncomment for testing
+     public static void main(String []args)
+     {
+             LoginSignup l = new LoginSignup();
+             sc = new Scanner(System.in);
+            
+             int choice;
+     while(true)
+     {
+             System.out.println("\n\nEnter Choice:\n1: Login\n2: SignUp\n");
+             choice = sc.nextInt();
+            
+                     switch(choice)
+                     {
+                     case 1:
+                             l.login();
+                             break;
+                     case 2:
+                             l.signUp();
+                             break;
+             }
+     }
+     sc.close();
+     }
+     */
 }
