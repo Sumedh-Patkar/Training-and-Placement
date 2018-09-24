@@ -511,18 +511,24 @@ public class Main extends Application
      */
     public void myProfilePageDisplay(Stage stage)
     {
-        BorderPane borderPane = createMenuBar(stage);
-
-       	studentObject.getStudentData(studentObject.sid);
+    	studentObject.getStudentData(studentObject.sid);
     	Label studentId = new Label(studentObject.sid);
+    	
     	Label studentName = new Label(studentObject.name);
+    	
     	Label studentAge = new Label(""+studentObject.age);
+    	
     	Label studentCGPA = new Label(""+studentObject.CGPA);
     	
     	Label displayId = new Label("ID");
+    	
     	Label displayName = new Label("Name");
+    	
     	Label displayAge = new Label("Age");
+    	
     	Label displayCGPA = new Label("CGPA");
+    	
+    	Button editProfile = new Button("Edit");
     	
     	GridPane gridPane = new GridPane();
     	
@@ -540,11 +546,93 @@ public class Main extends Application
     	gridPane.add(studentAge, 1, 2);
     	gridPane.add(displayCGPA, 0, 3);
     	gridPane.add(studentCGPA, 1, 3);
+    	gridPane.add(editProfile, 0, 4);
+    	
+    	BorderPane borderPane = createMenuBar(stage);
+    	
+    	editProfile.setOnAction(new EventHandler<ActionEvent>()
+    	{
+    		public void handle(ActionEvent event)
+    		{
+    			myProfileEditPageDisplay(stage);
+    		}
+    	});
     	
     	Scene scene = new Scene(new VBox(borderPane,gridPane),800,600);
     	stage.setScene(scene);
     	//To set stage to full screen 
         setFullScreen(stage);
+    	stage.show();
+    }
+    
+    public void myProfileEditPageDisplay(Stage stage)
+    {
+    	BorderPane borderPane = createMenuBar(stage);
+    	
+    	studentObject.getStudentData(studentObject.sid);
+    	TextField studentId = new TextField(studentObject.sid);
+    	TextField studentName = new TextField(studentObject.name);
+    	TextField studentAge = new TextField(""+studentObject.age);
+    	TextField studentCGPA = new TextField(""+studentObject.CGPA);
+    	Label displayId = new Label("ID");
+    	
+    	Label displayName = new Label("Name");
+    	
+    	Label displayAge = new Label("Age");
+    	
+    	Label displayCGPA = new Label("CGPA");
+    	
+    	Button saveChanges = new Button("Save changes");
+    	
+    	Button cancel = new Button("Cancel");
+    	
+    	GridPane gridPane = new GridPane();
+    	
+    	gridPane.setMinSize(400, 200); 
+        gridPane.setPadding(new Insets(10, 10, 10, 10)); 
+        gridPane.setVgap(20); 
+        gridPane.setHgap(20);       
+        gridPane.setAlignment(Pos.CENTER);
+    	
+    	gridPane.add(displayId, 0, 0);
+    	gridPane.add(studentId, 1, 0);
+    	gridPane.add(displayName, 0, 1);
+    	gridPane.add(studentName, 1, 1);
+    	gridPane.add(displayAge, 0, 2);
+    	gridPane.add(studentAge, 1, 2);
+    	gridPane.add(displayCGPA, 0, 3);
+    	gridPane.add(studentCGPA, 1, 3);
+    	gridPane.add(saveChanges, 0, 4);
+    	gridPane.add(cancel, 1, 4);
+    	
+    	saveChanges.setOnAction(new EventHandler<ActionEvent>() 
+    	{
+    		public void handle(ActionEvent event)
+    		{
+    			studentObject.sid = studentId.getText().toString();
+    			studentObject.name = studentName.getText().toString();
+    			studentObject.age = Double.parseDouble(studentAge.getText().toString());
+    			studentObject.CGPA = Double.parseDouble(studentCGPA.getText().toString());
+    			studentObject.setStudentData();
+    			myProfilePageDisplay(stage);
+
+    		}
+		});
+    	
+    	cancel.setOnAction(new EventHandler<ActionEvent>() 
+    	{
+    		public void handle(ActionEvent event)
+    		{
+    			
+    			myProfilePageDisplay(stage);
+
+    		}
+		});
+    	
+    	Scene scene = new Scene(new VBox(borderPane,gridPane),400,400);
+    	
+    	stage.setScene(scene);
+
     	stage.show();
     }
     
