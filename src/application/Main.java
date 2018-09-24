@@ -482,6 +482,50 @@ public class Main extends Application
     	
     }
   
+    //This function is to display the answer key of sample tests per company
+    public void companyAnsKeyPageDisplay(Stage stage,String companyName)
+    {
+    	//access the collection Company    	
+    	collection = database.getCollection("Company");
+
+    	//Get matching document
+    	FindIterable<Document> iterDoc = collection.find(new Document("name",companyName));
+    	MongoCursor<Document> it = iterDoc.iterator();
+    	Document company = it.next();
+   
+    	BorderPane borderPane = createMenuBar(stage);
+    	
+    	//actual answer key will be stored in this label 
+    	Label ansKey = new Label(company.get("ansKey").toString());
+    	
+    	
+    	GridPane gridPane = new GridPane();
+    	
+    	gridPane.setMinSize(400, 200); 
+        gridPane.setPadding(new Insets(10, 10, 10, 10)); 
+        gridPane.setVgap(20); 
+        gridPane.setHgap(20);       
+        gridPane.setAlignment(Pos.CENTER);
+        
+        gridPane.add(ansKey,0,0);
+        
+        ScrollPane scrollPane = new ScrollPane();
+    	//Fitting the scrollPane to the screen size
+    	scrollPane.setFitToWidth(true);
+    	scrollPane.setPrefSize(600, 700);
+    	
+    	scrollPane.setContent(gridPane);
+            
+    	// Make scrollPane Pannable.
+    	scrollPane.setPannable(true);
+        
+        Scene scene = new Scene(new VBox(borderPane,scrollPane),800,600);
+    	stage.setScene(scene);
+    	//To set stage to full screen 
+        setFullScreen(stage);
+    	stage.show();
+    	
+    }
     
     /*
      * Function for displaying company profile to STUDENT
@@ -520,7 +564,7 @@ public class Main extends Application
     	Label contactLabel = new Label(company.get("contact").toString());    
     	
     	Button exam = new Button("Sample Test");   //on clicking..test will be displayed on new page.
-    	
+    	Button ansKey = new Button("Answer Key");
     	
     	GridPane gridPane = new GridPane();
     	
@@ -549,14 +593,23 @@ public class Main extends Application
         gridPane.add(contactLabel, 1, 7);
         
         gridPane.add(exam, 1, 9);
+        gridPane.add(ansKey, 1, 11);
        
-        
         exam.setOnMouseClicked(new EventHandler<Event>()
         {
             @Override
             public void handle(Event event) 
             {
             	companyTestPageDisplay(stage,companyName);
+            }
+        });
+        
+        ansKey.setOnMouseClicked(new EventHandler<Event>()
+        {
+            @Override
+            public void handle(Event event) 
+            {
+            	companyAnsKeyPageDisplay(stage,companyName);
             }
         });
 
