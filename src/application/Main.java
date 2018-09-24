@@ -92,21 +92,21 @@ public class Main extends Application
         	public void handle(ActionEvent event)
         	{
         		studentObject = new Student(userSignUpTextField.getText().toString(),
-        				nameField.getText().toString(),
-        				Double.parseDouble(ageField.getText().toString()),
-        				Double.parseDouble(CGPAField.getText().toString()));
-
-        		boolean result=loginSignUpObject.signUp(userSignUpTextField.getText().toString(),
-        				userPasswordPasswordField.getText().toString());
-        		if(result)
-        		{
-                    studentObject.setStudentData();
-        			homePageDisplay(stage);
-        		}
-        		else
-        		{
-        			signUpPageDisplay(stage);
-        		}	
+                								nameField.getText().toString(),
+                								Double.parseDouble(ageField.getText().toString()),
+                								Double.parseDouble(CGPAField.getText().toString()));
+                	
+                	boolean result=loginSignUpObject.signUp(userSignUpTextField.getText().toString(),
+                											userPasswordPasswordField.getText().toString());
+                    if(result)
+                    {
+                    	homePageDisplay(stage);
+                    	studentObject.setStudentData();
+                    }
+                    else
+                    {
+                    	signUpPageDisplay(stage);
+                    }	
         	}
         });
 
@@ -132,6 +132,7 @@ public class Main extends Application
         setFullScreen(stage);
         stage.show();
     }
+
 
     public void companyListPageDisplay(Stage stage,ArrayList<String> domainList)
     {
