@@ -1,5 +1,7 @@
 package application;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import org.bson.Document;
@@ -37,7 +39,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -63,6 +66,7 @@ public class Main extends Application
             }
         });
 
+        Label allFieldsNotFilled = new Label("Fill all fields");
         Label userSignUpLabel = new Label("User ID");       
         Label userAgeLabel = new Label("Age");
         Label passwordLabel = new Label("Password"); 
@@ -86,27 +90,37 @@ public class Main extends Application
         gridPaneSignUp.setVgap(20); 
         gridPaneSignUp.setHgap(20);       
         gridPaneSignUp.setAlignment(Pos.CENTER); 
+        allFieldsNotFilled.setVisible(false);
              
         SignUpButton.setOnAction(new EventHandler<ActionEvent>() 
         {
         	public void handle(ActionEvent event)
         	{
-        		studentObject = new Student(userSignUpTextField.getText().toString(),
-        				nameField.getText().toString(),
-        				Double.parseDouble(ageField.getText().toString()),
-        				Double.parseDouble(CGPAField.getText().toString()));
-
-        		boolean result=loginSignUpObject.signUp(userSignUpTextField.getText().toString(),
-        				userPasswordPasswordField.getText().toString());
-        		if(result)
+        		if(nameField.getText().equals(""))
         		{
-                    studentObject.setStudentData();
-        			homePageDisplay(stage);
+        			System.out.println("Error detected");
         		}
         		else
         		{
-        			signUpPageDisplay(stage);
-        		}	
+        			System.out.println("reached here");
+        			studentObject = new Student(userSignUpTextField.getText().toString(),
+            				nameField.getText().toString(),
+            				Double.parseDouble(ageField.getText().toString()),
+            				Double.parseDouble(CGPAField.getText().toString()));
+
+            		boolean result=loginSignUpObject.userNameExists(userSignUpTextField.getText().toString(),
+            				userPasswordPasswordField.getText().toString());
+            		if(!result)
+            		{
+                        studentObject.setStudentData();
+            			homePageDisplay(stage);
+            		}
+            		else
+            		{
+            			signUpPageDisplay(stage);
+            		}
+        		}
+        			
         	}
         });
 
@@ -160,7 +174,10 @@ public class Main extends Application
     	
     	BorderPane borderPane = createMenuBar(stage);
 
-        VBox vBox = new VBox();
+        VBox vBox[] = new VBox[companyNames.size()+1];
+//        VBox vBox2 = new VBox();
+        HBox hBox[] = new HBox[companyNames.size()];
+        vBox[companyNames.size()] = new VBox();
         for(int i = 0; i < companyNames.size(); i++)
         {   
             /*
@@ -184,15 +201,22 @@ public class Main extends Application
             VBox.setMargin(domains.get(i), new Insets(5, 10, 5, 10));
             VBox.setMargin(subdomains.get(i), new Insets(5, 10, 20, 10));
         	
-        	vBox.getChildren().add(companyNames.get(i));  
-        	vBox.getChildren().add(description.get(i));
-        	vBox.getChildren().add(domains.get(i));
-        	vBox.getChildren().add(subdomains.get(i));
+            ImageView image = displayImage(companyNames.get(i).getText());
+            
+            vBox[i] = new VBox();
+        	vBox[i].getChildren().add(companyNames.get(i));  
+        	vBox[i].getChildren().add(description.get(i));
+        	vBox[i].getChildren().add(domains.get(i));
+        	vBox[i].getChildren().add(subdomains.get(i));
+        	
+        	hBox[i] = new HBox();
+        	hBox[i].getChildren().addAll(image,vBox[i]);
 
+        	vBox[companyNames.size()].getChildren().add(hBox[i]);
         }
-        
+     
         ScrollPane scrollPane = new ScrollPane();
-    	scrollPane.setContent(vBox);
+    	scrollPane.setContent(vBox[companyNames.size()]);
             
     	// Pannable.
     	scrollPane.setPannable(true);
@@ -941,6 +965,7 @@ public class Main extends Application
     	Label minCGPATextField = new Label("" + companyObject.minCGPA);
     	Label addressTextField = new Label(companyObject.address);
     	Label contactTextField = new Label("" + ((Double)companyObject.contact).intValue()); 	
+    	ImageView imageView = displayImage(companyObject.name);
     	
     	Button editProfileButton = new Button("Edit Profile");
     	Button logoutButton = new Button("Logout");
@@ -952,27 +977,30 @@ public class Main extends Application
         gridPane.setVgap(20); 
         gridPane.setHgap(20);       
         gridPane.setAlignment(Pos.CENTER);
+        imageView.setFitHeight(200);
+        imageView.setFitWidth(200);
         
-        gridPane.add(companyNameId, 0, 0);
-        gridPane.add(companyDomainId, 0, 1);
-        gridPane.add(companySubdomainId, 0, 2);
-        gridPane.add(generalDescriptionId, 0, 3);
-        gridPane.add(monthOfVisitId, 0, 4);
-        gridPane.add(minCGPAId, 0, 5);
-        gridPane.add(addressId, 0, 6);
-        gridPane.add(contactId, 0, 7);
+        gridPane.add(companyNameId, 0, 1);
+        gridPane.add(companyDomainId, 0, 2);
+        gridPane.add(companySubdomainId, 0, 3);
+        gridPane.add(generalDescriptionId, 0, 4);
+        gridPane.add(monthOfVisitId, 0, 5);
+        gridPane.add(minCGPAId, 0, 6);
+        gridPane.add(addressId, 0, 7);
+        gridPane.add(contactId, 0, 8);
         
-        gridPane.add(companyNameTextField, 1, 0);
-        gridPane.add(companyDomainTextField, 1, 1);
-        gridPane.add(companySubdomainTextField, 1, 2);
-        gridPane.add(generalDescriptionTextField, 1, 3);
-        gridPane.add(monthOfVisitTextField, 1, 4);
-        gridPane.add(minCGPATextField, 1, 5);
-        gridPane.add(addressTextField, 1, 6);
-        gridPane.add(contactTextField, 1, 7);
+        gridPane.add(imageView, 0, 0);
+        gridPane.add(companyNameTextField, 1, 1);
+        gridPane.add(companyDomainTextField, 1, 2);
+        gridPane.add(companySubdomainTextField, 1, 3);
+        gridPane.add(generalDescriptionTextField, 1, 4);
+        gridPane.add(monthOfVisitTextField, 1, 5);
+        gridPane.add(minCGPATextField, 1, 6);
+        gridPane.add(addressTextField, 1, 7);
+        gridPane.add(contactTextField, 1, 8);
         
-        gridPane.add(editProfileButton, 0, 10);
-        gridPane.add(logoutButton, 1, 10);
+        gridPane.add(editProfileButton, 0, 11);
+        gridPane.add(logoutButton, 1, 11);
         
         Scene scene = new Scene(gridPane,800,600);
     	stage.setScene(scene);
@@ -996,6 +1024,31 @@ public class Main extends Application
     		}
     	});
     	
+    }
+
+    public ImageView displayImage(String companyName)
+    {
+    	System.out.println("Working Directory = " +
+                System.getProperty("user.dir"));
+    	System.out.println(companyName);
+    	FileInputStream input = null;
+		try 
+		{
+			String path= ""+(System.getProperty("user.dir"))+"/images/"+companyName+".jpg";
+			input = new FileInputStream(path);
+		}
+		catch (FileNotFoundException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+           Image image = new Image(input);
+           ImageView imageView = new ImageView(image);
+
+           imageView.setFitWidth(100);
+           imageView.setFitHeight(100);
+           
+           return imageView;
     }
     
     @Override
