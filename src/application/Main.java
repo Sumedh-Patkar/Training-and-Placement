@@ -11,6 +11,8 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -91,7 +93,7 @@ public class Main extends Application
         final TextField nameField = new TextField("");
         final TextField ageField = new TextField("");
         final TextField CGPAField = new TextField("");
-        final TextField userSignUpTextField = new TextField("");      
+        final TextField usernameTextField = new TextField("");      
         final PasswordField userPasswordPasswordField = new PasswordField();
         PasswordField confirmPasswordField = new PasswordField();
 
@@ -109,21 +111,21 @@ public class Main extends Application
         {
             public void handle(ActionEvent event)
             {
-                boolean error = false;
+                boolean error = true;
                 
-                studentObject.sid = userSignUpTextField.getText();
+                studentObject.sid = usernameTextField.getText();
                 studentObject.name = nameField.getText();
-                studentObject.age = Double.parseDouble(ageField.getText());
-                studentObject.CGPA = Double.parseDouble(CGPAField.getText());
+              //  studentObject.age = Double.parseDouble(ageField.getText()); //cannot add here..added in validation part
+              //  studentObject.CGPA = Double.parseDouble(CGPAField.getText());
                
                 //replace this by another function which does not add incorrect entries in database
-                boolean result = loginSignUpObject.signUp(userSignUpTextField.getText(),
+                boolean result = loginSignUpObject.userNameExists(usernameTextField.getText(),
                         userPasswordPasswordField.getText());
-                if(!result)
+                if(result)
                 {
                     userNameExistsErrorLabel.setVisible(true);
                     error = true;
-                    return;
+                    
                 }
                 else
                 {
@@ -141,53 +143,63 @@ public class Main extends Application
                 }
                 
                 //for age
-                /*
-                 try
-    {
-        String inputdata = set.get(i);
-        if(inputdata != null && inputdata.trim().length() > 0)
-        {
-            int currentNumber = Integer.parseInt(userdata);
-            userDataStatus[i] = "Y";//Y represent valid number
-        }
-    }
-    catch (NumberFormatException ex )
-    {*/
-//                if()
+
+                try {
+                	Double checkAge = Double.parseDouble(ageField.getText());
+                	
+                	System.out.println("Age is valid!!");
+                	studentObject.age = Double.parseDouble(ageField.getText());
+                    ageErrorLabel.setVisible(false);
+                }
+                catch(Exception e)
                 {
+                	System.out.println("Age is not valid");
                     ageErrorLabel.setVisible(true);
                     error = true;
                 }
-//                else
-                {
-                    ageErrorLabel.setVisible(false);
+                
+                try {
+                	Double checkCGPA = Double.parseDouble(CGPAField.getText());
+                	System.out.println("CGPA is valid!!");
+                	studentObject.CGPA = Double.parseDouble(CGPAField.getText());
+                    CGPAErrorLabel.setVisible(false);
                 }
-               
-                if(nameField.getText().isEmpty() || ageField.getText().isEmpty() || CGPAField.getText().isEmpty() || userSignUpTextField.getText().isEmpty() || userPasswordPasswordField.getText().isEmpty() || confirmPasswordField.getText().isEmpty())
+                catch(Exception e)
+                {
+                	System.out.println("CGPA is not valid");
+                    CGPAErrorLabel.setVisible(true);
+                    error = true;
+                }
+                
+                
+                if(nameField.getText().equals("") || ageField.getText().equals("") || CGPAField.getText().equals("") || usernameTextField.getText().equals("") || userPasswordPasswordField.getText().equals("") || confirmPasswordField.getText().equals(""))
                 {
                 	allFieldsRequiredErrorLabel.setVisible(true);
                 	error = true;
                 }
                 else
+                {
                 	allFieldsRequiredErrorLabel.setVisible(false);
-                
-                if(!passwordErrorLabel.isVisible() && !userNameExistsErrorLabel.isVisible() && !ageErrorLabel.isVisible())
+                }
+                	
+                if(!passwordErrorLabel.isVisible() && !userNameExistsErrorLabel.isVisible() && !ageErrorLabel.isVisible() && !CGPAErrorLabel.isVisible())
                 {
                     error = false;
                     System.out.println("HELLO");
-//                    studentObject.setStudentData();
-//                    homePageDisplay(stage);
+                    studentObject.setStudentData();
+                    homePageDisplay(stage);
                 }
                 if(!error)
                 {
                     studentObject.setStudentData();
-                      homePageDisplay(stage);
+                    loginSignUpObject.signUp(usernameTextField.getText(), userPasswordPasswordField.getText());
+                    homePageDisplay(stage);
                 }
             }
         });
 
         gridPaneSignUp.add(userSignUpLabel, 0, 0);
-        gridPaneSignUp.add(userSignUpTextField, 1, 0);
+        gridPaneSignUp.add(usernameTextField, 1, 0);
         gridPaneSignUp.add(userNameExistsErrorLabel, 2, 0);
         gridPaneSignUp.add(passwordLabel, 0, 1);      
         gridPaneSignUp.add(userPasswordPasswordField, 1, 1);
@@ -196,11 +208,13 @@ public class Main extends Application
         gridPaneSignUp.add(passwordErrorLabel , 2, 2);
         gridPaneSignUp.add(nameLabel, 0, 3);
         gridPaneSignUp.add(nameField, 1, 3);
-        gridPaneSignUp.add(ageField, 1, 4);
         gridPaneSignUp.add(userAgeLabel, 0, 4);
+        gridPaneSignUp.add(ageField, 1, 4);
+        gridPaneSignUp.add(ageErrorLabel, 2, 4);
         gridPaneSignUp.add(CGPALabel, 0, 5);
         gridPaneSignUp.add(CGPAField, 1, 5);
-        gridPaneSignUp.add(allFieldsRequiredErrorLabel, 1, 6);
+        gridPaneSignUp.add(CGPAErrorLabel, 2, 5);
+        gridPaneSignUp.add(allFieldsRequiredErrorLabel, 1, 7);
         gridPaneSignUp.add(SignUpButton, 0,10);
         gridPaneSignUp.add(loginHyperlink, 1, 10);
        
