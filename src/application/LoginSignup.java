@@ -4,113 +4,74 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 
-import java.util.Scanner;
-
 import org.bson.Document;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoCredential; 
+import com.mongodb.MongoClient; 
 import com.mongodb.client.FindIterable;
 
-public class LoginSignup {
-        String username;
-        String password;
-        String type;
-        static Scanner sc;
+public class LoginSignup
+{
+	MongoClient mongo;
+	MongoDatabase database;
+	MongoCollection<Document> collection;
 
-        boolean login(String loginName,String password,String loginType)
-        {       
-            // Creating a Mongo client
-            MongoClient mongo = new MongoClient( "localhost" , 27017 );
+	LoginSignup()
+	{
+		mongo = new MongoClient( "localhost" , 27017 );
+		database = mongo.getDatabase("tnpdb");
+	}
 
-            // Accessing the database
-            MongoDatabase database = mongo.getDatabase("tnpdb");
+	public boolean login(String username,String password,String loginType)
+	{
+		//access the collection according to Login-Type
+		collection = database.getCollection(loginType + "Login");		//example "StudentLogin"
+		
+		//check if username already exists
+		BasicDBObject query = new BasicDBObject("username", username);
+		FindIterable<Document> iterDoc = collection.find(query);
+		MongoCursor<Document> it = iterDoc.iterator();
 
-            //check type
-            type = loginType;
+		if(it.hasNext() == true)	//if username exists
+		{
+			//check if password matches
+			Document result = it.next();
+			if(result.get("password").equals(password))
+			{
+				//give login if password matches
+				return true;
+			}
+			else
+				return false;	//wrong password
+		}
+		else
+			return false;		//username doesn't exist
+	}
+	
+	/*
+	 * THIS function RETURNS "TRUE" if username EXISTS
+	 */
+	public boolean userNameExists(String username,String password)
+	{       
+		collection = database.getCollection("StudentLogin");
+		
+		BasicDBObject query = new BasicDBObject("username", username);
+		FindIterable<Document> iterDoc = collection.find(query);
+		MongoCursor<Document> it = iterDoc.iterator();
+		
+		return it.hasNext();
+	}
+	
+	public void signUp(String username,String password)
+	{       
+		collection = database.getCollection("StudentLogin");
+		
+		//insert user into StudentLogin table
+		Document person = new Document("username",username)
+				.append("password", password);
 
-            MongoCollection<Document> collection;
-            if(type.equals("Student"))
-            //access the Collection
-                collection = database.getCollection("StudentLogin");
-            else if(type.equals("Company"))
-                collection = database.getCollection("CompanyLogin");
-            else
-            	collection = database.getCollection("AdminLogin");
-
-            //take username password
-            username = loginName;
-            password = password;
-
-            //check if username already exists
-
-            BasicDBObject whereQuery = new BasicDBObject();
-            whereQuery.put("username", username);
-            FindIterable<Document> iterDoc = collection.find(whereQuery);
-            MongoCursor<Document> it = iterDoc.iterator();
-
-            if(it.hasNext() == true)
-            {
-            //check for validity
-                Document result = it.next();
-                if(result.get("password").equals(password))
-                {
-                        //give login if password matches
-                        System.out.println("Welcome to tnp!\n");
-                        return true;
-                }
-                else
-                {
-                        System.out.println("Hack detected!\n");
-                        return false;
-                }
-            }
-            else
-                //username doesn't exist
-                System.out.println("Username doesn't exist.Please Sign Up");
-                return false;
-        }
-
-        boolean signUp(String signUpname,String pass)
-        {       
-            // Creating a Mongo client
-            MongoClient mongo = new MongoClient( "localhost" , 27017 ); 
-
-            // Accessing the database
-            MongoDatabase database = mongo.getDatabase("tnpdb");
-
-            MongoCollection<Document> collection;
-            //access the collection
-            collection = database.getCollection("StudentLogin");
-
-            //take username password
-            username = signUpname;
-            password = pass;
-
-            //check if username already exists
-
-            BasicDBObject whereQuery = new BasicDBObject();
-            whereQuery.put("username", username);
-            FindIterable<Document> iterDoc = collection.find(whereQuery);
-            MongoCursor<Document> it = iterDoc.iterator();
-
-            if(it.hasNext() == false)
-            {
-            //insert user into student table
-            Document person = new Document("username",username)
-                        .append("password", password);
-
-            collection.insertOne(person);
-            return true;
-            }
-            else
-            {
-                System.out.println("Username Already exists");
-                return false;
-            }
-
-        }
+		collection.insertOne(person);
+	}
 
     /*
      * only used for testing purpose

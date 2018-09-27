@@ -517,7 +517,6 @@ public class Main extends Application
         setFullScreen(stage);
         stage.show();
     }
-
     
     //Function to display sample test for each company
     public void companyTestPageDisplay(Stage stage,String companyName)
@@ -711,13 +710,15 @@ public class Main extends Application
        	studentObject.getStudentData();
     	//Label studentId = new Label(studentObject.sid);
     	Label studentName = new Label(studentObject.name);
-    	Label studentAge = new Label(""+studentObject.age);
+    	Label studentAge = new Label(""+((Double)studentObject.age).intValue());
     	Label studentCGPA = new Label(""+studentObject.CGPA);
     	
     	//Label displayId = new Label("ID");
     	Label displayName = new Label("Name");
     	Label displayAge = new Label("Age");
     	Label displayCGPA = new Label("CGPA");
+    	
+    	Button editProfile = new Button("Edit");
     	
     	GridPane gridPane = new GridPane();
     	
@@ -735,11 +736,83 @@ public class Main extends Application
     	gridPane.add(studentAge, 1, 2);
     	gridPane.add(displayCGPA, 0, 3);
     	gridPane.add(studentCGPA, 1, 3);
+    	gridPane.add(editProfile, 0, 4);
+    	
+    	editProfile.setOnAction(new EventHandler<ActionEvent>()
+    	{
+    		public void handle(ActionEvent event)
+    		{
+    			myProfileEditPageDisplay(stage);
+    		}
+    	});
     	
     	Scene scene = new Scene(new VBox(borderPane,gridPane),800,600);
     	stage.setScene(scene);
     	//To set stage to full screen 
         setFullScreen(stage);
+    	stage.show();
+    }
+    
+    public void myProfileEditPageDisplay(Stage stage)
+    {
+    	BorderPane borderPane = createMenuBar(stage);
+    	
+    	//edit will always be called after myProfileDisplay is called, so no need of getting student data again
+//    	studentObject.getStudentData();
+//    	TextField studentId = new TextField(studentObject.sid);
+    	TextField studentName = new TextField(studentObject.name);
+    	TextField studentAge = new TextField(""+((Double)studentObject.age).intValue());
+    	TextField studentCGPA = new TextField(""+studentObject.CGPA);
+//    	Label displayId = new Label("ID");
+    	Label displayName = new Label("Name");
+    	Label displayAge = new Label("Age");
+    	Label displayCGPA = new Label("CGPA");
+    	
+    	Button saveChanges = new Button("Save changes");
+    	Button cancel = new Button("Cancel");
+    	
+    	GridPane gridPane = new GridPane();
+    	
+    	gridPane.setMinSize(400, 200); 
+        gridPane.setPadding(new Insets(10, 10, 10, 10)); 
+        gridPane.setVgap(20); 
+        gridPane.setHgap(20);       
+        gridPane.setAlignment(Pos.CENTER);
+    	
+//    	gridPane.add(displayId, 0, 0);
+//    	gridPane.add(studentId, 1, 0);
+    	gridPane.add(displayName, 0, 0);
+    	gridPane.add(studentName, 1, 0);
+    	gridPane.add(displayAge, 0, 1);
+    	gridPane.add(studentAge, 1, 1);
+    	gridPane.add(displayCGPA, 0, 2);
+    	gridPane.add(studentCGPA, 1, 2);
+    	gridPane.add(saveChanges, 0, 4);
+    	gridPane.add(cancel, 1, 4);
+    	
+    	saveChanges.setOnAction(new EventHandler<ActionEvent>() 
+    	{
+    		public void handle(ActionEvent event)
+    		{
+//    			studentObject.sid = studentId.getText().toString();
+    			studentObject.name = studentName.getText().toString();
+    			studentObject.age = Double.parseDouble(studentAge.getText().toString());
+    			studentObject.CGPA = Double.parseDouble(studentCGPA.getText().toString());
+    			studentObject.updateProfile();
+    			myProfilePageDisplay(stage);
+    		}
+		});
+    	
+    	cancel.setOnAction(new EventHandler<ActionEvent>() 
+    	{
+    		public void handle(ActionEvent event)
+    		{   			
+    			myProfilePageDisplay(stage);
+    		}
+		});
+    	
+    	Scene scene = new Scene(new VBox(borderPane,gridPane),400,400);
+    	stage.setScene(scene);
     	stage.show();
     }
     
@@ -941,14 +1014,14 @@ public class Main extends Application
     	Label contactId = new Label("Contact: ");
     	
         //actual values
-    	TextField companyNameTextField = new TextField(companyObject.name);
-    	TextField companyDomainTextField = new TextField(companyObject.domain);
-    	TextField companySubdomainTextField = new TextField(companyObject.subdomain);
-    	TextField generalDescriptionTextField = new TextField(companyObject.generalDescription);
-    	TextField monthOfVisitTextField = new TextField(companyObject.monthOfVisit);
-    	TextField minCGPATextField = new TextField("" + companyObject.minCGPA);
-    	TextField addressTextField = new TextField(companyObject.address);
-    	TextField contactTextField = new TextField("" + ((Double)companyObject.contact).intValue()); 	
+    	Label companyNameTextField = new Label(companyObject.name);
+    	Label companyDomainTextField = new Label(companyObject.domain);
+    	Label companySubdomainTextField = new Label(companyObject.subdomain);
+    	Label generalDescriptionTextField = new Label(companyObject.generalDescription);
+    	Label monthOfVisitTextField = new Label(companyObject.monthOfVisit);
+    	Label minCGPATextField = new Label("" + companyObject.minCGPA);
+    	Label addressTextField = new Label(companyObject.address);
+    	Label contactTextField = new Label("" + ((Double)companyObject.contact).intValue()); 	
     	
     	Button editProfileButton = new Button("Edit Profile");
     	Button logoutButton = new Button("Logout");
