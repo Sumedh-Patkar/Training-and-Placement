@@ -22,6 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -51,87 +52,167 @@ public class Main extends Application
     MongoClient mongo;
     MongoDatabase database;
     MongoCollection<Document> collection;
-
+    
     public void signUpPageDisplay(final Stage stage)
-    {
-        Hyperlink loginHyperlink = new Hyperlink("Login");
+    {   
+        Hyperlink loginHyperlink = new Hyperlink("Already have an Account? Login");
 
         loginHyperlink.setOnAction(new EventHandler<ActionEvent>() {
-        	public void handle(ActionEvent event)
+            public void handle(ActionEvent event)
             {
                 loginPageDisplay(stage);
             }
         });
 
-        Label userSignUpLabel = new Label("User ID");       
+        Label userSignUpLabel = new Label("User ID");      
         Label userAgeLabel = new Label("Age");
-        Label passwordLabel = new Label("Password"); 
+        Label passwordLabel = new Label("Password");
         Label confirmPasswordLabel = new Label("Confirm Password");
         Label nameLabel = new Label("Name");
         Label CGPALabel = new Label("CGPA");
+       
+        Label userNameExistsErrorLabel = new Label("Username already exists!");
+        userNameExistsErrorLabel.setTextFill(Color.web("#ff0000"));
+        userNameExistsErrorLabel.setVisible(false);
+        Label passwordErrorLabel = new Label("Password's don't match!");
+        passwordErrorLabel.setTextFill(Color.web("#ff0000"));
+        passwordErrorLabel.setVisible(false);
+        
+        Label allFieldsRequiredErrorLabel = new Label("All fields are required!");
+        allFieldsRequiredErrorLabel.setTextFill(Color.web("#ff0000"));
+        allFieldsRequiredErrorLabel.setVisible(false);
+        Label ageErrorLabel = new Label("Enter correct age in digits");
+        ageErrorLabel.setTextFill(Color.web("#ff0000"));
+        ageErrorLabel.setVisible(false);
+        Label CGPAErrorLabel = new Label("Enter correct CGPA in digits");
+        CGPAErrorLabel.setTextFill(Color.web("#ff0000"));
+        CGPAErrorLabel.setVisible(false);
 
-        final TextField nameField = new TextField();
-        final TextField ageField = new TextField();
-        final TextField CGPAField = new TextField();
-        final TextField userSignUpTextField = new TextField();       
-        final PasswordField userPasswordPasswordField = new PasswordField(); 
+        final TextField nameField = new TextField("");
+        final TextField ageField = new TextField("");
+        final TextField CGPAField = new TextField("");
+        final TextField userSignUpTextField = new TextField("");      
+        final PasswordField userPasswordPasswordField = new PasswordField();
         PasswordField confirmPasswordField = new PasswordField();
 
-        Button SignUpButton = new Button("Sign Up"); 
+        Button SignUpButton = new Button("Sign Up");
+           
+        GridPane gridPaneSignUp = new GridPane();   
+           
+        gridPaneSignUp.setMinSize(400, 200);
+        gridPaneSignUp.setPadding(new Insets(10, 10, 10, 10));
+        gridPaneSignUp.setVgap(20);
+        gridPaneSignUp.setHgap(20);      
+        gridPaneSignUp.setAlignment(Pos.CENTER);
             
-        GridPane gridPaneSignUp = new GridPane();    
-            
-        gridPaneSignUp.setMinSize(400, 200); 
-        gridPaneSignUp.setPadding(new Insets(10, 10, 10, 10)); 
-        gridPaneSignUp.setVgap(20); 
-        gridPaneSignUp.setHgap(20);       
-        gridPaneSignUp.setAlignment(Pos.CENTER); 
-             
-        SignUpButton.setOnAction(new EventHandler<ActionEvent>() 
+        SignUpButton.setOnAction(new EventHandler<ActionEvent>()
         {
-        	public void handle(ActionEvent event)
-        	{
-        		studentObject = new Student(userSignUpTextField.getText().toString(),
-        				nameField.getText().toString(),
-        				Double.parseDouble(ageField.getText().toString()),
-        				Double.parseDouble(CGPAField.getText().toString()));
-
-        		boolean result=loginSignUpObject.signUp(userSignUpTextField.getText().toString(),
-        				userPasswordPasswordField.getText().toString());
-        		if(result)
-        		{
+            public void handle(ActionEvent event)
+            {
+                boolean error = false;
+                
+                studentObject.sid = userSignUpTextField.getText();
+                studentObject.name = nameField.getText();
+                studentObject.age = Double.parseDouble(ageField.getText());
+                studentObject.CGPA = Double.parseDouble(CGPAField.getText());
+               
+                //replace this by another function which does not add incorrect entries in database
+                boolean result = loginSignUpObject.signUp(userSignUpTextField.getText(),
+                        userPasswordPasswordField.getText());
+                if(!result)
+                {
+                    userNameExistsErrorLabel.setVisible(true);
+                    error = true;
+                    return;
+                }
+                else
+                {
+                    userNameExistsErrorLabel.setVisible(false);
+                }
+               
+                if(!(userPasswordPasswordField.getText().equals(confirmPasswordField.getText())))
+                {
+                    passwordErrorLabel.setVisible(true);
+                    error = true;
+                }
+                else
+                {
+                    passwordErrorLabel.setVisible(false);
+                }
+                
+                //for age
+                /*
+                 try
+    {
+        String inputdata = set.get(i);
+        if(inputdata != null && inputdata.trim().length() > 0)
+        {
+            int currentNumber = Integer.parseInt(userdata);
+            userDataStatus[i] = "Y";//Y represent valid number
+        }
+    }
+    catch (NumberFormatException ex )
+    {*/
+//                if()
+                {
+                    ageErrorLabel.setVisible(true);
+                    error = true;
+                }
+//                else
+                {
+                    ageErrorLabel.setVisible(false);
+                }
+               
+                if(nameField.getText().isEmpty() || ageField.getText().isEmpty() || CGPAField.getText().isEmpty() || userSignUpTextField.getText().isEmpty() || userPasswordPasswordField.getText().isEmpty() || confirmPasswordField.getText().isEmpty())
+                {
+                	allFieldsRequiredErrorLabel.setVisible(true);
+                	error = true;
+                }
+                else
+                	allFieldsRequiredErrorLabel.setVisible(false);
+                
+                if(!passwordErrorLabel.isVisible() && !userNameExistsErrorLabel.isVisible() && !ageErrorLabel.isVisible())
+                {
+                    error = false;
+                    System.out.println("HELLO");
+//                    studentObject.setStudentData();
+//                    homePageDisplay(stage);
+                }
+                if(!error)
+                {
                     studentObject.setStudentData();
-        			homePageDisplay(stage);
-        		}
-        		else
-        		{
-        			signUpPageDisplay(stage);
-        		}	
-        	}
+                      homePageDisplay(stage);
+                }
+            }
         });
 
-        gridPaneSignUp.add(userSignUpLabel, 0, 0); 
-        gridPaneSignUp.add(userSignUpTextField, 1, 0); 
-        gridPaneSignUp.add(nameLabel, 0, 1);
-        gridPaneSignUp.add(nameField, 1, 1);
-        gridPaneSignUp.add(ageField, 1, 2);
-        gridPaneSignUp.add(userAgeLabel, 0, 2);
-        gridPaneSignUp.add(CGPALabel, 0, 3);
-        gridPaneSignUp.add(CGPAField, 1, 3);
-        gridPaneSignUp.add(passwordLabel, 0, 4);       
-        gridPaneSignUp.add(userPasswordPasswordField, 1, 4);
-        gridPaneSignUp.add(confirmPasswordField, 1, 5);
-        gridPaneSignUp.add(confirmPasswordLabel, 0, 5); 
-        gridPaneSignUp.add(SignUpButton, 0,6); 
-        gridPaneSignUp.add(loginHyperlink, 1, 6);
-        
-        Scene scene = new Scene(gridPaneSignUp,800,600);  
-        
-        stage.setScene(scene);  
-        //To set stage to full screen 
+        gridPaneSignUp.add(userSignUpLabel, 0, 0);
+        gridPaneSignUp.add(userSignUpTextField, 1, 0);
+        gridPaneSignUp.add(userNameExistsErrorLabel, 2, 0);
+        gridPaneSignUp.add(passwordLabel, 0, 1);      
+        gridPaneSignUp.add(userPasswordPasswordField, 1, 1);
+        gridPaneSignUp.add(confirmPasswordField, 1, 2);
+        gridPaneSignUp.add(confirmPasswordLabel, 0, 2);
+        gridPaneSignUp.add(passwordErrorLabel , 2, 2);
+        gridPaneSignUp.add(nameLabel, 0, 3);
+        gridPaneSignUp.add(nameField, 1, 3);
+        gridPaneSignUp.add(ageField, 1, 4);
+        gridPaneSignUp.add(userAgeLabel, 0, 4);
+        gridPaneSignUp.add(CGPALabel, 0, 5);
+        gridPaneSignUp.add(CGPAField, 1, 5);
+        gridPaneSignUp.add(allFieldsRequiredErrorLabel, 1, 6);
+        gridPaneSignUp.add(SignUpButton, 0,10);
+        gridPaneSignUp.add(loginHyperlink, 1, 10);
+       
+        Scene scene = new Scene(gridPaneSignUp,800,600); 
+       
+        stage.setScene(scene); 
+        //To set stage to full screen
         setFullScreen(stage);
         stage.show();
     }
+
+
 
     public void companyListPageDisplay(Stage stage,ArrayList<String> subDomainList)
     {
