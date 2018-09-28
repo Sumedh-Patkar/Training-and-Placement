@@ -13,6 +13,8 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,6 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -54,97 +57,232 @@ public class Main extends Application
     MongoClient mongo;
     MongoDatabase database;
     MongoCollection<Document> collection;
-
+    
     public void signUpPageDisplay(final Stage stage)
-    {
-        Hyperlink loginHyperlink = new Hyperlink("Login");
+    {   
+        Hyperlink loginHyperlink = new Hyperlink("Already have an Account? Login");
 
         loginHyperlink.setOnAction(new EventHandler<ActionEvent>() {
-        	public void handle(ActionEvent event)
+            public void handle(ActionEvent event)
             {
                 loginPageDisplay(stage);
             }
         });
 
+
         Label allFieldsNotFilled = new Label("Fill all fields");
         Label userSignUpLabel = new Label("User ID");       
+
         Label userAgeLabel = new Label("Age");
-        Label passwordLabel = new Label("Password"); 
+        Label passwordLabel = new Label("Password");
         Label confirmPasswordLabel = new Label("Confirm Password");
         Label nameLabel = new Label("Name");
         Label CGPALabel = new Label("CGPA");
+       
+        Label userNameExistsErrorLabel = new Label("Username already exists!");
+        userNameExistsErrorLabel.setTextFill(Color.web("#ff0000"));
+        userNameExistsErrorLabel.setVisible(false);
+        Label passwordErrorLabel = new Label("Passwords don't match!");
+        passwordErrorLabel.setTextFill(Color.web("#ff0000"));
+        passwordErrorLabel.setVisible(false);
+        
+        Label allFieldsRequiredErrorLabel = new Label("All fields are required!");
+        allFieldsRequiredErrorLabel.setTextFill(Color.web("#ff0000"));
+        allFieldsRequiredErrorLabel.setVisible(false);
+        Label ageErrorLabel = new Label("Enter correct age in digits");
+        ageErrorLabel.setTextFill(Color.web("#ff0000"));
+        ageErrorLabel.setVisible(false);
+        Label ageNotWithinLimits = new Label("Age should be inbetween 18 and 30");
+        ageNotWithinLimits.setTextFill(Color.web("#ff0000"));
+        ageNotWithinLimits.setVisible(false);
+        Label CGPAErrorLabel = new Label("Enter correct CGPA in digits");
+        CGPAErrorLabel.setTextFill(Color.web("#ff0000"));
+        CGPAErrorLabel.setVisible(false);
+        Label CGPANotWithinLimitsErrorLabel = new Label("CGPA should be in between 0-10");
+        CGPANotWithinLimitsErrorLabel.setTextFill(Color.web("#ff0000"));
+        CGPANotWithinLimitsErrorLabel.setVisible(false);
 
-        final TextField nameField = new TextField();
-        final TextField ageField = new TextField();
-        final TextField CGPAField = new TextField();
-        final TextField userSignUpTextField = new TextField();       
-        final PasswordField userPasswordPasswordField = new PasswordField(); 
+        final TextField nameField = new TextField("");
+        final TextField ageField = new TextField("");
+        final TextField CGPAField = new TextField("");
+        final TextField usernameTextField = new TextField("");      
+        final PasswordField userPasswordPasswordField = new PasswordField();
         PasswordField confirmPasswordField = new PasswordField();
 
-        Button SignUpButton = new Button("Sign Up"); 
+        Button SignUpButton = new Button("Sign Up");
+           
+        GridPane gridPaneSignUp = new GridPane();   
+           
+        gridPaneSignUp.setMinSize(400, 200);
+        gridPaneSignUp.setPadding(new Insets(10, 10, 10, 10));
+        gridPaneSignUp.setVgap(20);
+        gridPaneSignUp.setHgap(20);      
+        gridPaneSignUp.setAlignment(Pos.CENTER);
             
-        GridPane gridPaneSignUp = new GridPane();    
-            
-        gridPaneSignUp.setMinSize(400, 200); 
-        gridPaneSignUp.setPadding(new Insets(10, 10, 10, 10)); 
-        gridPaneSignUp.setVgap(20); 
-        gridPaneSignUp.setHgap(20);       
-        gridPaneSignUp.setAlignment(Pos.CENTER); 
-        allFieldsNotFilled.setVisible(false);
-             
-        SignUpButton.setOnAction(new EventHandler<ActionEvent>() 
-        {
-        	public void handle(ActionEvent event)
-        	{
-        		if(nameField.getText().equals(""))
-        		{
-        			System.out.println("Error detected");
-        		}
-        		else
-        		{
-        			System.out.println("reached here");
-        			studentObject = new Student(userSignUpTextField.getText().toString(),
-            				nameField.getText().toString(),
-            				Double.parseDouble(ageField.getText().toString()),
-            				Double.parseDouble(CGPAField.getText().toString()));
 
-            		boolean result=loginSignUpObject.userNameExists(userSignUpTextField.getText().toString(),
-            				userPasswordPasswordField.getText().toString());
-            		if(!result)
-            		{
-                        studentObject.setStudentData();
-            			homePageDisplay(stage);
-            		}
-            		else
-            		{
-            			signUpPageDisplay(stage);
-            		}
-        		}
-        			
-        	}
+        SignUpButton.setOnAction(new EventHandler<ActionEvent>()
+        {
+            public void handle(ActionEvent event)
+            {
+                boolean error = true;
+                
+                studentObject.sid = usernameTextField.getText();
+                studentObject.name = nameField.getText();
+              
+                //replace this by another function which does not add incorrect entries in database
+                System.out.println("Password here");
+                System.out.println(userPasswordPasswordField.getText());
+                System.out.println(confirmPasswordField.getText());
+                boolean result = loginSignUpObject.userNameExists(usernameTextField.getText(),
+                        userPasswordPasswordField.getText());
+                if(result)
+                {
+                    userNameExistsErrorLabel.setVisible(true);
+                    error = true;     
+                }
+                else
+                {
+                    userNameExistsErrorLabel.setVisible(false);
+                }
+               
+                if(!(userPasswordPasswordField.getText().equals(confirmPasswordField.getText())))
+                {
+                    passwordErrorLabel.setVisible(true);
+                    error = true;
+                }
+                else
+                {
+                    passwordErrorLabel.setVisible(false);
+                }
+                
+                //for age
+
+                int validAge = validatingAge(ageField.getText());
+                if(validAge==0)
+                {
+                	ageErrorLabel.setVisible(false);
+                	ageNotWithinLimits.setVisible(false);
+                }
+                else if(validAge==1)
+                {
+                	ageErrorLabel.setVisible(true);
+                	error=true;
+                }
+                else
+                {
+                	ageNotWithinLimits.setVisible(true);
+                	error=true;
+                }
+                
+                int validCGPA = validatingCGPA(CGPAField.getText());
+                if(validCGPA==0)
+                {
+                	CGPAErrorLabel.setVisible(false);
+                	CGPANotWithinLimitsErrorLabel.setVisible(false);
+                }
+                else if(validCGPA==1)
+                {
+                	CGPAErrorLabel.setVisible(true);
+                	error=true;
+                }
+                else
+                {
+                	CGPANotWithinLimitsErrorLabel.setVisible(true);
+                	error=true;
+                }
+                
+                if(nameField.getText().equals("") || ageField.getText().equals("") || CGPAField.getText().equals("") || usernameTextField.getText().equals("") || userPasswordPasswordField.getText().equals("") || confirmPasswordField.getText().equals(""))
+                {
+                	allFieldsRequiredErrorLabel.setVisible(true);
+                	error = true;
+                }
+                else
+                {
+                	allFieldsRequiredErrorLabel.setVisible(false);
+                }
+                	
+                if(!passwordErrorLabel.isVisible() && !userNameExistsErrorLabel.isVisible() && !ageErrorLabel.isVisible() && !CGPAErrorLabel.isVisible() && !ageNotWithinLimits.isVisible() && !CGPANotWithinLimitsErrorLabel.isVisible() && !allFieldsRequiredErrorLabel.isVisible())
+                {
+                    error = false;
+                    System.out.println("HELLO");
+                }
+                if(!error)
+                {
+                	studentObject.CGPA = Double.parseDouble(CGPAField.getText());
+                	studentObject.age = Double.parseDouble(ageField.getText());
+                    studentObject.setStudentData();
+                    loginSignUpObject.signUp(usernameTextField.getText(), userPasswordPasswordField.getText());
+                    homePageDisplay(stage);
+                }
+            }
         });
 
-        gridPaneSignUp.add(userSignUpLabel, 0, 0); 
-        gridPaneSignUp.add(userSignUpTextField, 1, 0); 
-        gridPaneSignUp.add(nameLabel, 0, 1);
-        gridPaneSignUp.add(nameField, 1, 1);
-        gridPaneSignUp.add(ageField, 1, 2);
-        gridPaneSignUp.add(userAgeLabel, 0, 2);
-        gridPaneSignUp.add(CGPALabel, 0, 3);
-        gridPaneSignUp.add(CGPAField, 1, 3);
-        gridPaneSignUp.add(passwordLabel, 0, 4);       
-        gridPaneSignUp.add(userPasswordPasswordField, 1, 4);
-        gridPaneSignUp.add(confirmPasswordField, 1, 5);
-        gridPaneSignUp.add(confirmPasswordLabel, 0, 5); 
-        gridPaneSignUp.add(SignUpButton, 0,6); 
-        gridPaneSignUp.add(loginHyperlink, 1, 6);
-        
-        Scene scene = new Scene(gridPaneSignUp,800,600);  
-        
-        stage.setScene(scene);  
-        //To set stage to full screen 
+        gridPaneSignUp.add(userSignUpLabel, 0, 0);
+        gridPaneSignUp.add(usernameTextField, 1, 0);
+        gridPaneSignUp.add(userNameExistsErrorLabel, 2, 0);
+        gridPaneSignUp.add(passwordLabel, 0, 1);      
+        gridPaneSignUp.add(userPasswordPasswordField, 1, 1);
+        gridPaneSignUp.add(confirmPasswordField, 1, 2);
+        gridPaneSignUp.add(confirmPasswordLabel, 0, 2);
+        gridPaneSignUp.add(passwordErrorLabel , 2, 2);
+        gridPaneSignUp.add(nameLabel, 0, 3);
+        gridPaneSignUp.add(nameField, 1, 3);
+        gridPaneSignUp.add(userAgeLabel, 0, 4);
+        gridPaneSignUp.add(ageField, 1, 4);
+        gridPaneSignUp.add(ageErrorLabel, 2, 4);
+        gridPaneSignUp.add(ageNotWithinLimits, 2, 4);
+        gridPaneSignUp.add(CGPALabel, 0, 5);
+        gridPaneSignUp.add(CGPAField, 1, 5);
+        gridPaneSignUp.add(CGPAErrorLabel, 2, 5);
+        gridPaneSignUp.add(CGPANotWithinLimitsErrorLabel, 2, 5);
+        gridPaneSignUp.add(allFieldsRequiredErrorLabel, 1, 7);
+        gridPaneSignUp.add(SignUpButton, 0,10);
+        gridPaneSignUp.add(loginHyperlink, 1, 10);
+       
+        Scene scene = new Scene(gridPaneSignUp,800,600); 
+       
+        stage.setScene(scene); 
+        //To set stage to full screen
         setFullScreen(stage);
         stage.show();
+    }
+
+    public int validatingAge(String ageField)
+    {
+    	  try 
+    	  {
+          	Double checkAge = Double.parseDouble(ageField);
+          	if(checkAge<18 || checkAge>30)
+          	{
+          		return 2;
+          	}
+          	System.out.println("Age is valid!!"); 
+          }
+          catch(Exception e)
+          {
+          	System.out.println("Age is not valid");
+            return 1;  
+          }
+    	  return 0;
+    }
+    
+    public int validatingCGPA(String CGPAField)
+    {
+    	try 
+  	  {
+        	Double checkCGPA = Double.parseDouble(CGPAField);
+        	if(checkCGPA<0 || checkCGPA>10)
+        	{
+        		return 2;
+        	}
+        	System.out.println("CGPA is valid!!"); 
+        }
+        catch(Exception e)
+        {
+        	System.out.println("CGPA is not valid");
+          return 1;  
+        }
+  	  return 0;
     }
 
     public void companyListPageDisplay(Stage stage,ArrayList<String> subDomainList)
@@ -1050,6 +1188,7 @@ public class Main extends Application
            
            return imageView;
     }
+    
     
     @Override
     public void start(Stage primaryStage) throws Exception
