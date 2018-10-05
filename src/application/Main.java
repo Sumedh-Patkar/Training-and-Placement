@@ -10,18 +10,11 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -30,7 +23,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -50,7 +42,6 @@ import javafx.scene.image.ImageView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.css.*;
 
 public class Main extends Application
 {
@@ -317,7 +308,6 @@ public class Main extends Application
     	BorderPane borderPane = createMenuBar(stage);
 
         VBox vBox[] = new VBox[companyNames.size()+1];
-//        VBox vBox2 = new VBox();
         HBox hBox[] = new HBox[companyNames.size()];
         vBox[companyNames.size()] = new VBox();
         for(int i = 0; i < companyNames.size(); i++)
@@ -333,8 +323,7 @@ public class Main extends Application
                 @Override
                 public void handle(Event event) 
                 {
-                	System.out.println(companyNameSelected + " is selected");
-                    companyProfilePageDisplay(stage,companyNameSelected);
+                    companyProfilePageDisplay(stage, companyNameSelected);
                 }
             });
 
@@ -367,7 +356,6 @@ public class Main extends Application
     	        
     	Scene scene = new Scene(new VBox(borderPane,scrollPane),800,600);  
         stage.setScene(scene);
-        //To set stage to full screen 
         setFullScreen(stage);
     	stage.show();	
     }
@@ -377,12 +365,10 @@ public class Main extends Application
     	BorderPane borderPane = createMenuBar(stage);
     	borderPane.setStyle("-fx-foreground-color: black;");
     		
-    	//main code for this function
     	CheckBox subdomains[] = new CheckBox[25];
     	subdomains[0] = new CheckBox("Natural Language Processing");
     	subdomains[1] = new CheckBox("Computer Vision");
     	subdomains[2] = new CheckBox("Symbolic Reasoning");
-    	//update required names here afterwards
     	subdomains[3] = new CheckBox("Network Security");
     	subdomains[4] = new CheckBox("Information Security");
     	subdomains[5] = new CheckBox("Cryptography");
@@ -394,11 +380,11 @@ public class Main extends Application
     	subdomains[11] = new CheckBox("Smart Home");
     	subdomains[12] = new CheckBox("Data Mining");
     	subdomains[13] = new CheckBox("Big Data Analytics");
-    	subdomains[14] = new CheckBox("Digital art");
+    	subdomains[14] = new CheckBox("Digital Art");
     	subdomains[15] = new CheckBox("Animation");
-    	subdomains[16] = new CheckBox("Video games");
-    	subdomains[17] = new CheckBox("Visual effects");
-    	subdomains[18] = new CheckBox("Computer architecture");
+    	subdomains[16] = new CheckBox("Video Games");
+    	subdomains[17] = new CheckBox("Visual Effects");
+    	subdomains[18] = new CheckBox("Computer Architecture");
     	subdomains[19] = new CheckBox("Operating Systems");
     	subdomains[20] = new CheckBox("Parallel Computing");
     	subdomains[21] = new CheckBox("Distributed Computing");
@@ -425,7 +411,6 @@ public class Main extends Application
     	gridPane.setVgap(20); 
     	gridPane.setHgap(20);       
     	gridPane.setAlignment(Pos.CENTER); 
-    	
     	
     	gridPane.add(Domain1,0 ,1 );
     	gridPane.add(subdomains[0],1 ,2 );
@@ -470,15 +455,14 @@ public class Main extends Application
     	gridPane.add(subdomains[23], 1, 42);
     	gridPane.add(subdomains[24], 1, 43);
     	
-    	gridPane.add(searchCompanies,3,45);//purposefully kept much below for testing scrollpane
+    	gridPane.add(searchCompanies,3,45);
      
      
     	ScrollPane scrollPane = new ScrollPane();
     	
     	//Fitting the scrollPane to the screen size
     	scrollPane.setFitToWidth(true);
-    	scrollPane.setPrefSize(600, 700);
-    	
+
     	scrollPane.setContent(gridPane);
             
     	// Make scrollPane Pannable.
@@ -650,8 +634,7 @@ public class Main extends Application
 
         StackPane root = new StackPane();
         root.setStyle(
-            "-fx-background-image: url(" +
-                "'file:/Users/rohan/Training-and-Placement/images/nice.jpg'" +
+            "-fx-background-image: url(" + System.getProperty("user.dir")+"/images/nice.jpg'" +
             "); " +
             "-fx-background-size: auto;" +
             "-fx-background-repeat: no-repeat;" +
@@ -659,9 +642,7 @@ public class Main extends Application
         );
         root.getChildren().add(borderPane);
      Scene scene = new Scene(root,800,600);  
-   
-   
-        
+           
         stage.setScene(scene);
         //To set stage to full screen 
         setFullScreen(stage);
@@ -708,8 +689,7 @@ public class Main extends Application
     	stage.setScene(scene);
     	//To set stage to full screen 
         setFullScreen(stage);
-    	stage.show();
-    	
+    	stage.show();  	
     }
   
     //This function is to display the answer key of sample tests per company
@@ -753,8 +733,7 @@ public class Main extends Application
     	stage.setScene(scene);
     	//To set stage to full screen 
         setFullScreen(stage);
-    	stage.show();
-    	
+    	stage.show();  	
     }
     
     /*
@@ -791,7 +770,10 @@ public class Main extends Application
     	Label monthOfVisitLabel = new Label(company.get("monthOfVisit").toString());
     	Label minCGPALabel = new Label(company.get("minCGPA").toString());
     	Label addressLabel = new Label(company.get("address").toString());
-    	Label contactLabel = new Label(company.get("contact").toString());    
+    	Label contactLabel = new Label(company.get("contact").toString());
+        ImageView imageView = new ImageView(displayImage(companyName));
+        imageView.setFitHeight(100);
+        imageView.setFitWidth(100);
     	
     	Button exam = new Button("Sample Test");   //on clicking..test will be displayed on new page.
     	Button ansKey = new Button("Answer Key");
@@ -804,25 +786,26 @@ public class Main extends Application
         gridPane.setHgap(20);       
         gridPane.setAlignment(Pos.CENTER);
         
-        gridPane.add(companyNameId, 0, 0);
-        gridPane.add(companyDomainId, 0, 1);
-        gridPane.add(companySubdomainId, 0, 2);
-        gridPane.add(generalDescriptionId, 0, 3);
-        gridPane.add(monthOfVisitId, 0, 4);
-        gridPane.add(minCGPAId, 0, 5);
-        gridPane.add(addressId, 0, 6);
-        gridPane.add(contactId, 0, 7);
+        gridPane.add(companyNameId, 0, 1);
+        gridPane.add(companyDomainId, 0, 2);
+        gridPane.add(companySubdomainId, 0, 3);
+        gridPane.add(generalDescriptionId, 0, 4);
+        gridPane.add(monthOfVisitId, 0, 5);
+        gridPane.add(minCGPAId, 0, 6);
+        gridPane.add(addressId, 0, 7);
+        gridPane.add(contactId, 0, 8);
         
-        gridPane.add(companyNameLabel, 1, 0);
-        gridPane.add(companyDomainLabel, 1, 1);
-        gridPane.add(companySubdomainLabel, 1, 2);
-        gridPane.add(generalDescriptionLabel, 1, 3);
-        gridPane.add(monthOfVisitLabel, 1, 4);
-        gridPane.add(minCGPALabel, 1, 5);
-        gridPane.add(addressLabel, 1, 6);
-        gridPane.add(contactLabel, 1, 7);
+        gridPane.add(imageView, 0, 0);
+        gridPane.add(companyNameLabel, 1, 1);
+        gridPane.add(companyDomainLabel, 1, 2);
+        gridPane.add(companySubdomainLabel, 1, 3);
+        gridPane.add(generalDescriptionLabel, 1, 4);
+        gridPane.add(monthOfVisitLabel, 1, 5);
+        gridPane.add(minCGPALabel, 1, 6);
+        gridPane.add(addressLabel, 1, 7);
+        gridPane.add(contactLabel, 1, 8);
         
-        gridPane.add(exam, 1, 9);
+        gridPane.add(exam, 1, 10);
         gridPane.add(ansKey, 1, 11);
        
         exam.setOnMouseClicked(new EventHandler<Event>()
@@ -907,13 +890,10 @@ public class Main extends Application
     {
     	BorderPane borderPane = createMenuBar(stage);
     	
-    	//edit will always be called after myProfileDisplay is called, so no need of getting student data again
-//    	studentObject.getStudentData();
-//    	TextField studentId = new TextField(studentObject.sid);
     	TextField studentName = new TextField(studentObject.name);
     	TextField studentAge = new TextField(""+((Double)studentObject.age).intValue());
     	TextField studentCGPA = new TextField(""+studentObject.CGPA);
-//    	Label displayId = new Label("ID");
+
     	Label displayName = new Label("Name");
     	Label displayAge = new Label("Age");
     	Label displayCGPA = new Label("CGPA");
@@ -929,8 +909,6 @@ public class Main extends Application
         gridPane.setHgap(20);       
         gridPane.setAlignment(Pos.CENTER);
     	
-//    	gridPane.add(displayId, 0, 0);
-//    	gridPane.add(studentId, 1, 0);
     	gridPane.add(displayName, 0, 0);
     	gridPane.add(studentName, 1, 0);
     	gridPane.add(displayAge, 0, 1);
@@ -944,7 +922,6 @@ public class Main extends Application
     	{
     		public void handle(ActionEvent event)
     		{
-//    			studentObject.sid = studentId.getText().toString();
     			studentObject.name = studentName.getText().toString();
     			studentObject.age = Double.parseDouble(studentAge.getText().toString());
     			studentObject.CGPA = Double.parseDouble(studentCGPA.getText().toString());
@@ -1032,10 +1009,7 @@ public class Main extends Application
 //			e.printStackTrace();
 //		}
 //           Image image = new Image(input);
-        
-           
-           
-           
+                  
 //           StackPane root = new StackPane();
 //           root.setStyle(
 //               "-fx-background-image: url(" +
@@ -1114,7 +1088,10 @@ public class Main extends Application
     	TextField monthOfVisitTextField = new TextField(companyObject.monthOfVisit);
     	TextField minCGPATextField = new TextField("" + companyObject.minCGPA);
     	TextField addressTextField = new TextField(companyObject.address);
-    	TextField contactTextField = new TextField("" + ((Double)companyObject.contact).intValue());    	
+    	TextField contactTextField = new TextField("" + ((Double)companyObject.contact).intValue());  
+        ImageView imageView = new ImageView(displayImage(companyObject.name));
+        imageView.setFitHeight(100);
+        imageView.setFitWidth(100);  	
     	
     	Button saveProfileButton = new Button("Save Profile");
     	
@@ -1126,6 +1103,7 @@ public class Main extends Application
         gridPane.setHgap(20);       
         gridPane.setAlignment(Pos.CENTER);
         
+        gridPane.add(imageView, 0, 0);
         gridPane.add(companyNameId, 0, 1);
         gridPane.add(companyDomainId, 0, 2);
         gridPane.add(companySubdomainId, 0, 3);
@@ -1182,7 +1160,6 @@ public class Main extends Application
     	companyObject.getProfile();
     	
         //display the profile
-    	
         //only Id's
     	Label companyNameId = new Label("Name: ");
     	Label companyDomainId = new Label("Domain: ");
@@ -1282,10 +1259,8 @@ public class Main extends Application
 			e.printStackTrace();
 		}
            Image image = new Image(input);
-
            return image;
-    }
-    
+    } 
     
     @Override
     public void start(Stage primaryStage) throws Exception
