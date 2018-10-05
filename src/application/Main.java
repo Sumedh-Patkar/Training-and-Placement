@@ -3,15 +3,12 @@ package application;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-
 import org.bson.Document;
-
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
-
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -20,16 +17,22 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -47,6 +50,7 @@ import javafx.scene.image.ImageView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.css.*;
 
 public class Main extends Application
 {
@@ -339,7 +343,9 @@ public class Main extends Application
             VBox.setMargin(domains.get(i), new Insets(5, 10, 5, 10));
             VBox.setMargin(subdomains.get(i), new Insets(5, 10, 20, 10));
         	
-            ImageView image = displayImage(companyNames.get(i).getText());
+            ImageView imageView = new ImageView(displayImage(companyNames.get(i).getText()));
+            imageView.setFitHeight(100);
+            imageView.setFitWidth(100);
             
             vBox[i] = new VBox();
         	vBox[i].getChildren().add(companyNames.get(i));  
@@ -348,7 +354,7 @@ public class Main extends Application
         	vBox[i].getChildren().add(subdomains.get(i));
         	
         	hBox[i] = new HBox();
-        	hBox[i].getChildren().addAll(image,vBox[i]);
+        	hBox[i].getChildren().addAll(imageView,vBox[i]);
 
         	vBox[companyNames.size()].getChildren().add(hBox[i]);
         }
@@ -372,21 +378,43 @@ public class Main extends Application
     	borderPane.setStyle("-fx-foreground-color: black;");
     		
     	//main code for this function
-    	CheckBox subdomains[] = new CheckBox[9];
-    	subdomains[0] = new CheckBox("Artificial Intelligence");
-    	subdomains[1] = new CheckBox("Machine Learning");
-    	subdomains[2] = new CheckBox("Natural Language Processing");
+    	CheckBox subdomains[] = new CheckBox[25];
+    	subdomains[0] = new CheckBox("Natural Language Processing");
+    	subdomains[1] = new CheckBox("Computer Vision");
+    	subdomains[2] = new CheckBox("Symbolic Reasoning");
     	//update required names here afterwards
-    	subdomains[3] = new CheckBox("subdomain4");
-    	subdomains[4] = new CheckBox("subdomain5");
-    	subdomains[5] = new CheckBox("subdomain6");
-    	subdomains[6] = new CheckBox("subdomain7");
-    	subdomains[7] = new CheckBox("subdomain8");
-    	subdomains[8] = new CheckBox("subdomain9");
+    	subdomains[3] = new CheckBox("Network Security");
+    	subdomains[4] = new CheckBox("Information Security");
+    	subdomains[5] = new CheckBox("Cryptography");
+    	subdomains[6] = new CheckBox("Web Development");
+    	subdomains[7] = new CheckBox("Android Development");
+    	subdomains[8] = new CheckBox("Embedded Systems Development");
+    	subdomains[9] = new CheckBox("Smart Healthcare");
+    	subdomains[10] = new CheckBox("IoT In Agriculture");
+    	subdomains[11] = new CheckBox("Smart Home");
+    	subdomains[12] = new CheckBox("Data Mining");
+    	subdomains[13] = new CheckBox("Big Data Analytics");
+    	subdomains[14] = new CheckBox("Digital art");
+    	subdomains[15] = new CheckBox("Animation");
+    	subdomains[16] = new CheckBox("Video games");
+    	subdomains[17] = new CheckBox("Visual effects");
+    	subdomains[18] = new CheckBox("Computer architecture");
+    	subdomains[19] = new CheckBox("Operating Systems");
+    	subdomains[20] = new CheckBox("Parallel Computing");
+    	subdomains[21] = new CheckBox("Distributed Computing");
+    	subdomains[22] = new CheckBox("Virtualization and storage technologies");
+    	subdomains[23] = new CheckBox("Software Defined Networking");
+    	subdomains[24] = new CheckBox("Network Administration");
     	
-    	Label Domain1 = new Label("Domain1");
-    	Label Domain2 = new Label("Domain2");
-    	Label Domain3 = new Label("Domain3");
+    	Label Domain1 = new Label("Artificial Intelligence");
+    	Label Domain2 = new Label("Cyber Security");
+    	Label Domain3 = new Label("Software Development");
+    	Label Domain4 = new Label("Internet Of Things(IOT)");
+    	Label Domain5 = new Label("Data Science");
+    	Label Domain6 = new Label("Computer Graphics");
+    	Label Domain7 = new Label("Computer Architecture");
+    	Label Domain8 = new Label("Concurrent, parallel, and distributed systems");
+    	Label Domain9 = new Label("Computer Networking");
            
     	Button searchCompanies = new Button("Search"); 
           
@@ -414,7 +442,35 @@ public class Main extends Application
     	gridPane.add(subdomains[7], 1, 13);
     	gridPane.add(subdomains[8], 1, 14);
     	
-    	gridPane.add(searchCompanies,3,30);//purposefully kept much below for testing scrollpane
+    	gridPane.add(Domain4,0 ,16 );
+    	gridPane.add(subdomains[9],1 ,17 );
+    	gridPane.add(subdomains[10], 1, 18);
+    	gridPane.add(subdomains[11], 1, 19);
+    	
+    	gridPane.add(Domain5,0 ,21 );
+    	gridPane.add(subdomains[12],1 ,22 );
+    	gridPane.add(subdomains[13], 1, 23);
+    	
+    	gridPane.add(Domain6,0 ,25 );
+    	gridPane.add(subdomains[14],1 ,26 );
+    	gridPane.add(subdomains[15], 1, 27);
+    	gridPane.add(subdomains[16], 1, 28);
+    	gridPane.add(subdomains[17], 1, 29);
+    	
+    	gridPane.add(Domain7,0 ,31 );
+    	gridPane.add(subdomains[18],1 ,32 );
+    	gridPane.add(subdomains[19], 1, 33);
+    	
+    	gridPane.add(Domain8,0 ,35 );
+    	gridPane.add(subdomains[20],1 ,37 );
+    	gridPane.add(subdomains[21], 1, 38);
+    	
+    	gridPane.add(Domain9,0 ,40 );
+    	gridPane.add(subdomains[22],1 ,41 );
+    	gridPane.add(subdomains[23], 1, 42);
+    	gridPane.add(subdomains[24], 1, 43);
+    	
+    	gridPane.add(searchCompanies,3,45);//purposefully kept much below for testing scrollpane
      
      
     	ScrollPane scrollPane = new ScrollPane();
@@ -592,7 +648,20 @@ public class Main extends Application
     {
         BorderPane borderPane = createMenuBar(stage);
 
-        Scene scene = new Scene(borderPane, 800, 600);
+        StackPane root = new StackPane();
+        root.setStyle(
+            "-fx-background-image: url(" +
+                "'file:/Users/rohan/Training-and-Placement/images/nice.jpg'" +
+            "); " +
+            "-fx-background-size: auto;" +
+            "-fx-background-repeat: no-repeat;" +
+            "-fx-background-position: center;"
+        );
+        root.getChildren().add(borderPane);
+     Scene scene = new Scene(root,800,600);  
+   
+   
+        
         stage.setScene(scene);
         //To set stage to full screen 
         setFullScreen(stage);
@@ -922,6 +991,8 @@ public class Main extends Application
         
      	loginType.getSelectionModel().selectFirst();
      
+     	HBox container = new HBox();
+     	
         Label typeLabel = new Label("Type of login");
         Label signupLabel = new Label("New user?");
         Label userLoginLabel = new Label("User ID");       
@@ -948,9 +1019,37 @@ public class Main extends Application
         gridPane.add(signupLabel, 0, 5);
         gridPane.add(loginType, 1, 0);
         gridPane.add(typeLabel, 0, 0);
-
+        
+//        FileInputStream input = null;
+//		try 
+//		{
+//			String path= ""+(System.getProperty("user.dir"))+"/images/"+"Youtube"+".png";
+//			input = new FileInputStream(path);
+//		}
+//		catch (FileNotFoundException e) 
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//           Image image = new Image(input);
+        
+           
+           
+           
+//           StackPane root = new StackPane();
+//           root.setStyle(
+//               "-fx-background-image: url(" +
+//                   "'file:/Users/rohan/Training-and-Placement/images/final.jpg'" +
+//               "); " +
+//               "-fx-background-size: auto;" +
+//               "-fx-background-repeat: no-repeat;" +
+//               "-fx-background-position: center;"
+//           );
+//           root.getChildren().add(gridPane);
         Scene scene = new Scene(gridPane,800,600);  
-      
+//        gridPane.setStyle("-fx-background-color: #0000FF;");
+//        scene.getStylesheets().add(Main.class.getResource("trial.css").toExternalForm());
+        scene.getStylesheets().add("trial.css");
         stage.setTitle("Training-and-Placement"); 
         stage.setScene(scene);     
         
@@ -958,7 +1057,7 @@ public class Main extends Application
         setFullScreen(stage);
         
         stage.show();
-
+        
         loginButton.setOnAction(new EventHandler<ActionEvent>()
         {
         //Code to check all login credentials are filled
@@ -1103,7 +1202,9 @@ public class Main extends Application
     	Label minCGPATextField = new Label("" + companyObject.minCGPA);
     	Label addressTextField = new Label(companyObject.address);
     	Label contactTextField = new Label("" + ((Double)companyObject.contact).intValue()); 	
-    	ImageView imageView = displayImage(companyObject.name);
+    	ImageView imageView = new ImageView(displayImage(companyObject.name));
+    	imageView.setFitHeight(100);
+    	imageView.setFitWidth(100);
     	
     	Button editProfileButton = new Button("Edit Profile");
     	Button logoutButton = new Button("Logout");
@@ -1164,7 +1265,7 @@ public class Main extends Application
     	
     }
 
-    public ImageView displayImage(String companyName)
+    public Image displayImage(String companyName)
     {
     	System.out.println("Working Directory = " +
                 System.getProperty("user.dir"));
@@ -1181,12 +1282,8 @@ public class Main extends Application
 			e.printStackTrace();
 		}
            Image image = new Image(input);
-           ImageView imageView = new ImageView(image);
 
-           imageView.setFitWidth(100);
-           imageView.setFitHeight(100);
-           
-           return imageView;
+           return image;
     }
     
     
