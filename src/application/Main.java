@@ -20,6 +20,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -591,7 +596,14 @@ public class Main extends Application
     public void homePageDisplay(final Stage stage)
     {
         BorderPane borderPane = createMenuBar(stage);
-
+        
+        //adding backgroung image
+        BackgroundImage myBI= new BackgroundImage(new Image("file:///home/pratik/PratikWorkspace/Training-and-Placement/images/company1.jpg",32,32,false,true),
+        BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+        BackgroundSize.DEFAULT);
+       
+        borderPane.setBackground(new Background(myBI));
+        
         Scene scene = new Scene(borderPane, 800, 600);
         stage.setScene(scene);
         //To set stage to full screen 
