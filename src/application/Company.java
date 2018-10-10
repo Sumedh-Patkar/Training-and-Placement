@@ -133,7 +133,7 @@ public class Company {
 	{
 		/*
 		 * Used to get the Company List in order to Display in "Search by Company" page
-		*/	
+		 */	
 		ArrayList<String> returningCompanyList = new ArrayList<String>();
 		
 		//Find the Company's Document from the Collection

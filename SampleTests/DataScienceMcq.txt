@@ -1,0 +1,61 @@
+1. How many principles of analytical graphs exist ?
+a) 3
+b) 4
+c) 6
+d) None of the Mentioned
+
+2. Point out the correct statement:
+a) Raw data is original source of data
+b) Preprocessed data is original source of data
+c) Raw data is the data obtained after processing steps
+d) None of the Mentioned
+
+3. Which of the following is performed by Data Scientist ?
+a) Define the question
+b) Create reproducible code
+c) Challenge results
+d) All of the Mentioned
+
+4. Which of the following is most important language for Data Science ?
+a) Java
+b) Ruby
+c) R
+d) None of the Mentioned
+
+5. Point out the wrong statement:
+a) Merging concerns combining datasets on the same observations to produce a result with more variables
+b) Data visualization is the organization of information according to preset specifications
+c) Subsetting can be used to select and exclude variables and observations
+d) All of the Mentioned
+
+6. Which of the following approach should be used to ask Data Analysis question ?
+a) Find only one solution for particular problem
+b) Find out the question which is to be answered
+c) Find out answer from dataset without asking question
+d) None of the mentioned
+
+7. Which of the following is one of the key data science skill ?
+a) Statistics
+b) Machine Learning
+c) Data Visualization
+d) All of the Mentioned
+
+8. Which of the following is key characteristic of hacker ?
+a) Afraid to say they don’t know the answer
+b) Willing to find answers on their own
+c) Not Willing to find answers on their own
+d) All of the mentioned
+
+9. Which of the following is characteristic of Processed Data ?
+a) Data is not ready for analysis
+b) All steps should be noted
+c) Hard to use for data analysis
+d) None of the mentioned
+
+10. Point out the correct statement :
+a) Least square is an estimation tool
+b) Least square problems falls in to three categories
+c) Compound least square is one of the category of least square
+d) None of the Mentioned
+
+

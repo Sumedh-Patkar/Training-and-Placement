@@ -1,0 +1,59 @@
+1. Which devices provides positional information to the graphics system ?
+a) Input devices
+b) Output devices
+c) Pointing devices
+d) Both a and c
+
+2. The number of pixels stored in the frame buffer of a graphics system is known as
+a) Resolution
+b) Depth
+c) Resalution
+d) Only a
+
+3. In graphical system, the array of pixels in the picture are stored in
+a) Memory
+b) Frame buffer
+c) Processor
+d) All of the mentioned
+
+4. Heat supplied to the cathode by directing a current through a coil of wire is called
+a) Electron gun
+b) Electron beam
+c) Filament
+d) Anode and cathode
+
+5. The maximum number of points that can be displayed without overlap on a CRT is referred as
+a) Picture
+b) Resolution
+c) Persistence
+d) Neither b nor c
+
+6.________ stores the picture information as a charge distribution behind the phosphor-coated screen.
+a) Cathode ray tube
+b) Direct-view storage tube
+c) Flat panel displays
+d) 3D viewing device
+
+7. The devices which converts the electrical energy into light is called
+a) Liquid-crystal displays
+b) Non-emitters
+c) Plasma panels
+d) Emitters
+
+8. In which system, the Shadow mask methods are commonly used
+a) Raster-scan system
+b) Random-scan system
+c) Only b
+d) Both a and b
+
+9. The process of digitizing a given picture definition into a set of pixel-intensity for storage in the frame buffer is called
+a) Rasterization
+b) Encoding
+c) Scan conversion
+d) True color system
+
+10. Which display devices allows us to walk around an object and view it from different sides.
+a) Direct view storage tubes
+b) Three-dimensional devices
+c) Flat panel display devices
+d) Plasma panel display devices
