@@ -17,6 +17,8 @@ public class Student
     String name;
     double age;
     double CGPA;         // double taken on purpose
+    double rollNo;
+    String college;
     
     MongoClient mongo;
 	MongoDatabase database;
@@ -33,18 +35,22 @@ public class Student
         name = "";
         age=0;
         CGPA=0;
+        rollNo = 0;
+        college = "";
         
 		mongo = new MongoClient("localhost",27017);
 		database = mongo.getDatabase("tnpdb");
 		collection = database.getCollection("Student");
     }
 
-    public Student(String sid,String name,double age,double cgpa)
+    public Student(String sid,String name,double age,double cgpa, double rollNo, String college)
     {
         this.sid = sid;
         this.name = name;
         this.age=age;
         this.CGPA=cgpa;
+        this.rollNo=rollNo;
+        this.college=college;
         
         mongo = new MongoClient("localhost",27017);
 		database = mongo.getDatabase("tnpdb");
@@ -62,7 +68,9 @@ public class Student
         Document newDocument = new Document("sid", this.sid) 
                 .append("name", this.name)
                 .append("age", this.age) 
-                .append("CGPA", this.CGPA);  
+                .append("CGPA", this.CGPA)
+                .append("rollNo", this.rollNo)
+                .append("college", this.college);  
         
         //replace that document in the Student Collection
         collection.replaceOne(searchQuery,newDocument);    
@@ -75,7 +83,9 @@ public class Student
         Document document = new Document("sid", sid) 
     			.append("name", name)
     			.append("age", age) 
-    			.append("CGPA", CGPA);  
+    			.append("CGPA", CGPA)
+    			.append("rollNo", rollNo)
+    			.append("college", college);  
     	
         collection.insertOne(document); 
     }
@@ -83,30 +93,18 @@ public class Student
     //will be used for displaying the student's profile
     public  void getStudentData()
     {   
-        BasicDBObject whereQuery = new BasicDBObject();
-        whereQuery.put("sid" , sid);
-        FindIterable<Document> iterDoc = collection.find(whereQuery); 
+        BasicDBObject query = new BasicDBObject("sid" , sid);
+        FindIterable<Document> iterDoc = collection.find(query); 
         MongoCursor<Document> it = iterDoc.iterator();
-      
-        /*
-         * THE COMMENTED OUT PART IS UNNECESSARY as Student gets a login only when His profile exists
-         */
-//        if(it.hasNext() == false)
-//        {
-//        	System.out.println("Sorry, Cursor cannot find doc for this student!");
-//        }
-//        else
-//        {
-//        while (it.hasNext()) 
-//        {
+     
         Document result = it.next();
-//        this.sid  = result.get("sid").toString();
         this.name = result.get("name").toString();
         this.age  =  (Double)result.get("age");
         this.CGPA = (Double)result.get("CGPA");
-//        }
+        this.rollNo = (Double)result.get("rollNo");
+        this.college = result.get("college").toString();
+
     }            
-//    }
     
     /*
      * only used for testing purpose
