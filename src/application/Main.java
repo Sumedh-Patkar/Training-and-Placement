@@ -25,11 +25,14 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -43,6 +46,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -55,6 +59,7 @@ public class Main extends Application
     Student studentObject;
     LoginSignup loginSignUpObject;
     Company companyObject;
+    CompanyNews companyNewsObject ;
 
     MongoClient mongo;
     MongoDatabase database;
@@ -349,7 +354,7 @@ public class Main extends Application
     	}
     	
     	BorderPane borderPane = createMenuBar(stage);
-
+    	
         VBox vBox[] = new VBox[companyNames.size()+1];
         HBox hBox[] = new HBox[companyNames.size()];
         vBox[companyNames.size()] = new VBox();
@@ -680,7 +685,83 @@ public class Main extends Application
 
     public void homePageDisplay(final Stage stage)
     {
-        BorderPane borderPane = createMenuBar(stage);
+    	collection = database.getCollection("CompanyNews");
+    	
+    	Text notifications = new Text("Notifications:");
+    	Text news = new Text("News from Companies:");
+    	Text notification1 = new Text("Students are requested to report 30 minutes prior to any interview");
+    	Text notification2 = new Text("This year 10 more companies are visiting our college!");
+    	Text notification3 = new Text("Students can take benefit of the SAMPLE MCQ TESTS for each domain provided by this app. ");
+    	Text blank = new Text(".");
+    	Pane  space = new Pane();
+    	
+    	FindIterable<Document> iterDoc = collection.find();
+    	MongoCursor<Document> it = iterDoc.iterator();
+    	Document result;
+    	
+    	ArrayList<Label> companyNames = new ArrayList<>();
+    	ArrayList<Label> companyNews = new ArrayList<>();
+    	while(it.hasNext())
+    	{
+    		result = it.next();
+    		
+    		companyNames.add(new Label(result.get("companyName").toString()));
+    		companyNews.add(new Label(result.get("news").toString()));
+       	}
+    	
+    	VBox vBox[] = new VBox[companyNames.size()+1];
+    	VBox vBox2[] = new VBox[companyNames.size()+1];
+        HBox hBox[] = new HBox[companyNames.size()];
+        vBox[companyNames.size()] = new VBox();
+        vBox2[companyNames.size()] = new VBox();
+        for(int i = 0; i < companyNames.size(); i++)
+        {  
+        	
+        	String currentCompanyName = companyNames.get(i).getText();
+
+        	VBox.setMargin(companyNames.get(i), new Insets(5, 10, 5, 10));
+            VBox.setMargin(companyNews.get(i), new Insets(5, 10, 5, 10));
+            
+            ImageView imageView = new ImageView(displayImage(companyNames.get(i).getText()));
+            imageView.setFitHeight(100);
+            imageView.setFitWidth(100);
+            
+            vBox[i] = new VBox();
+            vBox2[i] = new VBox();
+        	vBox[i].getChildren().add(companyNames.get(i));  
+        	vBox2[i].getChildren().add(companyNews.get(i));
+        	
+        	hBox[i] = new HBox();
+        	hBox[i].getChildren().addAll(vBox[i],vBox2[i]);
+
+        	vBox[companyNames.size()].getChildren().add(hBox[i]);
+        }
+     
+        ScrollPane scrollPane = new ScrollPane();
+    	scrollPane.setContent(vBox[companyNames.size()]);
+            
+    	// Pannable.
+    	scrollPane.setPannable(true);
+    	
+       
+    	GridPane gridPane =new GridPane();
+    	gridPane.setGridLinesVisible(false);
+    	gridPane.add(notifications,0,0);
+    	gridPane.add(notification1,1,1);
+    	gridPane.add(notification2,1,2);
+    	gridPane.add(notification3,1,3);
+    	//gridPane.add(space,1,5,1,3);
+    	//gridPane.add(blank,1,6);
+    	gridPane.add(news,0,5);
+    	
+    	for (int i = 0; i <= 5; i++) {
+            RowConstraints con = new RowConstraints();
+            // Here we set the pref height of the row, but you could also use .setPercentHeight(double) if you don't know much space you will need for each label.
+            con.setPrefHeight(60);
+            gridPane.getRowConstraints().add(con);
+        }
+    	
+    	BorderPane borderPane = createMenuBar(stage);
         
         StackPane root = new StackPane();
         root.setStyle(
@@ -690,9 +771,10 @@ public class Main extends Application
             "-fx-background-repeat: no-repeat;" +
             "-fx-background-position: center;"
         );
-        root.getChildren().add(borderPane);
-        Scene scene = new Scene(root,800,600);  
-           
+        root.getChildren().addAll(new VBox(borderPane,gridPane,scrollPane) );
+
+    	
+    	Scene scene = new Scene(root,800,600);   
 
         stage.setScene(scene);
         //To set stage to full screen 
@@ -825,6 +907,8 @@ public class Main extends Application
         ImageView imageView = new ImageView(displayImage(companyName));
         imageView.setFitHeight(100);
         imageView.setFitWidth(100);
+        
+        
     	
     	Button exam = new Button("Sample Test");   //on clicking..test will be displayed on new page.
     	Button ansKey = new Button("Answer Key");
@@ -1349,11 +1433,16 @@ public class Main extends Application
     	TextField contactTextField = new TextField("" + ((Double)companyObject.contact).intValue());  
         ImageView imageView = new ImageView(displayImage(companyObject.name));
         imageView.setFitHeight(100);
-        imageView.setFitWidth(100);  	
-    	
+        imageView.setFitWidth(100); 
+        TextArea newsField = new TextArea("");
+        newsField.setPrefWidth(30);
+        
+    	Button addNewsButton = new Button("Add news to Home Page");
     	Button saveProfileButton = new Button("Save Profile");
     	
     	GridPane gridPane = new GridPane();
+    	GridPane gridPaneRight = new GridPane();
+    	GridPane gridPaneOuter = new GridPane();
     	
     	gridPane.setMinSize(400, 200); 
         gridPane.setPadding(new Insets(10, 10, 10, 10)); 
@@ -1382,7 +1471,10 @@ public class Main extends Application
         
         gridPane.add(saveProfileButton, 0, 10);
         
-        Scene scene = new Scene(gridPane,800,600);
+        gridPane.add(newsField,0,11);
+        gridPane.add(addNewsButton,0,12);
+                
+        Scene scene = new Scene(gridPane);
     	stage.setScene(scene);
     	//To set stage to full screen 
         setFullScreen(stage);
@@ -1405,6 +1497,18 @@ public class Main extends Application
     			
     			companyObject.updateProfile();
     			companyHomePageDisplay(stage);
+    		}
+    	});
+    	
+    	//on add news button clicked, add the news to database and display on home page news section
+    	addNewsButton.setOnAction(new EventHandler<ActionEvent>()
+    	{
+    		public void handle(ActionEvent event)
+    		{
+    			//get values from text area for news
+    			companyNewsObject = new CompanyNews();
+    			companyNewsObject.setData(companyObject.companyId, companyObject.name, newsField.getText());
+    		
     		}
     	});
     }
