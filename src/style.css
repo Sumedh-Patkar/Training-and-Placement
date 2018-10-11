@@ -1,0 +1,529 @@
+.panel
+{
+	-fx-background-image : url("file:///home/sumedh/Training-and-Placement/images/background.jpg");
+	-fx-background-repeat: no-repeat;
+	-fx-background-size : auto;
+	-fx-background-position: center;
+}
+
+.text {
+	 -fx-font-size: 10pt;
+     -fx-font-weight: bold;
+}
+
+.label {
+     -fx-font-size: 15pt;
+     -fx-font-weight: bold;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * CheckBox                                                                    *
+ *                                                                             *
+ ******************************************************************************/
+
+.check-box {
+    -fx-label-padding: 0.0em 0.0em 0.0em 0.416667em;
+    -fx-text-fill: #000;
+}
+
+/* OK */
+.check-box .box {
+   
+    -fx-background-color: 
+        rgb(142,143,143),
+        rgb(244,244,244),
+        linear-gradient(
+            to bottom right,
+            rgb(174,179,185) 0%,
+            rgb(233,233,234) 75%,
+            rgb(233,233,234) 100%
+        ),
+        linear-gradient(
+            to bottom right,
+            rgb(203,207,213) 0%,
+            rgb(246,246,246) 84%,
+            rgb(246,246,246) 100%
+        );
+
+    -fx-background-insets: 0, 1, 2, 3;
+    -fx-background-radius: 0,0,0,0;
+    -fx-padding: 0.25em;
+}
+
+/* OK */
+.check-box:focused .box {
+    
+    -fx-background-color: 
+        rgb(85,134,163),
+        rgb(222,249,250),
+        linear-gradient(
+            to bottom right,
+            rgb(121,198,245) 35%,
+            rgb(207,236,253) 100%),
+        linear-gradient(
+            to bottom right,
+            rgb(177,223,253) 0%,
+            rgb(231,247,254) 85%);
+}
+
+/* OK */
+.check-box:hover .box {
+    
+    -fx-background-color: 
+        rgb(85,134,163),
+        rgb(222,249,250),
+        linear-gradient(
+            to bottom right,
+            rgb(121,198,249) 0%,
+            rgb(121,198,249) 54%,
+            rgb(207,236,253) 85%,
+            rgb(207,236,253) 100%),
+        linear-gradient(
+            to bottom right,
+            rgb(177,223,253) 0%,
+            rgb(231,247,254) 75%,
+            rgb(231,247,254) 100%);
+}
+
+/* OK */
+.check-box:armed .box {
+    
+    -fx-background-color: 
+        rgb(44,98,139),
+        rgb(194,228,246),
+        linear-gradient(
+            to bottom right,
+            rgb(94,182,247) 0%,
+            rgb(94,182,247) 54%,
+            rgb(193,230,252) 85%,
+            rgb(193,230,252) 100%),
+        linear-gradient(
+            to bottom right,
+            rgb(157,213,252) 0%,
+            rgb(224,244,254) 75%,
+            rgb(224,244,254) 100%);
+    
+    -fx-color: -fx-pressed-base;
+}
+
+.check-box .mark {
+    -fx-background-color: transparent;
+    -fx-background-insets: 1 0 -1 0;
+    -fx-padding: 0.333333em; 
+    -fx-shape: "M0,4H2L3,6L6,0H8L4,8H2Z";
+}
+
+/* OK */
+.check-box:indeterminate .mark {
+    -fx-background-color: rgb(74,95,151);
+    -fx-shape: "M0,0H8V2H0Z";
+    -fx-scale-shape: false;
+}
+
+/* OK */
+.check-box:selected .mark {
+    -fx-background-color: rgb(74,95,151);
+}
+
+.check-box:disabled {
+    -fx-opacity: -fx-disabled-opacity;
+}
+
+.check-box:show-mnemonics .mnemonic-underline {
+    -fx-stroke: -fx-text-fill;
+} 
+
+/*******************************************************************************
+ *                                                                             *
+ * RadioButton                                                                 *
+ *                                                                             *
+ ******************************************************************************/
+
+.radio-button {
+    -fx-label-padding: 0.0em 0.0em 0.0em 0.416667em;
+    -fx-text-fill: -fx-text-background-color;
+}
+
+.radio-button:focused {
+    -fx-color: -fx-focused-base;
+}
+
+/* OK */
+.radio-button .radio  {
+   
+    -fx-background-color: 
+        rgb(145,146,146), 
+        rgb(242,242,242), 
+        rgb(181,186,196),
+        radial-gradient(
+            center 65% 65%, 
+            radius 100%, 
+            rgba(255,255,255,0.85), 
+        rgba(255,255,255,0));
+ 
+   -fx-background-insets: 0, 1, 2, 3 2 2 3;
+   -fx-background-radius: 1.0em;
+   -fx-padding: 0.25em;
+}
+
+/* OK */
+.radio-button:focused .radio {
+    
+    -fx-background-color: 
+       rgb(85,134,163), 
+        rgb(222,249,250), 
+        rgb(121,198,249),
+        radial-gradient(
+            center 65% 65%, 
+            radius 100%, 
+            rgba(255,255,255,0.85), 
+        rgba(255,255,255,0))
+}
+
+/* OK */
+.radio-button:hover .radio {
+        
+    -fx-background-color: 
+       rgb(85,134,163), 
+        rgb(222,249,250), 
+        rgb(121,198,249),
+        radial-gradient(
+            center 65% 65%, 
+            radius 100%, 
+            rgba(255,255,255,0.85), 
+        rgba(255,255,255,0))
+}
+
+/* OK */
+.radio-button:armed .radio {
+    
+    -fx-background-color: 
+        rgb(44,98,139), 
+        rgb(194,228,246), 
+        rgb(75,154,215),
+        radial-gradient(
+            center 65% 65%, 
+            radius 100%, 
+            rgba(255,255,255,0.85), 
+            rgba(255,255,255,0));
+    
+    -fx-color: -fx-pressed-base;
+}
+
+.radio-button .dot {
+   -fx-background-color: transparent;
+   -fx-background-insets: 0;
+   -fx-background-radius: 1.0em; 
+   -fx-padding: 0.25em; 
+}
+
+/* OK */
+.radio-button:selected .dot {
+    
+    -fx-background-color: 
+        rgb(25,52,74),
+        linear-gradient(
+            to bottom right,
+            rgb(255,255,255) 0%,
+            rgb(11,130,199) 40%),
+        radial-gradient(
+            center 10% 10%, 
+            radius 70%, 
+            rgb(255,255,255), 
+            rgba(255,255,255,0.2));
+    
+   -fx-background-insets: 0, 1, 1;
+}
+
+.radio-button:disabled {
+    -fx-opacity: -fx-disabled-opacity;
+}
+
+.radio-button:show-mnemonics .mnemonic-underline {
+    -fx-stroke: -fx-text-fill;
+} 
+
+/*******************************************************************************
+ *                                                                             *
+ * PopupMenu                                                                   *
+ *                                                                             *
+ ******************************************************************************/
+
+.context-menu {
+    -fx-background-color:
+        rgb(151,151,151), /* Menu BG Border, Inset: 0 */
+        rgb(245,245,245), /* inner highlight color, Inset: 1 */
+        rgb(240,240,240); /* off white on right side of gray vertica divider, Inset: 2 2 2 27 */
+        
+    /* Does the gray vertical divider spacing break with font size differences? 
+    Currently I have 3 pixels b/n menu icon and gray vertical divider. I
+    also have 3 pixels b/n gray vert divider and start of menu text. */
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 0,0,0,0,0,0;
+/*    -fx-padding: 0.666667em 0.083333em 0.666667em 0.083333em;  8 1 8 1 */
+    -fx-padding: 0.333333em 0.083333em 0.666667em 0.083333em; /* 4 1 8 1 */
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.3),3,0,2,2);
+}
+
+.context-menu {
+    
+    -fx-background-color:
+        rgb(151,151,151), /* Menu BG Border, Inset: 0 */
+        rgb(245,245,245), /* inner highlight color, Inset: 1 */
+        rgb(241,241,241), /* off white on left side of gray vertical divider, Inset: 2 */
+        rgb(226,227,227), /* gray vertical divider, Inset: 2 2 2 25 */
+        rgb(255,255,255), /* white highlight for vert divider, Inset: 2 2 2 26 */
+        rgb(240,240,240); /* off white on right side of gray vertica divider, Inset: 2 2 2 27 */
+        
+    -fx-background-insets: 0, 1, 2, 2 2 2 25, 2 2 2 26, 2 2 2 27;
+    -fx-background-radius: 0,0,0,0,0,0;
+/*    -fx-padding: 0.666667em 0.083333em 0.666667em 0.083333em;  8 1 8 1 */
+    -fx-padding: 0.333333em 0.083333em 0.666667em 0.083333em; /* 4 1 8 1 */
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.3),3,0,2,2);
+}
+
+.context-menu .separator {
+    -fx-padding: 0.0em 0.333333em 0.0em 0.333333em; /* 0 4 0 4 */
+}
+
+.context-menu .scroll-arrow {
+    -fx-padding: 0.416667em 0.416667em 0.416667em 0.416667em; /* 5 */
+    -fx-background-color: transparent;
+}
+
+.context-menu .scroll-arrow:hover {
+    -fx-background: -fx-accent;
+    -fx-background-color: -fx-selection-bar;
+    -fx-text-fill: -fx-selection-bar-text;
+}
+
+.context-menu:show-mnemonics .mnemonic-underline {
+    -fx-stroke: -fx-text-fill;
+} 
+
+/*******************************************************************************
+ *                                                                             *
+ * Menu                                                                        *
+ *                                                                             *
+ ******************************************************************************/
+
+/* Each Top Level Menu Item: File, Etc, Etc...*/
+.menu {
+    -fx-background-color: black;
+    -fx-padding: 0.42em 0.4em 0.3em 0.4em; /* 4 8 4 8 */
+    -fx-text-fill: rgb(0,0,0);
+    -fx-font-size: 35pt;
+}
+
+.menu:show-mnemonics .mnemonic-underline {
+    -fx-stroke: -fx-text-fill;
+}
+
+/* This hides the down arrow that would show on a menu placed in a menubar */
+.menu-bar .menu .arrow {
+    -fx-padding: 0;
+    -fx-background-color: black;
+    -fx-shape: null;
+    -fx-font-size: 35pt;
+}
+
+.menu-bar .menu .arrow-button {
+    -fx-padding: 0;
+    -fx-font-size: 35pt;
+}
+
+.menu .arrow {
+    -fx-background-color: rgb(40,40,40);
+    -fx-shape: "M0,-4L4,0L0,4Z";
+    -fx-scale-shape: false;
+    -fx-font-size: 35pt;
+}
+
+.menu:focused:showing .arrow, .menu:hover:showing .arrow, .menu:focused .arrow, .menu:showing .arrow {
+    -fx-background-color: black;
+    -fx-font-size: 35pt;
+}
+
+.menu-up-arrow {
+    -fx-padding: 0.666667em 0.416667em 0.0em 0.416667em;  /* 8 5 0 5 */
+    -fx-background-color: derive(-fx-color,-2%);
+    -fx-shape: "M0 1 L1 1 L.5 0 Z";
+    -fx-effect: innershadow( two-pass-box , rgba(0,0,0,0.6) , 4, 0.0 , 0 , 1 );
+    -fx-font-size: 35pt;
+}
+
+.menu-down-arrow {
+    -fx-background-color: derive(-fx-color,-2%);
+    -fx-padding: 0.666667em 0.416667em 0.0em 0.416667em;  /* 8 5 0 5 */
+    -fx-shape: "M0 0 L1 0 L.5 1 Z";
+    -fx-effect: innershadow( two-pass-box , rgba(0,0,0,0.6) , 4, 0.0 , 0 , 1 );
+    -fx-font-size: 35pt;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * MenuBar                                                                     *
+ *                                                                             *
+ ******************************************************************************/
+
+/* TO DO: Experiment with rgba() for linear gradients so bg shows through. */
+
+.menu-bar {
+    -fx-background-color: derive(#1d1d1d,20%);
+    -fx-font-size: 35pt;
+}
+
+.context-menu {
+    -fx-background-color: derive(#1d1d1d,10%);
+    -fx-font-size: 35pt;
+}
+
+.menu-bar .label {
+    -fx-font-size: 35pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: white;
+    -fx-opacity: 0.9;
+}
+
+.menu .left-container {
+    -fx-background-color: black;
+    -fx-font-size: 35pt;
+}
+.menu-item:hover
+{
+	-fx-background-color: #F0544C;
+	-fx-font-size: 35pt;
+}
+/*******************************************************************************
+ *                                                                             *
+ * MenuItem                                                                    *
+ *                                                                             *
+ ******************************************************************************/
+
+.menu-item {
+    
+    /*-fx-padding: 0.333333em 0.41777em 0.333333em 0.41777em; */  /* 4 5 4 5 */
+    -fx-padding: 0.6em 0.82em 0.6em 0.62em;
+    -fx-font-size: 35pt;
+}
+
+.menu-item .left-container {
+    -fx-padding: 0.458em 0.791em 0.458em 0.458em;
+    -fx-background-color: #ffffff;
+    -fx-font-size: 35pt;
+}
+
+.menu-item .graphic-container {
+    -fx-padding: 0em 0.333em 0em 0em;
+    -fx-font-size: 35pt;
+}
+
+/* Adds padding to the label text. For ex, adds .05em spacing b/n label text
+    and Shortcut accelerator text. */
+.menu-item .label {
+    -fx-padding: 0em 0.5em 0em 0em;
+    -fx-text-fill: rgb(1,1,1); /* Menu Item Text Color */
+    -fx-font-size: 35pt;
+}
+
+/* Menu Item Hover */
+.menu-item:focused {
+     -fx-background: -fx-accent;
+     -fx-font-size: 35pt;
+     -fx-background-color:
+         rgb(174,207,247),
+         linear-gradient(
+            to bottom,
+            rgb(248,248,250) 0%,
+            rgb(239,244,250) 100%),
+         linear-gradient(
+            to bottom,
+            rgb(243,248,247) 0%,
+            rgb(231,238,247) 100%);
+
+     -fx-background-insets: 3, 4, 5;
+     -fx-background-radius: 3, 2, 1 ;
+     -fx-text-fill: rgb(1,1,1);
+     
+}
+
+.menu-item:focused .label {
+    -fx-text-fill: rgb(1,1,1);
+    -fx-font-size: 35pt;
+}
+.menu-item .right-container {
+    -fx-padding: 0em 0em 0em 0.5em;
+    -fx-font-size: 35pt;
+}
+
+.menu-item:show-mnemonics .mnemonic-underline {
+    -fx-stroke: -fx-text-fill;
+    -fx-font-size: 35pt;
+} 
+
+
+.radio-menu-item:checked .radio {
+    -fx-background-color: -fx-mark-color;
+    -fx-shape: "M0,5H2L4,8L8,0H10L5,10H3Z";
+    -fx-scale-shape: false;
+    -fx-font-size: 35pt;
+}
+
+.radio-menu-item:focused:checked .radio {
+    -fx-background-color: white;
+    -fx-font-size: 35pt;
+}
+
+.check-menu-item:checked .check {
+    -fx-background-color: -fx-mark-color;
+    -fx-shape: "M0,5H2L4,8L8,0H10L5,10H3Z";
+    -fx-scale-shape: false;
+    -fx-font-size: 35pt;
+}
+
+.check-menu-item:focused:checked .check {
+    -fx-background-color: white;
+    -fx-font-size: 35pt;
+}
+
+.menu .arrow {
+    -fx-padding: 0.458em 0.167em 0.458em 0.167em; /* 4.5 2 4.5 2 */
+    -fx-background-color: -fx-mark-color;
+    -fx-shape: "M0,-4L4,0L0,4Z";
+    -fx-scale-shape: false;
+    -fx-font-size: 35pt;
+}
+
+.menu:selected .arrow {
+    -fx-background-color: rgb(40,40,40);
+    -fx-font-size: 35pt;
+}
+
+.menu-item:disabled {
+    -fx-opacity: -fx-disabled-opacity;
+    -fx-font-size: 35pt;
+}
+
+
+
+
+/*******************************************************************************
+ *                                                                             *
+ * ComboBox																		*
+ *                                                                             *
+ ******************************************************************************/
+ 
+ .combo-box-base  
+{
+    -fx-skin: "com.sun.javafx.scene.control.skin.ComboBoxBaseSkin";
+    
+    -fx-background-radius: 5, 5, 4, 3;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-padding: 0;
+}
+
+.combo-box-base:hover
+{
+    -fx-color: -fx-hover-base;
+}

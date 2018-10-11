@@ -18,6 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -25,6 +26,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -272,6 +274,7 @@ public class Main extends Application
         
         Scene scene = new Scene(panel,800,600); 
         scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+        scene.getStylesheets().add("style.css");
         stage.setScene(scene); 
         //To set stage to full screen
         setFullScreen(stage);
@@ -408,6 +411,7 @@ public class Main extends Application
     	
     	Scene scene = new Scene(panel,800,600);  
     	scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+    	scene.getStylesheets().add("style.css");
     	stage.setScene(scene);
         setFullScreen(stage);
     	stage.show();	
@@ -518,6 +522,7 @@ public class Main extends Application
      
      
     	ScrollPane scrollPane = new ScrollPane();
+//    	scrollPane.setStyle("-fx-background-color: #3e3e3e;");
     	
     	//Fitting the scrollPane to the screen size
     	scrollPane.setFitToWidth(true);
@@ -527,10 +532,12 @@ public class Main extends Application
     	// Make scrollPane Pannable.
     	scrollPane.setPannable(true);
     	VBox vBox = new VBox(borderPane,scrollPane);
+//    	vBox.setStyle("-fx-background-color: #3e3e3e;");
     	
     	panel.setCenter(vBox);
     	Scene scene = new Scene(panel,800,600);
     	scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+    	scene.getStylesheets().add("style.css");
         stage.setScene(scene);
         //To set stage to full screen 
         setFullScreen(stage);
@@ -595,6 +602,7 @@ public class Main extends Application
         
         Scene scene = new Scene(panel,800,600);
         scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+        scene.getStylesheets().add("style.css");
         stage.setScene(scene);
         //To set stage to full screen 
         setFullScreen(stage);
@@ -708,6 +716,7 @@ public class Main extends Application
         
      Scene scene = new Scene(panel,800,600);  
      scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+     scene.getStylesheets().add("style.css");
         stage.setScene(scene);
         //To set stage to full screen 
         setFullScreen(stage);
@@ -758,6 +767,7 @@ public class Main extends Application
     	
         Scene scene = new Scene(vBox,800,600);
         scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+        scene.getStylesheets().add("style.css");
         stage.setScene(scene);
     	//To set stage to full screen 
         setFullScreen(stage);
@@ -809,6 +819,7 @@ public class Main extends Application
     	
         Scene scene = new Scene(panel,800,600);
         scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+        scene.getStylesheets().add("style.css");
         stage.setScene(scene);
     	//To set stage to full screen 
         setFullScreen(stage);
@@ -871,27 +882,33 @@ public class Main extends Application
         gridPane.setAlignment(Pos.CENTER);
         
         gridPane.add(companyNameId, 0, 1);
-        gridPane.add(companyDomainId, 0, 2);
-        gridPane.add(companySubdomainId, 0, 3);
-        gridPane.add(generalDescriptionId, 0, 4);
-        gridPane.add(monthOfVisitId, 0, 5);
-        gridPane.add(minCGPAId, 0, 6);
-        gridPane.add(addressId, 0, 7);
-        gridPane.add(contactId, 0, 8);
+        gridPane.add(companyDomainId, 0, 2, 3, 1);
+        gridPane.add(companySubdomainId, 0, 3, 3,1);
+        gridPane.add(generalDescriptionId, 0, 4, 3, 1);
+        gridPane.add(monthOfVisitId, 0, 5, 3, 1);
+        gridPane.add(minCGPAId, 0, 6, 3, 1);
+        gridPane.add(addressId, 0, 7, 3, 1);
+        gridPane.add(contactId, 0, 8, 3, 1);
         
         gridPane.add(imageView, 0, 0);
-        gridPane.add(companyNameLabel, 1, 1);
-        gridPane.add(companyDomainLabel, 1, 2);
-        gridPane.add(companySubdomainLabel, 1, 3);
-        gridPane.add(generalDescriptionLabel, 1, 4);
-        gridPane.add(monthOfVisitLabel, 1, 5);
-        gridPane.add(minCGPALabel, 1, 6);
-        gridPane.add(addressLabel, 1, 7);
-        gridPane.add(contactLabel, 1, 8);
+        gridPane.add(companyNameLabel, 3, 1);
+        gridPane.add(companyDomainLabel, 3, 2);
+        gridPane.add(companySubdomainLabel, 3, 3);
+        gridPane.add(generalDescriptionLabel, 3, 4);
+        gridPane.add(monthOfVisitLabel, 3, 5);
+        gridPane.add(minCGPALabel, 3, 6);
+        gridPane.add(addressLabel, 3, 7);
+        gridPane.add(contactLabel, 3, 8);
         
-        gridPane.add(exam, 1, 10);
-        gridPane.add(ansKey, 1, 11);
+        gridPane.add(exam, 0, 10, 2, 1);
+        gridPane.add(ansKey, 0, 11, 2, 1);
        
+        for(int i = 0; i < 2; i++)
+        {
+        	ColumnConstraints con = new ColumnConstraints();
+        	con.setPrefWidth(260);
+        	gridPane.getColumnConstraints().add(con);
+        }
         exam.setOnMouseClicked(new EventHandler<Event>()
         {
             @Override
@@ -915,6 +932,7 @@ public class Main extends Application
         
         Scene scene = new Scene(panel,800,600);
         scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+        scene.getStylesheets().add("style.css");
         stage.setScene(scene);
     	//To set stage to full screen 
         setFullScreen(stage);
@@ -981,7 +999,9 @@ public class Main extends Application
     	
     	Scene scene = new Scene(panel,800,600);
     	scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+    	scene.getStylesheets().add("style.css");
     	stage.setScene(scene);
+    	
     	//To set stage to full screen 
         setFullScreen(stage);
     	stage.show();
@@ -1248,6 +1268,7 @@ public class Main extends Application
     	
     	Scene scene = new Scene(panel,400,400);
     	scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+    	scene.getStylesheets().add("style.css");
     	stage.setScene(scene);
     	stage.show();
     }
@@ -1267,6 +1288,7 @@ public class Main extends Application
     	);
         
         final ComboBox<String> loginType = new ComboBox<String>(options);
+        
         Hyperlink signUpHyperlink = new Hyperlink("SignUp");
 
         signUpHyperlink.setOnAction(new EventHandler<ActionEvent>() {
@@ -1280,6 +1302,7 @@ public class Main extends Application
      	loginType.getSelectionModel().selectFirst();
      	
         Label typeLabel = new Label("Type of login");
+//        typeLabel.getStyleClass().setAll("h3","strong");
 //        typeLabel.getStyleClass().setAll("lbl","h1","lbl-info");
         Label signupLabel = new Label("New user?");
 //        signupLabel.getStyleClass().setAll("lbl","lbl-info");
@@ -1315,21 +1338,8 @@ public class Main extends Application
         gridPane.add(signupLabel, 0, 5);
         gridPane.add(loginType, 1, 0);
         gridPane.add(typeLabel, 0, 0);
-        
-//        FileInputStream input = null;
-//		try 
-//		{
-//			String path= ""+(System.getProperty("user.dir"))+"/images/"+"Youtube"+".png";
-//			input = new FileInputStream(path);
-//		}
-//		catch (FileNotFoundException e) 
-//		{
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//           Image image = new Image(input);
-                  
-           StackPane root = new StackPane();
+                   
+//        StackPane root = new StackPane();
 //           root.setStyle(
 //               "-fx-background-image: url(" +
 //                   "'file:/Users/rohan/Training-and-Placement/images/final.jpg'" +
@@ -1348,11 +1358,12 @@ public class Main extends Application
            panel.setBody(gridPane);
         Scene scene = new Scene(panel,800,600); 
         scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+        scene.getStylesheets().add("style.css");
 //        gridPane.setStyle("-fx-background-color: #0000FF;");
 //        scene.getStylesheets().add(Main.class.getResource("trial.css").toExternalForm());
-//        scene.getStylesheets().add("trial.css");
 //        stage.setTitle("Training-and-Placement"); 
-//        scene.getStylesheets().add("DarkTheme.css");
+//        scene.getStylesheets().add("style.css");
+//        scene.getStylesheets().add("style.css");
         stage.setScene(scene);     
         
       //To set stage to full screen 
@@ -1400,6 +1411,8 @@ public class Main extends Application
          */
         
     	//ADD PANELS HERE
+    	Panel panel = new Panel("Training and Placement");
+        panel.getStyleClass().add("panel-primary");
     	
     	//only Id's
     	Label companyNameId = new Label("Name: ");
@@ -1425,6 +1438,7 @@ public class Main extends Application
         imageView.setFitWidth(100);  	
     	
     	Button saveProfileButton = new Button("Save Profile");
+    	saveProfileButton.getStyleClass().setAll("btn","btn-primary");
     	GridPane gridPane = new GridPane();
     	
     	gridPane.setMinSize(400, 200); 
@@ -1455,9 +1469,11 @@ public class Main extends Application
         gridPane.add(saveProfileButton, 0, 10);
         
         //ADD GRIDPANE TO PANEL AND PANEL TO SCENE
+        panel.setCenter(gridPane);
         
-        Scene scene = new Scene(gridPane,800,600);
+        Scene scene = new Scene(panel,800,600);
         scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+        scene.getStylesheets().add("style.css");
         stage.setScene(scene);
     	//To set stage to full screen 
         setFullScreen(stage);
@@ -1491,7 +1507,9 @@ public class Main extends Application
          */
     	
     	//ADD PANEL HERE
-    	
+    	Panel panel = new Panel("Training and Placement");
+        panel.getStyleClass().add("panel-primary");
+        
     	//get the profile from object
     	companyObject.getProfile();
     	
@@ -1520,7 +1538,9 @@ public class Main extends Application
     	imageView.setFitWidth(100);
     	
     	Button editProfileButton = new Button("Edit Profile");
+    	editProfileButton.getStyleClass().setAll("btn","btn-primary");
     	Button logoutButton = new Button("Logout");
+    	logoutButton.getStyleClass().setAll("btn","btn-primary");
     	GridPane gridPane = new GridPane();
     	
     	gridPane.setMinSize(400, 200); 
@@ -1554,9 +1574,11 @@ public class Main extends Application
         gridPane.add(logoutButton, 1, 11);
         
         //ADD GRIDPANE TO PANEL AND PANEL TO SCENE
+        panel.setCenter(gridPane);
         
-        Scene scene = new Scene(gridPane,800,600);
+        Scene scene = new Scene(panel,800,600);
         scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+        scene.getStylesheets().add("style.css");
         stage.setScene(scene);
 
     	//To set stage to full screen 
