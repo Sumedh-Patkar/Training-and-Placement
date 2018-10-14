@@ -1,0 +1,60 @@
+1. The IETF standards documents are called
+a) RFC
+b) RCF
+c) ID
+d) None of the mentioned
+
+2. In the layer hierarchy as the data packet moves from the upper to the lower layers, headers are
+a) Added
+b) Removed
+c) Rearranged
+d) Modified
+
+3. The structure or format of data is called
+a) Syntax
+b) Semantics
+c) Struct
+d) None of the mentioned
+
+4. Communication between a computer and a keyboard involves ______________ transmission
+a) Automatic
+b) Half-duplex
+c) Full-duplex
+d) Simplex
+
+5. The first Network
+a) CNNET
+b) NSFNET
+c) ASAPNET
+d) ARPANET
+
+6. The _______ is the physical path over which a message travels
+a) Path
+b) Medium
+c) Protocol
+d) Route
+
+7. Which organization has authority over interstate and international commerce in the communications field?
+a) ITU-T
+b) IEEE
+c) FCC
+d) ISOC
+
+8. Which of this is not a network edge device?
+a) PC
+b) Smartphones
+c) Servers
+d) Switch
+
+9. A set of rules that governs data communication
+a) Protocols
+b) Standards
+c) RFCs
+d) None of the mentioned
+
+10. Three or more devices share a link in ________ connection
+a) Unipoint
+b) Multipoint
+c) Point to point
+d) None of the mentioned
+

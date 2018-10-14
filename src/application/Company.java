@@ -72,21 +72,40 @@ public class Company {
 		collection = database.getCollection("Company");
 	}
 	
-	void getProfile()
+	void getProfileById()
 	{
 		/*
 		 * Used to get Company profile document from Company collection
 		 */
 		
 		//Find the Company's Document from the Collection
-		BasicDBObject clause1 = new BasicDBObject("companyId", this.companyId);
-		BasicDBObject clause2 = new BasicDBObject("name", this.name);
-	
-		BasicDBList or = new BasicDBList();
-		or.add(clause1);
-		or.add(clause2);
+		BasicDBObject query = new BasicDBObject("companyId", this.companyId);
 		
-		BasicDBObject query = new BasicDBObject("$or",or);
+		FindIterable <Document> iterDoc = collection.find(query);
+		MongoCursor <Document> it = iterDoc.iterator();
+		
+		//Store in a Document object
+		Document result = it.next();
+		
+		//get the company document entries into company object's attributes
+		this.name = (String)result.get("name");
+		this.domain = (String)result.get("domain");
+		this.subdomain = (String)result.get("subdomain");
+		this.monthOfVisit = (String)result.get("monthOfVisit");
+		this.generalDescription = (String)result.get("generalDescription");
+		this.minCGPA = (Double)result.get("minCGPA");
+		this.address = (String)result.get("address");
+		this.contact = (Double)result.get("contact");
+	}
+	
+	void getProfileByName()
+	{
+		/*
+		 * Used to get Company profile document from Company collection
+		 */
+		
+		//Find the Company's Document from the Collection
+		BasicDBObject query = new BasicDBObject("name", this.name);
 		
 		FindIterable <Document> iterDoc = collection.find(query);
 		MongoCursor <Document> it = iterDoc.iterator();
@@ -133,7 +152,7 @@ public class Company {
 	{
 		/*
 		 * Used to get the Company List in order to Display in "Search by Company" page
-		*/	
+		 */	
 		ArrayList<String> returningCompanyList = new ArrayList<String>();
 		
 		//Find the Company's Document from the Collection

@@ -1,0 +1,69 @@
+
+
+1. A list of protocols used is known as –
+a) protocol access
+b) protocol stack
+c) permutation stack
+d) none of the mentioned
+
+2. ‘Jitter’ refers to-
+a) errorless delivery
+b) variation in the packet arrival time
+c) timely delivery of message
+d) none of the mentioned
+View Answer
+
+3. 2 Half duplex systems can make a Full-Duplex.
+a) True
+b) False
+View Answer
+
+4. Which topology requires the most amount of wiring?
+a) Mesh
+b) Star
+c) Bus
+d) Ring
+View Answer
+
+5. How many links are there for N nodes in the mesh topology?
+a) 1
+b) N(N+1)/2
+c) N
+d) N(N-1)/2
+View Answer
+
+6. Which topology has a central hub?
+a) Mesh
+b) Star
+c) Bus
+d) Ring
+View Answer
+
+7. Which topology has the toughest fault identification?
+a) Mesh
+b) Star
+c) Bus
+d) Ring
+View Answer
+
+8. Ethernet LANs use which topology?
+a) Mesh
+b) Star
+c) Bus
+d) Ring
+View Answer
+
+9. Which topology uses the token passing algorithm?
+a) Mesh
+b) Star
+c) Bus
+d) Ring
+
+10. How many lines are required for the bus topology?
+a) N(N-1)/2
+b) N
+c) N+1
+d) none of the mentioned
+View Answer
+
+

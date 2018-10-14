@@ -1,0 +1,66 @@
+1. _________ allows us to control electronic components
+a) RETful API
+b) RESTful API
+c) HTTP
+d) MQTT
+View Answer
+
+2. MQTT stands for _____________
+a) MQ Telemetry Things
+b) MQ Transport Telemetry
+c) MQ Transport Things
+d) MQ Telemetry Transport
+View Answer
+
+3. MQTT is better than HTTP for sending and receiving data.
+a) True
+b) False
+View Answer
+
+4. MQTT is _________ protocol.
+a) Machine to Machine
+b) Internet of Things
+c) Machine to Machine and Internet of Things
+d) Machine Things
+View Answer
+
+5. Which protocol is lightweight?
+a) MQTT
+b) HTTP
+c) CoAP
+d) SPI
+View Answer
+
+6. PubNub publishes and subscribes _________ in order to send and receive messages.
+a) Network
+b) Account
+c) Portal
+d) Keys
+View Answer
+
+7. By clicking which key the PubNub will display public, subscribe, and secret keys.
+a) Pane
+b) Demo Keyset
+c) Portal
+d) Network
+View Answer
+
+8. The messageChannel class declares the _________ class attribute that defines the key string.
+a) command_key
+b) command-key
+c) commandkey
+d) Key_command
+View Answer
+
+9. _________ method saves the received arguments in three attributes.
+a) __Init
+b) Init__
+c) __Init__
+d) _init_
+View Answer
+
+10. _________ and _________ saves the publish and subscribe keys that we have generated with the PubNub Admin portal.
+a) public_key and subscribe_key
+b) Public-key and subscribe-key
+c) publickey and subscribekey
+d) Key_public and key_subscribe
