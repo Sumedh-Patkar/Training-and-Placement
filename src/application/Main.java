@@ -3,6 +3,7 @@ package application;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+
 import org.bson.Document;
 
 import com.mongodb.BasicDBObject;
@@ -11,17 +12,13 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -54,6 +51,7 @@ import javafx.scene.image.ImageView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+
 import org.kordamp.bootstrapfx.scene.layout.Panel;
 
 public class Main extends Application
@@ -69,6 +67,7 @@ public class Main extends Application
     
     public void signUpPageDisplay(final Stage stage)
     {   
+    	
     	Panel panel = new Panel("Training and Placement");
         panel.getStyleClass().add("panel-primary");
         
@@ -127,6 +126,7 @@ public class Main extends Application
         PasswordField confirmPasswordField = new PasswordField();
 
         Button signUpButton = new Button("Sign Up");
+        signUpButton.setStyle("-fx-font-size: 20px;");
         signUpButton.getStyleClass().setAll("btn","btn-primary");
            
         GridPane gridPaneSignUp = new GridPane();   
@@ -387,6 +387,7 @@ public class Main extends Application
                 }
             });
 
+        	
         	VBox.setMargin(companyNames.get(i), new Insets(5, 10, 5, 10));
             VBox.setMargin(description.get(i), new Insets(5, 10, 5, 10));
             VBox.setMargin(domains.get(i), new Insets(5, 10, 5, 10));
@@ -413,7 +414,7 @@ public class Main extends Application
             
     	// Pannable.
     	scrollPane.setPannable(true);
-    	        
+    	scrollPane.setPrefHeight(1080);
     	VBox vBox2 = new VBox(borderPane,scrollPane);
     	
     	panel.setCenter(vBox2);
@@ -473,6 +474,7 @@ public class Main extends Application
     	noDomainSelectedLabel.setTextFill(Color.web("#FF0000"));
     	noDomainSelectedLabel.setVisible(false);
     	Button searchCompaniesButton = new Button("Search");
+    	searchCompaniesButton.setStyle("-fx-font-size: 20px;");
     	searchCompaniesButton.getStyleClass().setAll("btn","btn-primary");
           
     	GridPane gridPane = new GridPane();   
@@ -540,8 +542,8 @@ public class Main extends Application
             
     	// Make scrollPane Pannable.
     	scrollPane.setPannable(true);
+    	scrollPane.setPrefHeight(1080);
     	VBox vBox = new VBox(borderPane,scrollPane);
-//    	vBox.setStyle("-fx-background-color: #3e3e3e;");
     	
     	panel.setCenter(vBox);
     	Scene scene = new Scene(panel,800,600);
@@ -723,11 +725,10 @@ public class Main extends Application
     	notifications.setStyle("-fx-font-size: 30pt");
     	Label news = new Label("News from Companies:");
     	news.setStyle("-fx-font-size: 30pt");
+
     	Label notification1 = new Label("Students are requested to report 30 minutes prior to any interview");
     	Label notification2 = new Label("This year 10 more companies are visiting our college!");
     	Label notification3 = new Label("Students can take benefit of the SAMPLE MCQ TESTS for each domain provided by this app. ");
-    	Label blank = new Label(".");
-    	Pane  space = new Pane();
     	
     	FindIterable<Document> iterDoc = collection.find();
     	MongoCursor<Document> it = iterDoc.iterator();
@@ -848,14 +849,16 @@ public class Main extends Application
     	scrollPane.setPrefSize(600, 700);
     	
     	scrollPane.setContent(gridPane);
-            
+    	
     	// Make scrollPane Pannable.
     	scrollPane.setPannable(true);
+    	scrollPane.setPrefHeight(1080);
+    	
         
-    	VBox vBox = new VBox(borderPane,gridPane);
+    	VBox vBox = new VBox(borderPane,scrollPane);
     	panel.setCenter(vBox);
     	
-        Scene scene = new Scene(vBox,800,600);
+        Scene scene = new Scene(panel,800,600);
         scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
         scene.getStylesheets().add("style.css");
         stage.setScene(scene);
@@ -883,7 +886,6 @@ public class Main extends Application
     	//actual answer key will be stored in this label 
     	Label ansKey = new Label(company.get("ansKey").toString());
     	
-    	
     	GridPane gridPane = new GridPane();
     	
     	gridPane.setMinSize(400, 200); 
@@ -903,6 +905,7 @@ public class Main extends Application
             
     	// Make scrollPane Pannable.
     	scrollPane.setPannable(true);
+    	scrollPane.setPrefHeight(1080);
         
     	VBox vBox = new VBox(borderPane,gridPane);
     	panel.setCenter(vBox);
@@ -961,8 +964,10 @@ public class Main extends Application
         
     	
     	Button exam = new Button("Sample Test");   //on clicking..test will be displayed on new page.
+    	exam.setStyle("-fx-font-size: 20px;");
     	exam.getStyleClass().setAll("btn","btn-primary");
     	Button ansKey = new Button("Answer Key");
+    	ansKey.setStyle("-fx-font-size: 20px;");
     	ansKey.getStyleClass().setAll("btn","btn-primary");
     	
     	GridPane gridPane = new GridPane();
@@ -992,8 +997,8 @@ public class Main extends Application
         gridPane.add(addressLabel, 3, 7);
         gridPane.add(contactLabel, 3, 8);
         
-        gridPane.add(exam, 0, 10, 2, 1);
-        gridPane.add(ansKey, 0, 11, 2, 1);
+        gridPane.add(exam, 0, 10, 4, 1);
+        gridPane.add(ansKey, 0, 11, 4, 1);
        
         for(int i = 0; i < 2; i++)
         {
@@ -1055,7 +1060,8 @@ public class Main extends Application
     	Label displayRollNo = new Label("Roll Number");
     	Label displayCollegeName = new Label("College Name");
     	
-    	Button editProfileButton = new Button("Edit");
+    	Button editProfileButton = new Button("Edit Profile");
+    	editProfileButton.setStyle("-fx-font-size: 20px;");
     	editProfileButton.getStyleClass().setAll("btn","btn-primary");
     	
     	GridPane gridPane = new GridPane();
@@ -1158,10 +1164,13 @@ public class Main extends Application
         rollNoErrorLabel.setVisible(false);
     	
     	Button saveChangesButton = new Button("Save changes");
+    	saveChangesButton.setStyle("-fx-font-size: 20px;");
     	saveChangesButton.getStyleClass().setAll("btn","btn-primary");
     	Button changePasswordButton = new Button("Change Password");
+    	changePasswordButton.setStyle("-fx-font-size: 20px;");
     	changePasswordButton.getStyleClass().setAll("btn","btn-primary");
     	Button cancelButton = new Button("Cancel");
+    	cancelButton.setStyle("-fx-font-size: 20px;");
     	cancelButton.getStyleClass().setAll("btn","btn-primary");
     	
     	GridPane gridPane = new GridPane();
@@ -1431,32 +1440,12 @@ public class Main extends Application
         gridPane.add(signupLabel, 0, 5);
         gridPane.add(loginType, 1, 0);
         gridPane.add(typeLabel, 0, 0);
-                   
-//        StackPane root = new StackPane();
-//           root.setStyle(
-//               "-fx-background-image: url(" +
-//                   "'file:/Users/rohan/Training-and-Placement/images/final.jpg'" +
-//               "); " +
-//               "-fx-background-size: auto;" +
-//               "-fx-background-repeat: no-repeat;" +
-//               "-fx-background-position: center;"
-//           );
-//           root.setStyle("-fx-background-color: darkslategray;");
-//           typeLabel.setStyle("-fx-stroke: white;");
-//           signupLabel.setStyle("-fx-stroke: white;");
-//           userLoginLabel.setStyle("-fx-stroke: white;");
-//           passwordLabel.setStyle("-fx-stroke: white;");
 
-//           root.getChildren().add(gridPane);
-           panel.setBody(gridPane);
+        panel.setBody(gridPane);
+        
         Scene scene = new Scene(panel,800,600); 
         scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
         scene.getStylesheets().add("style.css");
-//        gridPane.setStyle("-fx-background-color: #0000FF;");
-//        scene.getStylesheets().add(Main.class.getResource("trial.css").toExternalForm());
-//        stage.setTitle("Training-and-Placement"); 
-//        scene.getStylesheets().add("style.css");
-//        scene.getStylesheets().add("style.css");
         stage.setScene(scene);     
         
       //To set stage to full screen 
@@ -1530,11 +1519,14 @@ public class Main extends Application
         imageView.setFitHeight(100);
         imageView.setFitWidth(100); 
         TextArea newsField = new TextArea("");
-        newsField.setPrefWidth(30);
+        newsField.setPrefWidth(100);
         
     	Button addNewsButton = new Button("Add news to Home Page");
+    	addNewsButton.setStyle("-fx-font-size: 20px;");
     	Button saveProfileButton = new Button("Save Profile");
+    	saveProfileButton.setStyle("-fx-font-size: 20px;");
     	saveProfileButton.getStyleClass().setAll("btn","btn-primary");
+    	addNewsButton.getStyleClass().setAll("btn","btn-primary");
     	GridPane gridPane = new GridPane();
     	GridPane gridPaneRight = new GridPane();
     	GridPane gridPaneOuter = new GridPane();
@@ -1566,7 +1558,7 @@ public class Main extends Application
         
         gridPane.add(saveProfileButton, 0, 10);
         
-        gridPane.add(newsField,0,11);
+        gridPane.add(newsField,0,11,2,1);
         gridPane.add(addNewsButton,0,12);
                 
         //ADD GRIDPANE TO PANEL AND PANEL TO SCENE
@@ -1638,21 +1630,25 @@ public class Main extends Application
     	Label contactId = new Label("Contact: ");
     	
         //actual values
-    	Label companyNameTextField = new Label(companyObject.name);
-    	Label companyDomainTextField = new Label(companyObject.domain);
-    	Label companySubdomainTextField = new Label(companyObject.subdomain);
-    	Label generalDescriptionTextField = new Label(companyObject.generalDescription);
-    	Label monthOfVisitTextField = new Label(companyObject.monthOfVisit);
-    	Label minCGPATextField = new Label("" + companyObject.minCGPA);
-    	Label addressTextField = new Label(companyObject.address);
-    	Label contactTextField = new Label("" + ((Double)companyObject.contact).intValue()); 	
+    	Label companyNameLabel = new Label(companyObject.name);
+    	Label companyDomainLabel = new Label(companyObject.domain);
+    	Label companySubdomainLabel = new Label(companyObject.subdomain);
+    	Label generalDescriptionLabel = new Label(companyObject.generalDescription);
+    	generalDescriptionLabel.setWrapText(true);
+    	generalDescriptionLabel.setMaxWidth(1920);
+    	Label monthOfVisitLabel = new Label(companyObject.monthOfVisit);
+    	Label minCGPALabel = new Label("" + companyObject.minCGPA);
+    	Label addressLabel = new Label(companyObject.address);
+    	Label contactLabel = new Label("" + ((Double)companyObject.contact).intValue()); 	
     	ImageView imageView = new ImageView(displayImage(companyObject.name));
     	imageView.setFitHeight(100);
     	imageView.setFitWidth(100);
     	
     	Button editProfileButton = new Button("Edit Profile");
+    	editProfileButton.setStyle("-fx-font-size: 20px;");
     	editProfileButton.getStyleClass().setAll("btn","btn-primary");
     	Button logoutButton = new Button("Logout");
+    	logoutButton.setStyle("-fx-font-size: 20px;");
     	logoutButton.getStyleClass().setAll("btn","btn-primary");
     	GridPane gridPane = new GridPane();
     	
@@ -1674,14 +1670,14 @@ public class Main extends Application
         gridPane.add(contactId, 0, 8);
         
         gridPane.add(imageView, 0, 0);
-        gridPane.add(companyNameTextField, 1, 1);
-        gridPane.add(companyDomainTextField, 1, 2);
-        gridPane.add(companySubdomainTextField, 1, 3);
-        gridPane.add(generalDescriptionTextField, 1, 4);
-        gridPane.add(monthOfVisitTextField, 1, 5);
-        gridPane.add(minCGPATextField, 1, 6);
-        gridPane.add(addressTextField, 1, 7);
-        gridPane.add(contactTextField, 1, 8);
+        gridPane.add(companyNameLabel, 1, 1);
+        gridPane.add(companyDomainLabel, 1, 2);
+        gridPane.add(companySubdomainLabel, 1, 3);
+        gridPane.add(generalDescriptionLabel, 1, 4);
+        gridPane.add(monthOfVisitLabel, 1, 5);
+        gridPane.add(minCGPALabel, 1, 6);
+        gridPane.add(addressLabel, 1, 7);
+        gridPane.add(contactLabel, 1, 8);
         
         gridPane.add(editProfileButton, 0, 11);
         gridPane.add(logoutButton, 1, 11);
