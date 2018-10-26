@@ -5,13 +5,12 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCursor;
 
-import java.util.Scanner;
+//import java.util.Scanner;
 import java.util.ArrayList;
 
 import org.bson.Document;
 
 import com.mongodb.MongoClient;
-import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 
 /*

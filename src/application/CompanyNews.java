@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import org.bson.Document;
 
 import com.mongodb.MongoClient;
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
 
 public class CompanyNews {
 String companyId;
@@ -26,8 +24,7 @@ MongoCollection<Document> collection;
 
 	CompanyNews() 
 	{
-		// TODO Auto-generated constructor stub
-	
+		// TODO Auto-generated constructor stub	
 		companyId = "";
 		companyName = "";
 		news = "";
@@ -46,8 +43,6 @@ MongoCollection<Document> collection;
 		ArrayList<String> newsList = new ArrayList<String>();
 		
 		//Find the Company's News Document from the Collection
-//		BasicDBObject query = new BasicDBObject();
-//		BasicDBObject fields = new BasicDBObject("name",1);
 		FindIterable <Document> iterDoc = collection.find().projection(new Document("news",1));
 		MongoCursor <Document> it = iterDoc.iterator();
 		
@@ -68,6 +63,5 @@ MongoCollection<Document> collection;
 		
 		collection.insertOne(document);
 	}
-
 
 }
